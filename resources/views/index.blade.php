@@ -567,7 +567,7 @@
                             </div> --}}
 
                         <div class="widget social-widget">
-                            <h1>Reste_connecté </h1>
+                            <h1>Reste connecté </h1>
                             <p>Nos pages sociales</p>
                             <ul class="social-share">
 
