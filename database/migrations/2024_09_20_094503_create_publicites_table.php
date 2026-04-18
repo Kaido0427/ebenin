@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('publicites', function (Blueprint $table) {
             $table->id();
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->string('url');
             $table->string('space');
             $table->timestamps();

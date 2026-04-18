@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('socials', function (Blueprint $table) {
             $table->id();
             $table->string('nom');
-            $table->string('logo_social');
+            $table->string('url');
+            $table->foreignId('organization_id')->nullable()->constrained('organizations')->nullOnDelete();
             $table->timestamps();
         });
     }
