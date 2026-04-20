@@ -1,4 +1,8 @@
 <!DOCTYPE html>
+@php
+    $host = request()->getHost();
+    $baseDomain = str_contains($host, 'e-benin.bj') ? 'e-benin.bj' : 'e-benin.com';
+@endphp
 <html lang="en">
 
 <head>
@@ -31,7 +35,7 @@
                     @endphp
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('home', ['organization' => $subdomain]) }}">Accueil</a>
+                        <a class="nav-link" href="https://{{ $subdomain }}.{{ $baseDomain }}/blog">Accueil</a>
                     </li>
                 </ul>
             </div>

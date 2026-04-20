@@ -1,5 +1,12 @@
 <!doctype html>
 
+@php
+    $orgLogoPath = !empty($organization->organization_logo) ? $organization->organization_logo : 'images/ebenins.png';
+    $orgLogoUrl = asset($orgLogoPath);
+    $contentFallback = asset('assets/vendors/img/upload/placeholder.jpg');
+    $host = request()->getHost();
+    $baseDomain = str_contains($host, 'e-benin.bj') ? 'e-benin.bj' : 'e-benin.com';
+@endphp
 
 <html lang="en" class="no-js">
 
@@ -26,16 +33,16 @@
 
     <!-- Canonical URL -->
     <link rel="canonical"
-        href="{{ route('category.show', ['organization' => $organization->subdomain, 'id' => $rubrique->id]) }}">
+        href="https://{{ $organization->subdomain }}.{{ $baseDomain }}/category/{{ $rubrique->id }}">
 
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="{{ $rubrique->name }} | {{ $organization->organization_name }}">
     <meta property="og:description"
         content="Explorez les articles de la rubrique {{ $rubrique->name }}. Actualités, analyses et opinions au Bénin sur le blog {{ $organization->organization_name }}.">
-    <meta property="og:image" content="{{ asset($organization->organization_logo) }}">
+    <meta property="og:image" content="{{ $orgLogoUrl }}">
     <!-- Remplace par une image par défaut ou spécifique -->
     <meta property="og:url"
-        content="{{ route('category.show', ['organization' => $organization->subdomain, 'id' => $rubrique->id]) }}">
+        content="https://{{ $organization->subdomain }}.{{ $baseDomain }}/category/{{ $rubrique->id }}">
     <meta property="og:type" content="website">
 
     <!-- Twitter Card Meta Tags -->
@@ -43,7 +50,7 @@
     <meta name="twitter:title" content="{{ $rubrique->name }} | {{ $organization->organization_name }}">
     <meta name="twitter:description"
         content="Découvrez la rubrique {{ $rubrique->name }} sur le blog {{ $organization->organization_name }}.">
-    <meta name="twitter:image" content="{{ asset($organization->organization_logo) }}">
+    <meta name="twitter:image" content="{{ $orgLogoUrl }}">
     <!-- Remplace par une image spécifique -->
 
     <!-- Structured Data pour la page de rubrique -->
@@ -53,7 +60,7 @@
       "@type": "CollectionPage",
       "name": "{{ $rubrique->name }}",
       "description": "Découvrez les articles de la rubrique {{ $rubrique->name }} sur le blog {{ $organization->organization_name }}.",
-      "url": "{{ route('category.show', ['organization' => $organization->subdomain, 'id' => $rubrique->id]) }}",
+      "url": "https://{{ $organization->subdomain }}.{{ $baseDomain }}/category/{{ $rubrique->id }}",
       "mainEntity": {
         "@type": "ItemList",
         "itemListElement": [
@@ -62,7 +69,7 @@
                 "@type": "BlogPosting",
                 "headline": "{{ $post->libelle }}",
                 "description": "{{ $post->description }}",
-                "url": "{{ route('single-post', ['organization' => $organization->subdomain, 'id' => $post->id]) }}"
+                "url": "https://{{ $organization->subdomain }}.{{ $baseDomain }}/post/{{ $post->id }}"
               } @if(!$loop->last),@endif
           @endforeach
         ]
@@ -134,7 +141,7 @@
                                                                 @endphp
 
                                                                 <li>
-                                                                    <a href="{{ 'https://' . $subdomain . '.e-benin.com/dashboard' }}">Tableau de
+                                                                    <a href="https://{{ $subdomain }}.{{ $baseDomain }}/dashboard">Tableau de
                                                                         bord</a>
                                                                 </li>
                                 @endauth
@@ -164,7 +171,7 @@
                             @endphp
                             <li class="nav-item active">
                                 <a class="nav-link"
-                                    href="{{ route('home', ['organization' => $organization->subdomain]) }}"
+                                    href="https://{{ $organization->subdomain }}.{{ $baseDomain }}/blog"
                                     style="font-size: {{ $fontSize }}px;text-transform: uppercase;">
                                     {{ $organization->organization_name }}
                                 </a>
@@ -172,7 +179,7 @@
                             @foreach ($rubriquesGuest as $rubrique)
                                 <li class="nav-item">
                                     <a class="nav-link"
-                                        href="{{ route('category.show', ['id' => $rubrique->id, 'organization' => $organization->subdomain]) }}"
+                                        href="https://{{ $organization->subdomain }}.{{ $baseDomain }}/category/{{ $rubrique->id }}"
                                         style="font-size: {{ $fontSize }}px;text-transform: uppercase;">
                                         {{ $rubrique->name }}
                                     </a>
@@ -202,11 +209,12 @@
                                         <div class="col-sm-4">
                                             <div class="post-image">
                                                 <a
-                                                    href="{{ route('single-post', ['id' => $post->id, 'organization' => $organization->subdomain]) }}">
+                                                    href="https://{{ $organization->subdomain }}.{{ $baseDomain }}/post/{{ $post->id }}">
                                                     <div style="width: 100%; height: 200px; overflow: hidden;">
-                                                        <img src="{{ $post->image ? asset($post->image) : asset($post->user->organization->organization_logo) }}"
+                                                        <img src="{{ $post->image ? asset($post->image) : (!empty($post->user->organization->organization_logo) ? asset($post->user->organization->organization_logo) : $contentFallback) }}"
                                                             alt="{{ $post->libelle }}"
-                                                            style="width: 100%; height: 100%; object-fit: cover;">
+                                                            style="width: 100%; height: 100%; object-fit: cover;"
+                                                            onerror="this.onerror=null;this.src='{{ $contentFallback }}';">
                                                     </div>
                                                 </a>
 
@@ -214,7 +222,7 @@
                                         </div>
                                         <div class="col-sm-8">
                                             <h2><a
-                                                    href="{{ route('single-post', ['id' => $post->id, 'organization' => $organization->subdomain]) }}">{{ $post->libelle }}</a>
+                                                    href="https://{{ $organization->subdomain }}.{{ $baseDomain }}/post/{{ $post->id }}">{{ $post->libelle }}</a>
                                                 <p>{{ $post->sous_titre }}</p>
                                             </h2>
 
@@ -245,7 +253,7 @@
                 <div class="up-footer">
 
                     <div class="footer-widget text-widget">
-                        <h1><a href="index.html"><img src="images/logo-black.png" alt=""></a></h1>
+                        <h1><a href="index.html"><img src="images/logo.png" alt=""></a></h1>
                         <p>{{ $organization->organization_name }}</p>
                         <ul class="social-icons">
                             <li><a class="facebook" href="#"><i class="fa fa-facebook"></i></a></li>

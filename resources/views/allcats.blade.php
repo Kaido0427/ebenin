@@ -1,5 +1,10 @@
 <!doctype html>
 
+@php
+    $contentFallback = asset('assets/vendors/img/upload/placeholder.jpg');
+    $host = request()->getHost();
+    $baseDomain = str_contains($host, 'e-benin.bj') ? 'e-benin.bj' : 'e-benin.com';
+@endphp
 
 <html lang="en" class="no-js">
 
@@ -50,7 +55,7 @@
                         <div class="col-sm-6">
                             <ul class="info-list right-align">
                                 <li>
-                                    <a href="https://e-benin.com">E-BENIN</a>
+                                    <a href="https://{{ $baseDomain }}">E-BENIN</a>
                                 </li>
 
 
@@ -80,18 +85,19 @@
                                         <div class="col-sm-4">
                                             <div class="post-image">
                                                 <a
-                                                    href="{{ route('single-post', ['id' => $post->id, 'organization' => $post->user->organization->subdomain]) }}">
+                                                    href="https://{{ $post->user->organization->subdomain }}.{{ $baseDomain }}/post/{{ $post->id }}">
                                                     <div style="width: 100%; height: 200px; overflow: hidden;">
-                                                        <img src="{{ $post->image ? asset($post->image) : asset($post->user->organization->organization_logo) }}"
+                                                        <img src="{{ $post->image ? asset($post->image) : (!empty($post->user->organization->organization_logo) ? asset($post->user->organization->organization_logo) : $contentFallback) }}"
                                                             alt="{{ $post->libelle }}"
-                                                            style="width: 100%; height: 100%; object-fit: cover;">
+                                                            style="width: 100%; height: 100%; object-fit: cover;"
+                                                            onerror="this.onerror=null;this.src='{{ $contentFallback }}';">
                                                     </div>
                                                 </a>
                                             </div>
                                         </div>
                                         <div class="col-sm-8">
                                             <h2><a
-                                                    href="{{ route('single-post', ['id' => $post->id, 'organization' => $post->user->organization->subdomain]) }}">{{ $post->libelle }}</a>
+                                                    href="https://{{ $post->user->organization->subdomain }}.{{ $baseDomain }}/post/{{ $post->id }}">{{ $post->libelle }}</a>
                                                 <p>{{ $post->sous_titre }}</p>
                                             </h2>
 

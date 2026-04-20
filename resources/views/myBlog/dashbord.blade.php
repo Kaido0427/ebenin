@@ -84,7 +84,7 @@
 
                             <li class="nav-item">
                                 <a class="nav-link active"
-                                    href="{{ route('home', ['organization' => $subdomain]) }}">Accueil</a>
+                                    href="https://{{ $subdomain }}.{{ $baseDomain }}/blog">Accueil</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#">Mes

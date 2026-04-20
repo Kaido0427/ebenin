@@ -1,5 +1,16 @@
 <!doctype html>
 
+@php
+    $orgLogoPath = !empty($organization->organization_logo) ? $organization->organization_logo : 'images/ebenins.png';
+    $orgLogoUrl = asset($orgLogoPath);
+    $logoFallback = asset('images/ebenins.png');
+    $contentFallback = asset('assets/vendors/img/upload/placeholder.jpg');
+    $postImageUrl = !empty($post->image) ? asset($post->image) : $contentFallback;
+    $imgFallback = $contentFallback;
+    $host = request()->getHost();
+    $baseDomain = str_contains($host, 'e-benin.bj') ? 'e-benin.bj' : 'e-benin.com';
+    $postUrl = 'https://' . $organization->subdomain . '.' . $baseDomain . '/post/' . $post->id;
+@endphp
 
 <html lang="en" class="no-js">
 
@@ -35,14 +46,14 @@
     @endif
 
     <meta property="og:url"
-        content="{{ route('single-post', ['organization' => $organization->subdomain, 'id' => $post->id]) }}">
+        content="{{ $postUrl }}">
     <meta property="og:type" content="article">
 
 
 
     <!-- Canonical URL -->
     <link rel="canonical"
-        href="{{ route('single-post', ['organization' => $organization->subdomain, 'id' => $post->id]) }}">
+        href="{{ $postUrl }}">
 
     <!-- Structured Data for Article -->
     <script type="application/ld+json">
@@ -50,7 +61,7 @@
             "@context": "https://schema.org",
             "@type": "BlogPosting",
             "headline": "{{ $post->libelle }}",
-            "image": "{{ asset($post->image) }}",
+            "image": "{{ $postImageUrl }}",
             "author": {
                 "@type": "Person",
                 "name": "{{ $organization->organization_name }}"
@@ -60,7 +71,7 @@
                 "name": "{{ $organization->organization_name }}",
                 "logo": {
                     "@type": "ImageObject",
-                    "url": "{{ asset($organization->organization_logo) }}"
+                    "url": "{{ $orgLogoUrl }}"
                 }
             },
             "datePublished": "{{ $post->created_at->toIso8601String() }}",
@@ -68,7 +79,7 @@
             "description": "{{ $post->description }}",
             "mainEntityOfPage": {
                 "@type": "WebPage",
-                "@id": "{{ route('single-post', ['organization' => $organization->subdomain, 'id' => $post->id]) }}"
+                "@id": "{{ $postUrl }}"
             }
         }
     </script>
@@ -93,7 +104,8 @@
                     <div class="row">
                         <div class="col-sm-5">
                             <a class="navbar-brand" href="#">
-                                <img src="{{ asset($organization->organization_logo) }}" class="img-fluid" height="90" width="90" alt="Logo">
+                                <img src="{{ $orgLogoUrl }}" class="img-fluid" height="90" width="90" alt="Logo"
+                                    onerror="this.onerror=null;this.src='{{ $logoFallback }}';">
                             </a>
                         </div>
                         <div class="col-sm-7">
@@ -178,7 +190,7 @@
                             @endphp
                             <li class="nav-item active">
                                 <a class="nav-link"
-                                    href="{{ route('home', ['organization' => $post->user->organization->subdomain]) }}"
+                                    href="https://{{ $post->user->organization->subdomain }}.{{ $baseDomain }}/blog"
                                     style="font-size: {{ $fontSize }}px;text-transform: uppercase;">
                                     {{ $post->user->organization->organization_name }}
                                 </a>
@@ -186,7 +198,7 @@
                             @foreach ($rubriquesGuest as $rubrique)
                                 <li class="nav-item">
                                     <a class="nav-link"
-                                        href="{{ route('category.show', ['id' => $rubrique->id, 'organization' => $post->user->organization->subdomain]) }}"
+                                        href="https://{{ $post->user->organization->subdomain }}.{{ $baseDomain }}/category/{{ $rubrique->id }}"
                                         style="font-size: {{ $fontSize }}px;text-transform: uppercase;">
                                         {{ $rubrique->name }}
                                     </a>
@@ -244,8 +256,9 @@
                                 }
                             </style>
 
-                            <img src="{{ $post->image ? asset($post->image) : asset($post->user->organization->organization_logo) }}"
-                                alt="Post Image" class="no-action" oncontextmenu="return false;">
+                            <img src="{{ $post->image ? asset($post->image) : (!empty($post->user->organization->organization_logo) ? asset($post->user->organization->organization_logo) : $imgFallback) }}"
+                                alt="Post Image" class="no-action" oncontextmenu="return false;"
+                                onerror="this.onerror=null;this.src='{{ $contentFallback }}';">
 
 
                             <div class="share-post-box">
@@ -253,7 +266,7 @@
                                     <!-- Facebook Share -->
                                     <li>
                                         <a class="facebook"
-                                            href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(route('single-post', ['organization' => $post->user->organization->subdomain, 'id' => $post->id])) }}&quote={{ urlencode($post->libele) }}"
+                                            href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode($postUrl) }}&quote={{ urlencode($post->libelle) }}"
                                             target="_blank">
                                             <i class="fa fa-facebook"></i><span>Partager sur Facebook</span>
                                         </a>
@@ -262,7 +275,7 @@
                                     <!-- WhatsApp Share -->
                                     <li>
                                         <a class="whatsapp"
-                                            href="https://api.whatsapp.com/send?text={{ urlencode($post->user->organization->organization_name . '-' . $post->libelle . ' Pour en savoir plus : ' . route('single-post', ['organization' => $post->user->organization->subdomain, 'id' => $post->id])) }}"
+                                            href="https://api.whatsapp.com/send?text={{ urlencode($post->user->organization->organization_name . '-' . $post->libelle . ' Pour en savoir plus : ' . $postUrl) }}"
                                             target="_blank">
                                             <span>
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15"
@@ -278,14 +291,14 @@
                                     <!-- LinkedIn Share -->
                                     <li>
                                         <a class="linkedin"
-                                            href="https://www.linkedin.com/sharing/share-offsite/?url={{ urlencode(route('single-post', ['organization' => $organization->subdomain, 'id' => $post->id])) }}&title={{ urlencode($post->libele) }}"
+                                            href="https://www.linkedin.com/sharing/share-offsite/?url={{ urlencode($postUrl) }}&title={{ urlencode($post->libelle) }}"
                                             target="_blank">
                                             <i class="fa fa-linkedin"></i><span>Linkedin</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="#" style="background: gray;"
-                                            onclick="copyToClipboard('{{ route('single-post', ['organization' => $organization->subdomain, 'id' => $post->id]) }}')">
+                                            onclick="copyToClipboard('{{ $postUrl }}')">
                                             <i class="fa fa-copy"></i><span>Copier le lien</span>
                                         </a>
                                     </li>
@@ -394,7 +407,7 @@
 
                         <!-- Advertisement -->
                         <div class="advertisement">
-                            <a href="#"><img src="upload/addsense/620x80grey.jpg" alt=""></a>
+                            <a href="#"><img src="uploads/addsense/620x80grey.jpg" alt=""></a>
                         </div>
                         <!-- End Advertisement -->
 
@@ -558,7 +571,7 @@
                         <div class="title-section">
                             <h1>Connexion</h1>
                         </div>
-                        <form id="login-form" method="POST" action="{{ route('userLogin') }}">
+                        <form id="login-form" method="POST" action="{{ request()->getSchemeAndHttpHost() }}/bloger/login">
                             @csrf
                             <label for="email">Adresse Mail*</label>
                             <input id="email" type="text" name="email" value="{{ old('email') }}"
@@ -584,8 +597,9 @@
                 <div class="up-footer">
 
                     <div class="footer-widget text-widget">
-                        <img src="{{ asset($organization->organization_logo) }}" height="200" width="200"
-                            class="img-fluid" alt="Organization Logo">
+                        <img src="{{ $orgLogoUrl }}" height="200" width="200"
+                            class="img-fluid" alt="Organization Logo"
+                            onerror="this.onerror=null;this.src='{{ $logoFallback }}';">
                         <ul class="social-icons">
                             @foreach ($socials as $social)
                                 @php

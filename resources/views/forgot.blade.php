@@ -1,4 +1,8 @@
 <!doctype html>
+@php
+    $host = request()->getHost();
+    $baseDomain = str_contains($host, 'e-benin.bj') ? 'e-benin.bj' : 'e-benin.com';
+@endphp
 <html lang="fr" class="no-js">
 
 <head>
@@ -128,7 +132,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-sm-5">
-                            <a class="navbar-brand" href="https://e-benin.com">
+                            <a class="navbar-brand" href="https://{{ $baseDomain }}">
                                 <img src="{{ asset('images/logo.png') }}" alt="">
                             </a>
                         </div>

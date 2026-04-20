@@ -1,5 +1,9 @@
 <!doctype html>
 
+@php
+    $host = request()->getHost();
+    $baseDomain = str_contains($host, 'e-benin.bj') ? 'e-benin.bj' : 'e-benin.com';
+@endphp
 
 <html lang="en" class="no-js">
 
@@ -22,8 +26,8 @@
     <meta property="og:description"
         content="Actualités, analyses et reportages sur la politique, l'économie, la culture et la société au Bénin. Le premier réseau de blogs d'information béninois offrant des perspectives uniques sur l'avenir du pays et la vie quotidienne au Bénin.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://e-benin.bj">
-    <meta property="og:image" content="https://e-benin.bj/images/e-benin.png">
+    <meta property="og:url" content="https://{{ $baseDomain }}">
+    <meta property="og:image" content="https://{{ $baseDomain }}/images/e-benin.png">
     <meta property="og:site_name" content="E-Benin">
     <meta property="og:locale" content="fr_FR">
     <meta property="og:updated_time" content="{{ now()->toAtomString() }}">
@@ -37,10 +41,10 @@
     <meta name="twitter:title" content="E-Benin | L'actualité du Bénin en un clic">
     <meta name="twitter:description"
         content="Suivez l'actualité béninoise : politique, économie, culture, société. Reportages exclusifs et analyses approfondies sur les défis, opportunités et réalités du Bénin, apportées par nos journalistes.">
-    <meta name="twitter:image" content="https://e-benin.bj/images/e-benin.png">
+    <meta name="twitter:image" content="https://{{ $baseDomain }}/images/e-benin.png">
 
     <!-- Balises supplémentaires -->
-    <link rel="canonical" href="https://e-benin.bj">
+    <link rel="canonical" href="https://{{ $baseDomain }}">
     <meta name="robots" content="index, follow">
     <meta name="author" content="E-Benin">
     <meta name="copyright" content="E-Benin, Tous droits réservés">
@@ -52,7 +56,7 @@
     <link rel="stylesheet" type="text/css" href="css/style.css">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="https://e-benin.bj/favicon.ico">
+    <link rel="icon" type="image/png" href="https://{{ $baseDomain }}/favicon.ico">
 </head>
 
 
@@ -200,7 +204,7 @@
                             @foreach($rubriques as $key => $rubrique)
                             @if($key < 8)
                                 <li class="nav-item">
-                                <a class="nav-link" href="{{ route('categories', ['id' => $rubrique->id]) }}">
+                                <a class="nav-link" href="https://{{ $baseDomain }}/categories/{{ $rubrique->id }}">
                                     {{ $rubrique->name }}
                                 </a>
                                 </li>
@@ -216,7 +220,7 @@
                                     <div class="dropdown-menu">
                                         @foreach($rubriques as $key => $rubrique)
                                         @if($key >= 8)
-                                        <a class="dropdown-item" href="{{ route('categories', ['id' => $rubrique->id]) }}">
+                                        <a class="dropdown-item" href="https://{{ $baseDomain }}/categories/{{ $rubrique->id }}">
                                             {{ $rubrique->name }}
                                         </a>
                                         @endif
@@ -277,7 +281,7 @@
         <div class="marquee-container">
             <div class="marquee">
                 @foreach ($flashNews as $flash)
-                <a href="{{ route('single-post', ['id' => $flash->id, 'organization' => $flash->user->organization->subdomain]) }}"
+                <a href="https://{{ $flash->user->organization->subdomain }}.{{ $baseDomain }}/post/{{ $flash->id }}"
                     class="marquee-item">{{ $flash->libelle }}</a>
                 @endforeach
             </div>
@@ -476,7 +480,7 @@
                                     </style>
                                     <div class="post-image">
                                         <a
-                                            href="{{ route('single-post', ['id' => $post->id, 'organization' => $post->user->organization->subdomain]) }}">
+                                            href="https://{{ $post->user->organization->subdomain }}.{{ $baseDomain }}/post/{{ $post->id }}">
                                             <img src="{{ asset($post->image ?? 'images/logo.png') }}"
                                                 alt="{{ $post->libelle }}">
                                         </a>
@@ -486,11 +490,11 @@
                                     </div>
 
                                     <h6><a
-                                            href="{{ route('single-post', ['id' => $post->id, 'organization' => $post->user->organization->subdomain]) }}">{{ $post->libelle }}</a>
+                                            href="https://{{ $post->user->organization->subdomain }}.{{ $baseDomain }}/post/{{ $post->id }}">{{ $post->libelle }}</a>
                                     </h6>
                                     <ul class="post-tags">
                                         <li>by <a
-                                                href="{{ route('home', ['organization' => $post->user->organization->subdomain]) }}">{{ $post->user->organization->organization_name }}</a>
+                                                href="https://{{ $post->user->organization->subdomain }}.{{ $baseDomain }}/blog">{{ $post->user->organization->organization_name }}</a>
                                         </li>
                                         <li><a href="#"><span>{{ $post->comments->count() }}
                                                     comments</span></a></li>
@@ -542,7 +546,7 @@
                                         <div class="slider-caption">
                                             <a href="#" class="category">Reportages</a>
                                             <h2><a
-                                                    href="{{ route('single-post', ['organization' => $reportage->user->organization->subdomain, 'id' => $reportage->id]) }}">{{ $reportage->title }}</a>
+                                                    href="https://{{ $reportage->user->organization->subdomain }}.{{ $baseDomain }}/post/{{ $reportage->id }}">{{ $reportage->libelle }}</a>
                                             </h2>
                                             <ul class="post-tags">
                                                 <li><i class="lnr lnr-user"></i>by <a
@@ -608,7 +612,7 @@
                                 $rubriqueId = $tag->id;
                                 $rubriqueName = $tag->name;
                                 @endphp
-                                <li><a href="{{ route('categories', ['id' => $rubriqueId]) }}">
+                                <li><a href="https://{{ $baseDomain }}/categories/{{ $rubriqueId }}">
                                         {{ $rubriqueName }}
                                     </a></li>
                                 @endforeach
@@ -657,7 +661,7 @@
                                 </li>
                                 @foreach ($footerOrgs as $organization)
                                 <li style="color: #fff; font-size: 12px; margin-top: 5px;">
-                                    <a href="{{ route('home', ['organization' => urlencode($organization->subdomain)]) }}"
+                                    <a href="https://{{ urlencode($organization->subdomain) }}.{{ $baseDomain }}/blog"
                                         style="color: #fff; text-decoration: none;">
                                         {{ $organization->organization_name }}
                                     </a>
@@ -752,7 +756,7 @@
                     <div class="title-section">
                         <h1>Connexion</h1>
                     </div>
-                    <form id="login-form" method="POST" action="{{ route('userLogin') }}">
+                    <form id="login-form" method="POST" action="{{ request()->getSchemeAndHttpHost() }}/bloger/login">
                         @csrf
                         <label for="email">Adresse Mail*</label>
                         <input id="email" type="text" name="email" value="{{ old('email') }}" required

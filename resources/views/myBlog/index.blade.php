@@ -1,5 +1,11 @@
 <!doctype html>
 
+@php
+    $orgLogoPath = !empty($organization->organization_logo) ? $organization->organization_logo : 'images/ebenins.png';
+    $orgLogoUrl = asset($orgLogoPath);
+    $logoFallback = asset('images/ebenins.png');
+    $contentFallback = asset('assets/vendors/img/upload/placeholder.jpg');
+@endphp
 
 <html lang="en" class="no-js">
 
@@ -30,7 +36,7 @@
         content="{{ $organization->organization_name }} est un blog dédié à l'actualité. Retrouvez les dernières nouvelles et plus encore.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="og:image" content="{{ url($organization->organization_logo ?? 'images/ebenins.png') }}">
+    <meta property="og:image" content="{{ $orgLogoUrl }}">
     <!-- Remplacer par le chemin réel de l'image -->
     <meta property="og:site_name" content="{{ $organization->organization_name }}">
     <meta property="og:locale" content="fr_FR">
@@ -52,7 +58,7 @@
     <!-- Stylesheets -->
     <link rel="stylesheet" href="{{ asset('myBlogAssets/css/modernmag-assets.min.css') }}">
     <link rel="stylesheet" href="{{ asset('myBlogAssets/css/style.css') }}">
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset($organization->organization_logo) }}" />
+    <link rel="shortcut icon" type="image/x-icon" href="{{ $orgLogoUrl }}" />
 
 </head>
 
@@ -73,7 +79,8 @@
                     <div class="row">
                         <div class="col-sm-5">
                             <a class="navbar-brand" href="#">
-                                <img src="{{ asset($organization->organization_logo) }}" class="img-fluid" height="90" width="90" alt="Logo">
+                                <img src="{{ $orgLogoUrl }}" class="img-fluid" height="90" width="90" alt="Logo"
+                                    onerror="this.onerror=null;this.src='{{ $logoFallback }}';">
                             </a>
                         </div>
                         <div class="col-sm-7">
@@ -148,7 +155,7 @@
                             @endphp
                             <li class="nav-item active">
                                 <a class="nav-link"
-                                    href="{{ route('home', ['organization' => $organization->subdomain]) }}"
+                                    href="https://{{ $organization->subdomain }}.{{ $baseDomain }}/blog"
                                     style="font-size: {{ $fontSize }}px; text-transform: uppercase;">
                                     Accueil
                                 </a>
@@ -156,7 +163,7 @@
                             @forelse ($rubriques as $rubrique)
                             <li class="nav-item">
                                 <a class="nav-link"
-                                    href="{{ route('category.show', ['id' => $rubrique->id, 'organization' => $subdomain]) }}"
+                                    href="https://{{ $subdomain }}.{{ $baseDomain }}/category/{{ $rubrique->id }}"
                                     style="font-size: {{ $fontSize }}px; text-transform: uppercase;">
                                     {{ $rubrique->name }}
                                 </a>
@@ -197,10 +204,11 @@
                                         @if ($latestNews)
                                         <!-- Vérifier si $latestPost est défini -->
                                         <li>
-                                            <img alt="" src="{{ asset($latestNews->image) }}" />
+                                            <img alt="" src="{{ asset($latestNews->image) }}"
+                                                onerror="this.onerror=null;this.src='{{ $contentFallback }}';" />
                                             <div class="slider-caption">
                                                 <h2><a
-                                                        href="{{ route('single-post', ['id' => $latestNews->id, 'organization' => $subdomain]) }}">{{ $latestNews->libelle }}</a>
+                                                        href="https://{{ $subdomain }}.{{ $baseDomain }}/post/{{ $latestNews->id }}">{{ $latestNews->libelle }}</a>
                                                 </h2>
                                                 <p>{{ $latestNews->libelle }}</p>
                                                 <p>{{ $latestNews->sous_titre }}</p>
@@ -233,13 +241,14 @@
                                         <div class="news-post standart-post">
                                             <div class="post-image">
                                                 <a
-                                                    href="{{ route('single-post', ['id' => $post->id, 'organization' => $post->user->organization->subdomain]) }}">
-                                                    <img src="{{ asset($post->image) }}" alt="">
+                                                    href="https://{{ $post->user->organization->subdomain }}.{{ $baseDomain }}/post/{{ $post->id }}">
+                                                    <img src="{{ asset($post->image) }}" alt=""
+                                                        onerror="this.onerror=null;this.src='{{ $contentFallback }}';">
                                                 </a>
                                                 <a href="#" class="category">{{ $rubrique->name }}</a>
                                             </div>
                                             <h2><a
-                                                    href="{{ route('single-post', ['id' => $post->id, 'organization' => $post->user->organization->subdomain]) }}">{{ $post->libelle }}</a>
+                                                    href="https://{{ $post->user->organization->subdomain }}.{{ $baseDomain }}/post/{{ $post->id }}">{{ $post->libelle }}</a>
                                             </h2>
                                             <p>{{ $post->libelle }}</p>
                                         </div>
@@ -332,7 +341,7 @@
                                 @endphp
                                 @forelse ($randomTags as $tag)
                                 <li><a
-                                        href="{{ route('category.show', ['id' => $tag->id, 'organization' => $subdomain]) }}">{{ $tag->name }}</a>
+                                        href="https://{{ $subdomain }}.{{ $baseDomain }}/category/{{ $tag->id }}">{{ $tag->name }}</a>
                                 </li>
                                 @empty
                                 <li>
@@ -365,13 +374,14 @@
                             <div class="news-post standart-post">
                                 <div class="post-image">
                                     <a
-                                        href="{{ route('single-post', ['id' => $post->id, 'organization' => $post->user->organization->subdomain]) }}">
-                                        <img src="{{ asset($post->image) }}" alt="">
+                                        href="https://{{ $post->user->organization->subdomain }}.{{ $baseDomain }}/post/{{ $post->id }}">
+                                        <img src="{{ asset($post->image) }}" alt=""
+                                            onerror="this.onerror=null;this.src='{{ $contentFallback }}';">
                                     </a>
                                     <a href="#" class="category">{{ $rubrique->name }}</a>
                                 </div>
                                 <h2><a
-                                        href="{{ route('single-post', ['id' => $post->id, 'organization' => $post->user->organization->subdomain]) }}">{{ $post->libelle }}</a>
+                                        href="https://{{ $post->user->organization->subdomain }}.{{ $baseDomain }}/post/{{ $post->id }}">{{ $post->libelle }}</a>
                                 </h2>
                                 <p>{{ Str::limit($post->description, 100) }}</p>
                                 <ul class="post-tags">
@@ -394,7 +404,7 @@
             <!-- End Posts-block -->
             <!-- Advertisement -->
             <div class="advertisement">
-                <a href="#"><img src="upload/addsense/620x80grey.jpg" alt=""></a>
+                <a href="#"><img src="uploads/addsense/620x80grey.jpg" alt=""></a>
             </div>
             <!-- End Advertisement -->
 
@@ -428,7 +438,7 @@
                                     </iframe>
                                     <!-- End youtube -->
                                     <h2><a
-                                            href="{{ route('single-post', ['id' => $reportage->id, 'organization' => $organization->subdomain]) }}">
+                                            href="https://{{ $organization->subdomain }}.{{ $baseDomain }}/post/{{ $reportage->id }}">
                                             {{ $reportage->libelle }}
                                         </a></h2>
                                     <p>{{ $reportage->sous_titre }}</p>
@@ -443,13 +453,14 @@
                                     <div class="news-post video-post">
                                         <div class="post-image">
                                             <a
-                                                href="{{ route('single-post', ['id' => $reportage->id, 'organization' => $organization->subdomain]) }}">
-                                                <img src="{{ $reportage->image_url }}" alt="">
+                                                href="https://{{ $organization->subdomain }}.{{ $baseDomain }}/post/{{ $reportage->id }}">
+                                                <img src="{{ $reportage->image_url }}" alt=""
+                                                    onerror="this.onerror=null;this.src='{{ $contentFallback }}';">
                                                 <i class="fa fa-youtube-play" aria-hidden="true"></i>
                                             </a>
                                         </div>
                                         <h2><a
-                                                href="{{ route('single-post', ['id' => $reportage->id, 'organization' => $organization->subdomain]) }}">
+                                                href="https://{{ $organization->subdomain }}.{{ $baseDomain }}/post/{{ $reportage->id }}">
                                                 {{ $reportage->libelle }}
                                             </a></h2>
                                     </div>
@@ -478,12 +489,12 @@
                                     @forelse ($featuredPosts as $post)
                                     <li>
                                         <a
-                                            href="{{ route('single-post', ['id' => $post->id, 'organization' => $subdomain]) }}">
+                                            href="https://{{ $subdomain }}.{{ $baseDomain }}/post/{{ $post->id }}">
                     <img src="{{ asset($post->image) }}" alt="">
                     </a>
                     <div class="post-cont">
                         <h2><a
-                                href="{{ route('single-post', ['id' => $post->id, 'organization' => $subdomain]) }}">{{ $post->libelle }}</a>
+                                href="https://{{ $subdomain }}.{{ $baseDomain }}/post/{{ $post->id }}">{{ $post->libelle }}</a>
                         </h2>
                     </div>
                     </li>
@@ -508,8 +519,9 @@
             <div class="up-footer">
 
                 <div class="footer-widget text-widget">
-                    <img src="{{ asset($organization->organization_logo) }}" height="80" width="80"
-                        class="img-fluid" alt="Organization Logo">
+                    <img src="{{ $orgLogoUrl }}" height="80" width="80"
+                        class="img-fluid" alt="Organization Logo"
+                        onerror="this.onerror=null;this.src='{{ $logoFallback }}';">
 
                     <ul class="social-icons">
                         @foreach ($socials as $social)

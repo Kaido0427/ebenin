@@ -618,7 +618,7 @@ textarea.form-control { resize: vertical; min-height: 100px; }
         </li>
         @if(Auth::user()->isAdmin === 0)
         <li>
-            <a href="{{ route('home', ['organization' => $user->organization->subdomain]) }}">
+            <a href="https://{{ $user->organization->subdomain }}.{{ $baseDomain }}/blog">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
                 Mon Blog
             </a>
@@ -637,7 +637,7 @@ textarea.form-control { resize: vertical; min-height: 100px; }
     <ul class="sidebar-nav">
         @forelse($rubriques as $rubrique)
         <li>
-            <a href="{{ route('category.show', ['id' => $rubrique->id, 'organization' => $user->organization->subdomain]) }}">
+            <a href="https://{{ $user->organization->subdomain }}.{{ $baseDomain }}/category/{{ $rubrique->id }}">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
                 {{ $rubrique->name }}
             </a>
@@ -827,7 +827,7 @@ textarea.form-control { resize: vertical; min-height: 100px; }
                         </td>
                         <td>
                             <div class="actions-cell">
-                                <a href="{{ route('single-post', ['id' => $post->id, 'organization' => $user->organization->subdomain]) }}"
+                                <a href="https://{{ $user->organization->subdomain }}.{{ $baseDomain }}/post/{{ $post->id }}"
                                    class="btn btn-sm btn-secondary" target="_blank" title="Voir">
                                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="13" height="13"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                                 </a>
