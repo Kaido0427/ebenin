@@ -83,7 +83,7 @@ class HomeController extends Controller
             ->get();
 
         $randomTags = Rubrique::inRandomOrder()->take(10)->get();
-        $socials     = organization_ocial::where('organization_id', $organization->id)->get();
+        $socials     = organization_social::where('organization_id', $organization->id)->get();
         $pub         = Publicite::where('space', 'blog.e-benin')->first();
 
         return view('myBlog.index', compact(
