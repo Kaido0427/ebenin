@@ -135,11 +135,16 @@ class AdminController extends Controller
 
         $activityFeed = $this->buildDashboardActivityFeed($latestTransactions, $latestPosts, $expiringSubscriptions);
 
+        $maxRevenue = max(1, $monthlyRevenue->max('value'));
+        $maxPosts   = max(1, $monthlyPosts->max('value'));
+
         return view('admin.dashboard', compact(
             'kpis',
             'kpiChanges',
             'monthlyRevenue',
             'monthlyPosts',
+            'maxRevenue',
+            'maxPosts',
             'heroInsights',
             'expiringSubscriptions',
             'flaggedPosts',

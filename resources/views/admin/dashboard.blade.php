@@ -6,8 +6,6 @@
 @section('page_subtitle', 'Vision centrale sur les comptes, les blogs, les contenus et les revenus')
 
 @section('content')
-    @php($maxRevenue = max(1, $monthlyRevenue->max('value')))
-    @php($maxPosts = max(1, $monthlyPosts->max('value')))
     @php
         $lineWidth = 520;
         $lineHeight = 220;
