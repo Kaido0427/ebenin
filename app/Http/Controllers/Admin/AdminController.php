@@ -679,9 +679,7 @@ class AdminController extends Controller
             ];
         });
 
-        return $paymentFeed
-            ->merge($postFeed)
-            ->merge($subscriptionFeed)
+        return collect([...$paymentFeed, ...$postFeed, ...$subscriptionFeed])
             ->sortByDesc('sort_at')
             ->take(10)
             ->values();
