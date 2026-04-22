@@ -27,6 +27,9 @@ class User extends Authenticatable
         'organization_id',
         'subscription_quantity',
         'subscription_started_at',   // ← nouveau
+        'is_active',
+        'deactivated_at',
+        'deactivation_reason',
     ];
 
     protected $hidden = [
@@ -39,6 +42,8 @@ class User extends Authenticatable
         'password'                => 'hashed',
         'subscription_started_at' => 'datetime',  // ← cast Carbon automatique
         'subscription_quantity'   => 'integer',   // ← float → integer (des demi-mois ça n'existe pas)
+        'is_active'               => 'boolean',
+        'deactivated_at'          => 'datetime',
     ];
 
     // ─────────────────────────────────────────────

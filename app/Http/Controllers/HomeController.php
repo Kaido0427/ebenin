@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\organization;
+use App\Models\OrganizationSubscription;
 use App\Models\post;
 use App\Models\rubrique;
+use App\Models\transaction as Transaction;
 use App\Models\User;
 use App\Models\publicite;
 use App\Models\userOrganization;
@@ -13,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class HomeController extends Controller
 {
@@ -40,17 +43,20 @@ class HomeController extends Controller
         $subdomain = $this->getSubdomain();
 
         $organization = Organization::where('subdomain', $subdomain)->firstOrFail();
+        $this->abortIfOrganizationUnavailable($organization);
 
         $user = Auth::user();
 
         $rubriques = Rubrique::whereHas('posts', function ($q) use ($organization) {
-            $q->whereHas('user', fn($q2) => $q2->where('organization_id', $organization->id));
+            $q->published()->whereHas('user', fn($q2) => $q2->where('organization_id', $organization->id));
         })->get();
 
         // Un post aléatoire (sans vidéo) par rubrique
         $randomPosts = $rubriques->map(function ($rubrique) use ($organization) {
             $posts = $rubrique->posts->filter(
-                fn($p) => $p->user->organization_id === $organization->id && is_null($p->video)
+                fn($p) => $p->user->organization_id === $organization->id
+                    && is_null($p->video)
+                    && ($p->editorial_status ?? 'published') === 'published'
             );
             return $posts->isNotEmpty()
                 ? ['rubrique' => $rubrique, 'post' => $posts->random()]
@@ -60,12 +66,15 @@ class HomeController extends Controller
         // Dernière actualité (sans vidéo)
         $latestNews = $rubriques->flatMap(function ($rubrique) use ($organization) {
             return $rubrique->posts->filter(
-                fn($p) => $p->user->organization_id === $organization->id && is_null($p->video)
+                fn($p) => $p->user->organization_id === $organization->id
+                    && is_null($p->video)
+                    && ($p->editorial_status ?? 'published') === 'published'
             );
         })->sortByDesc('created_at')->first();
 
         // Posts à la une
         $featuredPosts = Post::where('featured', 1)
+            ->published()
             ->whereHas('user', fn($q) => $q->where('organization_id', $organization->id))
             ->orderByDesc('created_at')
             ->take(4)
@@ -73,6 +82,7 @@ class HomeController extends Controller
 
         // Reportages (vidéos ou rubrique "reportage")
         $reportages = Post::whereIn('user_id', $organization->users->pluck('id'))
+            ->published()
             ->where(
                 fn($q) => $q
                     ->whereNotNull('video')
@@ -85,6 +95,12 @@ class HomeController extends Controller
         $randomTags = Rubrique::inRandomOrder()->take(10)->get();
         $socials     = organization_social::where('organization_id', $organization->id)->get();
         $pub         = Publicite::where('space', 'blog.e-benin')->first();
+        $breakingPosts = Post::published()
+            ->where('is_breaking', true)
+            ->whereHas('user', fn($q) => $q->where('organization_id', $organization->id))
+            ->latest()
+            ->take(8)
+            ->get();
 
         return view('myBlog.index', compact(
             'organization',
@@ -97,28 +113,39 @@ class HomeController extends Controller
             'featuredPosts',
             'randomTags',
             'subdomain',
-            'reportages'
+            'reportages',
+            'breakingPosts'
         ));
     }
 
     public function navbar()
     {
-        $rubriques             = Rubrique::whereHas('posts')->with('posts')->get();
-        $latestPosts           = Post::whereNull('video')->orderByDesc('created_at')->take(15)->get();
-        $flashNews             = Post::orderByDesc('created_at')->take(4)->get();
-        $newPosts              = Post::whereNull('video')->orderByDesc('created_at')->take(4)->get();
-        $featuredPosts         = Post::where('featured', 1)->orderByDesc('created_at')->get();
+        $rubriques             = Rubrique::whereHas('posts', fn($q) => $q->published())->with('posts')->get();
+        $latestPosts           = Post::published()->whereNull('video')->orderByDesc('created_at')->take(15)->get();
+        $flashNews             = Post::published()->where('is_breaking', 1)->orderByDesc('created_at')->take(6)->get();
+        $newPosts              = Post::published()->whereNull('video')->orderByDesc('created_at')->take(4)->get();
+        $featuredPosts         = Post::published()->where('featured', 1)->orderByDesc('created_at')->get();
         $rubriquesWithoutPosts = Rubrique::all();
-        $reportages            = Post::whereNotNull('video')->with('user', 'rubriques', 'comments')->get();
+        $reportages            = Post::published()->whereNotNull('video')->with('user', 'rubriques', 'comments')->get();
         $tags                  = Rubrique::all();
         $pub                   = Publicite::where('space', 'e-benin')->first();
-        $footerOrgs            = Organization::whereHas('users.posts')->get();
+        $footerOrgs            = Organization::where('is_active', true)
+            ->where('is_publicly_visible', true)
+            ->whereHas('users.posts', fn($q) => $q->published())
+            ->get();
+
+        if ($flashNews->isEmpty()) {
+            $flashNews = $latestPosts->take(6);
+        }
 
         $randomizedPosts = [];
-        foreach (Organization::with(['users.posts'])->get() as $org) {
+        foreach (Organization::where('is_active', true)->where('is_publicly_visible', true)->with(['users.posts'])->get() as $org) {
             $subdomain = urlencode($org->subdomain);
             foreach ($org->users as $u) {
                 foreach ($u->posts as $post) {
+                    if (($post->editorial_status ?? 'published') !== 'published') {
+                        continue;
+                    }
                     $randomizedPosts[] = ['organization' => $subdomain, 'post' => $post];
                 }
             }
@@ -143,11 +170,12 @@ class HomeController extends Controller
     public function showUserRubrique(string $subdomain, int $id)
     {
         $organization = Organization::where('subdomain', $subdomain)->firstOrFail();
+        $this->abortIfOrganizationUnavailable($organization);
         $rubrique     = Rubrique::with('posts')->findOrFail($id);
 
-        $posts          = $rubrique->posts->filter(fn($p) => $p->user->organization->id === $organization->id);
+        $posts          = $rubrique->posts->filter(fn($p) => $p->user->organization->id === $organization->id && ($p->editorial_status ?? 'published') === 'published');
         $paginatedPosts = $this->paginatePosts($posts, 'organization');
-        $rubriquesGuest = Rubrique::whereHas('posts')->get();
+        $rubriquesGuest = Rubrique::whereHas('posts', fn($q) => $q->published())->get();
 
         return view('myBlog.category', compact('rubrique', 'paginatedPosts', 'rubriquesGuest', 'organization'));
     }
@@ -155,8 +183,8 @@ class HomeController extends Controller
     public function allCategories(int $id)
     {
         $rubrique       = Rubrique::with('posts')->findOrFail($id);
-        $paginatedPosts = $this->paginatePosts($rubrique->posts, 'user');
-        $rubriquesGuest = Rubrique::whereHas('posts')->get();
+        $paginatedPosts = $this->paginatePosts($rubrique->posts->where('editorial_status', 'published'), 'user');
+        $rubriquesGuest = Rubrique::whereHas('posts', fn($q) => $q->published())->get();
 
         return view('allcats', compact('rubrique', 'paginatedPosts', 'rubriquesGuest'));
     }
@@ -181,6 +209,10 @@ class HomeController extends Controller
 
         if (!$user) {
             return back()->withErrors(['email' => 'Identifiants incorrects.'])->withInput();
+        }
+
+        if (!$user->is_active || !$user->organization?->is_active) {
+            return back()->withErrors(['email' => 'Ce compte est suspendu. Contactez l\'administration.'])->withInput();
         }
 
         // Vérification abonnement
@@ -256,6 +288,8 @@ class HomeController extends Controller
                 'organization_phone'   => $sessionData['organization_phone'],
                 'organization_logo'    => $sessionData['organization_logo'],
                 'subdomain'            => $sessionData['subdomain'],
+                'is_active'            => true,
+                'is_publicly_visible'  => true,
             ]);
 
             // Création de l'utilisateur avec abonnement 1 mois
@@ -270,6 +304,24 @@ class HomeController extends Controller
                 'organization_id'         => $organization->id,
                 'subscription_quantity'   => 1,
                 'subscription_started_at' => now(),  // ✅ colonne dédiée, jamais écrasée accidentellement
+                'is_active'               => true,
+            ]);
+
+            $subscription = $this->syncOrganizationSubscription($organization, 1, 'active');
+            $this->syncLegacySubscriptionFields($organization, $subscription);
+
+            Transaction::create([
+                'phone' => $organization->organization_phone ?? $user->phone ?? 'N/A',
+                'amount' => 10000,
+                'status' => 'paid',
+                'token' => (string) Str::uuid(),
+                'payment_method' => 'kkiapay',
+                'organization_id' => $organization->id,
+                'source' => 'kkiapay',
+                'reference' => $request->query('transaction_id') ?: 'registration-' . $organization->subdomain,
+                'paid_at' => now(),
+                'months_awarded' => 1,
+                'notes' => 'Activation initiale du blog',
             ]);
 
             UserOrganization::create([
@@ -360,6 +412,23 @@ class HomeController extends Controller
         $user->subscription_quantity   = ($user->subscription_quantity ?? 0) + $quantity;
         $user->save();
 
+        $subscription = $this->syncOrganizationSubscription($organization, $quantity, 'active');
+        $this->syncLegacySubscriptionFields($organization, $subscription);
+
+        Transaction::create([
+            'phone' => $organization->organization_phone ?? $user->phone ?? 'N/A',
+            'amount' => 10000 * $quantity,
+            'status' => 'paid',
+            'token' => (string) Str::uuid(),
+            'payment_method' => 'kkiapay',
+            'organization_id' => $organization->id,
+            'source' => 'kkiapay',
+            'reference' => $request->query('transaction_id') ?: 'renewal-' . $organization->subdomain . '-' . now()->timestamp,
+            'paid_at' => now(),
+            'months_awarded' => $quantity,
+            'notes' => 'Renouvellement via callback Kkiapay',
+        ]);
+
         Log::info('Abonnement renouvelé avec succès', [
             'user_id'               => $user->id,
             'subdomain'             => $subdomain,
@@ -434,5 +503,50 @@ class HomeController extends Controller
             $page,
             ['path' => request()->url()]
         );
+    }
+
+    private function syncOrganizationSubscription(Organization $organization, int $monthsToAdd, string $status = 'active'): OrganizationSubscription
+    {
+        $subscription = OrganizationSubscription::firstOrNew([
+            'organization_id' => $organization->id,
+        ]);
+
+        $currentExpiry = $subscription->expires_at;
+        $baseStart = ($currentExpiry && now()->lessThan($currentExpiry)) ? $currentExpiry->copy() : now();
+
+        if (!$subscription->exists || !$subscription->started_at) {
+            $subscription->started_at = now();
+        }
+
+        $subscription->plan_name = $subscription->plan_name ?: 'Blog Standard';
+        $subscription->status = $status;
+        $subscription->renewal_cycle_months = 1;
+        $subscription->is_auto_renew = false;
+        $subscription->last_payment_at = now();
+        $subscription->expires_at = $baseStart->copy()->addMonths($monthsToAdd);
+        $subscription->next_renewal_at = $subscription->expires_at;
+        $subscription->save();
+
+        return $subscription->fresh();
+    }
+
+    private function syncLegacySubscriptionFields(Organization $organization, OrganizationSubscription $subscription): void
+    {
+        $owners = User::where('organization_id', $organization->id)->get();
+
+        foreach ($owners as $owner) {
+            $owner->subscription_started_at = $subscription->started_at;
+            $owner->subscription_quantity = $subscription->started_at && $subscription->expires_at
+                ? max(1, $subscription->started_at->diffInMonths($subscription->expires_at))
+                : 0;
+            $owner->save();
+        }
+    }
+
+    private function abortIfOrganizationUnavailable(Organization $organization): void
+    {
+        if (!$organization->is_active || !$organization->is_publicly_visible) {
+            abort(404);
+        }
     }
 }

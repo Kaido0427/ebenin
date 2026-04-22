@@ -17,6 +17,8 @@ use App\Http\Controllers\articleController;
 use App\Http\Controllers\authController;
 use App\Http\Controllers\bioController;
 use App\Http\Controllers\pubController;
+use App\Http\Controllers\Admin\Auth\LoginController as AdminLoginController;
+use App\Http\Controllers\Admin\AdminController;
 use Illuminate\Http\Request;
 
 /*
@@ -43,6 +45,53 @@ Route::post('comment/{post}', [PostController::class, 'storeComment'])->name('co
 $mainDomainRoutes = function () {
     // Accueil
     Route::get('/', [HomeController::class, 'navbar']);
+
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::middleware('guest:admin')->group(function () {
+            Route::get('/login', [AdminLoginController::class, 'create'])->name('login');
+            Route::post('/login', [AdminLoginController::class, 'store'])->name('login.store');
+        });
+
+        Route::middleware('auth:admin')->group(function () {
+            Route::post('/logout', [AdminLoginController::class, 'destroy'])->name('logout');
+
+            Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
+            Route::get('/users', [AdminController::class, 'users'])->name('users.index');
+            Route::patch('/users/{user}/toggle', [AdminController::class, 'toggleUserStatus'])->name('users.toggle');
+
+            Route::get('/blogs', [AdminController::class, 'blogs'])->name('blogs.index');
+            Route::patch('/blogs/{organization}/toggle', [AdminController::class, 'toggleBlogStatus'])->name('blogs.toggle');
+            Route::patch('/blogs/{organization}/visibility', [AdminController::class, 'toggleBlogVisibility'])->name('blogs.visibility');
+
+            Route::get('/posts', [AdminController::class, 'posts'])->name('posts.index');
+            Route::patch('/posts/{post}/editorial', [AdminController::class, 'updatePostEditorial'])
+                ->middleware('admin.role:super_admin,editorial_admin')
+                ->name('posts.editorial');
+
+            Route::get('/payments', [AdminController::class, 'payments'])->name('payments.index');
+            Route::post('/payments/manual', [AdminController::class, 'storeManualPayment'])
+                ->middleware('admin.role:super_admin,billing_support')
+                ->name('payments.manual');
+
+            Route::get('/subscriptions', [AdminController::class, 'subscriptions'])->name('subscriptions.index');
+            Route::post('/subscriptions/{organization}/renew', [AdminController::class, 'renewSubscription'])
+                ->middleware('admin.role:super_admin,billing_support')
+                ->name('subscriptions.renew');
+
+            Route::get('/admins', [AdminController::class, 'admins'])
+                ->middleware('admin.role:super_admin')
+                ->name('admins.index');
+            Route::post('/admins', [AdminController::class, 'storeAdmin'])
+                ->middleware('admin.role:super_admin')
+                ->name('admins.store');
+            Route::patch('/admins/{admin}/toggle', [AdminController::class, 'toggleAdminStatus'])
+                ->middleware('admin.role:super_admin')
+                ->name('admins.toggle');
+
+            Route::get('/profile', [AdminController::class, 'profile'])->name('profile');
+            Route::put('/profile', [AdminController::class, 'updateProfile'])->name('profile.update');
+        });
+    });
 
     // ✅ Callback Kkiapay renouvellement — DOIT être ici, pas en global
     //    Kkiapay redirige vers e-benin.com/update-subscription ou e-benin.bj/update-subscription
@@ -74,6 +123,7 @@ $mainDomainRoutes = function () {
     Route::middleware(['auth'])->group(function () {
         Route::post('/articles/store',      [articleController::class, 'store'])->name('articles.store');
         Route::put('/articles/update/{id}', [articleController::class, 'update'])->name('articles.update');
+        Route::delete('/articles/{id}',     [articleController::class, 'destroy'])->name('articles.delete');
 
         Route::post('bio/create',           [bioController::class, 'store'])->name('bio.store');
         Route::put('bio/update/{id}',       [bioController::class, 'update'])->name('bio.update');
@@ -114,10 +164,36 @@ $subdomainRoutes = function ($domain) {
 
         // Dashboard protégé
         Route::middleware(['auth'])->group(function () {
+            // Actions dashboard sur sous-domaine (évite les 419 CSRF entre hôtes)
+            Route::post('/articles/store',      [articleController::class, 'store']);
+            Route::put('/articles/update/{id}', [articleController::class, 'update']);
+            Route::delete('/articles/{id}',     [articleController::class, 'destroy']);
+
+            Route::post('bio/create',           [bioController::class, 'store']);
+            Route::put('bio/update/{id}',       [bioController::class, 'update']);
+            Route::put('org/update{id}',        [bioController::class, 'updateOrg']);
+
+            Route::post('social/store',         [bioController::class, 'storeSocial']);
+            Route::put('social/update{id}',     [bioController::class, 'updateSocial']);
+
+            Route::post('/update-password',     [authController::class, 'updatePassword']);
+            Route::post('/upload-image',        [HomeController::class, 'upload']);
+
+            Route::post('/publicite',           [pubController::class, 'create']);
+            Route::put('/publicites/{id}',      [pubController::class, 'update']);
+            Route::delete('/publicites/{id}',   [pubController::class, 'delete']);
+
             Route::get('/dashboard', function (Request $request) {
                 $user         = Auth::user();
                 $biographie   = biographie::where('user_id', $user->id)->first();
                 $organization = $user->organization;
+
+                if (!$user->is_active || !$organization?->is_active) {
+                    Auth::logout();
+
+                    return redirect()->to('https://' . (str_contains(request()->getHost(), 'e-benin.bj') ? 'e-benin.bj' : 'e-benin.com'))
+                        ->with('error', 'Votre acces a ete suspendu. Contactez l\'administration.');
+                }
 
                 // Vérification abonnement avec subscription_started_at
                 $expiryDate = ($user->subscription_started_at && $user->subscription_quantity)

@@ -1,303 +1,208 @@
-<!doctype html>
-
 @php
-    $orgLogoPath = !empty($organization->organization_logo) ? $organization->organization_logo : 'images/ebenins.png';
-    $orgLogoUrl = asset($orgLogoPath);
-    $contentFallback = asset('assets/vendors/img/upload/placeholder.jpg');
+    use Illuminate\Support\Str;
+
     $host = request()->getHost();
     $baseDomain = str_contains($host, 'e-benin.bj') ? 'e-benin.bj' : 'e-benin.com';
+    $homeUrl = "https://{$organization->subdomain}.{$baseDomain}/blog";
+
+    $postImageUrl = function ($post) use ($organization) {
+        $image = trim((string) ($post->image ?? ''));
+        if ($image === '') {
+            $logo = trim((string) ($organization->organization_logo ?? 'images/ebenins.png'));
+            return Str::startsWith($logo, ['http://', 'https://']) ? $logo : asset(ltrim($logo, '/'));
+        }
+
+        if (Str::startsWith($image, ['http://', 'https://'])) {
+            return $image;
+        }
+
+        $normalized = ltrim($image, '/');
+        if (Str::startsWith($normalized, ['uploads/', 'images/', 'storage/'])) {
+            return asset($normalized);
+        }
+
+        return asset('uploads/posts/images/' . basename($normalized));
+    };
+
+    $postUrl = fn($post) => "https://{$organization->subdomain}.{$baseDomain}/post/{$post->id}";
+    $categoryUrl = fn($item) => "https://{$organization->subdomain}.{$baseDomain}/category/{$item->id}";
+    $excerpt = fn($post, $limit = 145) => Str::limit(trim(preg_replace('/\s+/', ' ', strip_tags((string) ($post->description ?? '')))), $limit);
+
+    $categoryPosts = $paginatedPosts->getCollection();
+    $featured = $categoryPosts->first();
+    $sidePosts = $categoryPosts->slice(1, 3);
+    $gridPosts = $categoryPosts->slice(4);
+    $popularList = $categoryPosts->take(5);
+
+    $navItems = $rubriquesGuest;
+    $footerRubriques = $rubriquesGuest;
+    $tickerPosts = $categoryPosts->take(6);
+    $tickerLinkResolver = fn($post) => $postUrl($post);
+    $brandLogoPath = $organization->organization_logo ?: 'images/ebenins.png';
+    $activeCategoryId = $rubrique->id;
 @endphp
 
-<html lang="en" class="no-js">
+@extends('public.layouts.app')
 
-<head>
-    <!-- Title Tag Dynamique -->
-    <title>{{ $rubrique->name }} | {{ $organization->organization_name }}</title>
+@section('title', "{$rubrique->name} | {$organization->organization_name}")
+@section('meta_description', "Consultez les articles de {$organization->organization_name} dans la rubrique {$rubrique->name}.")
+@section('canonical', $homeUrl . '/category/' . $rubrique->id)
 
-    <!-- Meta Charset -->
-    <meta charset="UTF-8">
+@section('content')
+    <div class="cat-hero">
+        <div class="container">
+            <div class="cat-hero__label">{{ $organization->organization_name }}</div>
+            <h1 class="cat-hero__title">{{ $rubrique->name }}</h1>
+            <p class="cat-hero__count">{{ $paginatedPosts->total() }} articles dans cette rubrique</p>
+        </div>
+    </div>
 
-    <!-- Meta Viewport -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Meta Description Dynamique -->
-    <meta name="description"
-        content="Découvrez les articles de la rubrique {{ $rubrique->name }} du blog {{ $organization->organization_name }}. Actualités, analyses et opinions sur divers sujets au Bénin.">
-
-    <!-- Meta Keywords Dynamique -->
-    <meta name="keywords"
-        content="Bénin, Cotonou, {{ $rubrique->name }}, {{ $organization->organization_name }}, journalisme, actualités, blog, média, presse béninoise">
-
-    <!-- Robots Meta Tag -->
-    <meta name="robots" content="index, follow">
-
-    <!-- Canonical URL -->
-    <link rel="canonical"
-        href="https://{{ $organization->subdomain }}.{{ $baseDomain }}/category/{{ $rubrique->id }}">
-
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="{{ $rubrique->name }} | {{ $organization->organization_name }}">
-    <meta property="og:description"
-        content="Explorez les articles de la rubrique {{ $rubrique->name }}. Actualités, analyses et opinions au Bénin sur le blog {{ $organization->organization_name }}.">
-    <meta property="og:image" content="{{ $orgLogoUrl }}">
-    <!-- Remplace par une image par défaut ou spécifique -->
-    <meta property="og:url"
-        content="https://{{ $organization->subdomain }}.{{ $baseDomain }}/category/{{ $rubrique->id }}">
-    <meta property="og:type" content="website">
-
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{{ $rubrique->name }} | {{ $organization->organization_name }}">
-    <meta name="twitter:description"
-        content="Découvrez la rubrique {{ $rubrique->name }} sur le blog {{ $organization->organization_name }}.">
-    <meta name="twitter:image" content="{{ $orgLogoUrl }}">
-    <!-- Remplace par une image spécifique -->
-
-    <!-- Structured Data pour la page de rubrique -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "CollectionPage",
-      "name": "{{ $rubrique->name }}",
-      "description": "Découvrez les articles de la rubrique {{ $rubrique->name }} sur le blog {{ $organization->organization_name }}.",
-      "url": "https://{{ $organization->subdomain }}.{{ $baseDomain }}/category/{{ $rubrique->id }}",
-      "mainEntity": {
-        "@type": "ItemList",
-        "itemListElement": [
-          @foreach ($paginatedPosts as $post)
-              {
-                "@type": "BlogPosting",
-                "headline": "{{ $post->libelle }}",
-                "description": "{{ $post->description }}",
-                "url": "https://{{ $organization->subdomain }}.{{ $baseDomain }}/post/{{ $post->id }}"
-              } @if(!$loop->last),@endif
-          @endforeach
-        ]
-      }
-    }
-    </script>
-
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="{{ asset('myBlogAssets/css/modernmag-assets.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('myBlogAssets/css/style.css') }}">
-
-</head>
-
-
-<body class="boxed-style">
-
-    <!-- Container -->
-    <div id="container" style="">
-
-        <header class="clearfix">
-
-            <div class="top-line">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <ul class="info-list">
-                                <li id="clock">
-                                    <i class="fa fa-clock-o"></i>{{ now()->formatLocalized('%A %d.%m.%Y %H:%M:%S') }}
-                                </li>
-
-                                <script>
-                                    function updateClock() {
-                                        // Mettre à jour l'élément #clock avec la date et l'heure actuelles
-                                        document.getElementById('clock').innerHTML = `
-									<i class="fa fa-clock-o"></i>${new Date().toLocaleString('fr-FR', { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' })}
-								`;
-                                    }
-
-                                    // Mettre à jour l'horloge toutes les secondes
-                                    setInterval(updateClock, 1000);
-                                </script>
-
-                            </ul>
-                        </div>
-                        <div class="col-sm-6">
-                            <ul class="info-list right-align">
-                                @php
-                                    // Déterminer dynamiquement le domaine
-                                    $host = request()->getHost();
-                                    $baseDomain = str_contains($host, 'e-benin.bj') ? 'e-benin.bj' : 'e-benin.com';
-                                @endphp
-
-                                <li>
-                                    <a href="https://{{ $baseDomain }}">E-BENIN</a>
-                                </li>
-                                @auth
-                                                                <li>
-                                                                    <a class="" href="{{ route('logOut') }}" onclick="event.preventDefault();
-                                          document.getElementById('logout-form').submit();">
-                                                                        {{ __('Deconnexion') }}
-                                                                    </a>
-
-                                                                    <form id="logout-form" action="{{ route('logOut') }}" method="POST" class="d-none">
-                                                                        @csrf
-                                                                    </form>
-                                                                </li>
-                                                                @php
-                                                                    $subdomain = auth()->user()->organization->subdomain;
-                                                                @endphp
-
-                                                                <li>
-                                                                    <a href="https://{{ $subdomain }}.{{ $baseDomain }}/dashboard">Tableau de
-                                                                        bord</a>
-                                                                </li>
-                                @endauth
-
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+    <div class="cat-strip">
+        <div class="container">
+            <div class="cat-strip__inner">
+                @foreach ($rubriquesGuest as $item)
+                    <a href="{{ $categoryUrl($item) }}" class="cat-tag {{ $item->id === $rubrique->id ? 'active' : '' }}">{{ $item->name }}</a>
+                @endforeach
             </div>
+        </div>
+    </div>
 
-
-
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <div class="container">
-                    <button class="navbar-toggler" type="button" data-toggle="collapse"
-                        data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav m-auto">
-                            @php
-                                $rubriqueCount = $rubriquesGuest->count();
-                                $totalCount = $rubriqueCount + 1; // Include the "Home" link
-                                $fontSize = max(12, 20 - $totalCount); // Adjust font size based on total number of links
-                            @endphp
-                            <li class="nav-item active">
-                                <a class="nav-link"
-                                    href="https://{{ $organization->subdomain }}.{{ $baseDomain }}/blog"
-                                    style="font-size: {{ $fontSize }}px;text-transform: uppercase;">
-                                    {{ $organization->organization_name }}
+    <main>
+        <div class="container">
+            <div class="main-layout">
+                <div class="content-area section-stack">
+                    @if ($featured)
+                        <section>
+                            <div class="grid-two">
+                                <a href="{{ $postUrl($featured) }}" class="card card--lg">
+                                    <div class="card__img-wrap">
+                                        <img class="card__img" src="{{ $postImageUrl($featured) }}" alt="{{ $featured->libelle }}">
+                                        <span class="card__cat">À la une</span>
+                                    </div>
+                                    <div class="card__body">
+                                        <h2 class="card__title">{{ $featured->libelle }}</h2>
+                                        <p class="card__excerpt">{{ $excerpt($featured, 180) }}</p>
+                                    </div>
                                 </a>
-                            </li>
-                            @foreach ($rubriquesGuest as $rubrique)
-                                <li class="nav-item">
-                                    <a class="nav-link"
-                                        href="https://{{ $organization->subdomain }}.{{ $baseDomain }}/category/{{ $rubrique->id }}"
-                                        style="font-size: {{ $fontSize }}px;text-transform: uppercase;">
-                                        {{ $rubrique->name }}
-                                    </a>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-        </header>
-        <!-- End Header -->
-
-
-        <section id="content-section" style="width:100%;">
-            <div class="container">
-
-                <div class="row">
-                    <div class="col">
-
-                        <!-- Posts-block -->
-                        <div class="posts-block articles-box">
-
-
-                            @foreach ($paginatedPosts as $post)
-                                <div class="news-post article-post">
-                                    <div class="row">
-                                        <div class="col-sm-4">
-                                            <div class="post-image">
-                                                <a
-                                                    href="https://{{ $organization->subdomain }}.{{ $baseDomain }}/post/{{ $post->id }}">
-                                                    <div style="width: 100%; height: 200px; overflow: hidden;">
-                                                        <img src="{{ $post->image ? asset($post->image) : (!empty($post->user->organization->organization_logo) ? asset($post->user->organization->organization_logo) : $contentFallback) }}"
-                                                            alt="{{ $post->libelle }}"
-                                                            style="width: 100%; height: 100%; object-fit: cover;"
-                                                            onerror="this.onerror=null;this.src='{{ $contentFallback }}';">
-                                                    </div>
-                                                </a>
-
+                                <div class="list-stack">
+                                    @foreach ($sidePosts as $post)
+                                        <a href="{{ $postUrl($post) }}" class="card card--h">
+                                            <div class="card__img-wrap">
+                                                <img class="card__img" src="{{ $postImageUrl($post) }}" alt="{{ $post->libelle }}">
                                             </div>
+                                            <div class="card__body">
+                                                <h3 class="card__title">{{ $post->libelle }}</h3>
+                                                <p class="card__excerpt">{{ optional($post->created_at)->diffForHumans() }}</p>
+                                            </div>
+                                        </a>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </section>
+                    @endif
+
+                    <section>
+                        <div class="section-header">
+                            <h2 class="section-title">Tous les articles</h2>
+                            <span style="font-size:.82rem;color:var(--muted)">{{ $paginatedPosts->total() }} résultats</span>
+                        </div>
+
+                        @if ($gridPosts->isNotEmpty())
+                            <div class="news-grid">
+                                @foreach ($gridPosts as $post)
+                                    <a href="{{ $postUrl($post) }}" class="card">
+                                        <div class="card__img-wrap">
+                                            <img class="card__img" src="{{ $postImageUrl($post) }}" alt="{{ $post->libelle }}">
+                                            <span class="card__cat">{{ $rubrique->name }}</span>
                                         </div>
-                                        <div class="col-sm-8">
-                                            <h2><a
-                                                    href="https://{{ $organization->subdomain }}.{{ $baseDomain }}/post/{{ $post->id }}">{{ $post->libelle }}</a>
-                                                <p>{{ $post->sous_titre }}</p>
-                                            </h2>
+                                        <div class="card__body">
+                                            <h3 class="card__title">{{ $post->libelle }}</h3>
+                                            <p class="card__excerpt">{{ $excerpt($post) }}</p>
+                                        </div>
+                                    </a>
+                                @endforeach
+                            </div>
+                        @else
+                            <div class="empty-state">Aucun autre article publié dans cette rubrique pour le moment.</div>
+                        @endif
 
+                        @if ($paginatedPosts->lastPage() > 1)
+                            <div class="pagination-modern">
+                                @if ($paginatedPosts->onFirstPage())
+                                    <span>Préc.</span>
+                                @else
+                                    <a href="{{ $paginatedPosts->previousPageUrl() }}">Préc.</a>
+                                @endif
 
+                                @for ($page = 1; $page <= $paginatedPosts->lastPage(); $page++)
+                                    @if ($page === $paginatedPosts->currentPage())
+                                        <span class="is-active">{{ $page }}</span>
+                                    @else
+                                        <a href="{{ $paginatedPosts->url($page) }}">{{ $page }}</a>
+                                    @endif
+                                @endfor
+
+                                @if ($paginatedPosts->hasMorePages())
+                                    <a href="{{ $paginatedPosts->nextPageUrl() }}">Suiv.</a>
+                                @else
+                                    <span>Suiv.</span>
+                                @endif
+                            </div>
+                        @endif
+                    </section>
+                </div>
+
+                <aside class="sidebar">
+                    @if ($popularList->isNotEmpty())
+                        <div class="widget">
+                            <div class="widget__title">Les plus lus</div>
+                            <div class="widget-divider"></div>
+                            <div class="popular-list">
+                                @foreach ($popularList as $index => $post)
+                                    <div class="popular-item">
+                                        <div class="popular-rank">{{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}</div>
+                                        <div>
+                                            <a href="{{ $postUrl($post) }}" class="popular-title">{{ $post->libelle }}</a>
+                                            <div class="popular-meta">{{ $rubrique->name }} · {{ $post->comments->count() }} commentaires</div>
                                         </div>
                                     </div>
-                                </div>
-                            @endforeach
-
-                            <!-- Affichage de la pagination -->
-                            <ul class="pagination-list">
-                                {{ $paginatedPosts->links('vendor.pagination.bootstrap-4') }}
-                            </ul>
+                                @endforeach
+                            </div>
                         </div>
+                    @endif
 
-                        <!-- End Posts-block -->
-                    </div>
-                </div>
-
-            </div>
-        </section>
-        <!-- End content section -->
-
-
-        <footer>
-            <div class="container">
-
-                <div class="up-footer">
-
-                    <div class="footer-widget text-widget">
-                        <h1><a href="index.html"><img src="images/logo.png" alt=""></a></h1>
-                        <p>{{ $organization->organization_name }}</p>
-                        <ul class="social-icons">
-                            <li><a class="facebook" href="#"><i class="fa fa-facebook"></i></a></li>
-                            <li><a class="twitter" href="#"><i class="fa fa-twitter"></i></a></li>
-                            <li><a class="google" href="#"><i class="fa fa-google-plus"></i></a></li>
-                            <li><a class="linkedin" href="#"><i class="fa fa-linkedin"></i></a></li>
-                            <li><a class="instagram" href="#"><i class="fa fa-instagram"></i></a></li>
-                        </ul>
+                    <div class="widget newsletter-widget">
+                        <div class="widget__title">Newsletter</div>
+                        <div class="widget-divider"></div>
+                        <p>Restez informé de l'actualité {{ Str::lower($rubrique->name) }} sur {{ $organization->organization_name }}.</p>
+                        <form class="newsletter-form-compact" action="#" method="GET">
+                            <input type="email" placeholder="Votre e-mail">
+                            <button type="submit" class="btn btn--primary">S'abonner</button>
+                        </form>
                     </div>
 
-                </div>
+                    <div class="widget">
+                        <div class="widget__title">Réseaux sociaux</div>
+                        <div class="widget-divider"></div>
+                        <div class="social-grid social-grid--full">
+                            <a class="social-btn social-btn--fb" href="#">Facebook</a>
+                            <a class="social-btn social-btn--tw" href="#">Twitter</a>
+                            <a class="social-btn social-btn--yt" href="#">YouTube</a>
+                            <a class="social-btn social-btn--wa" href="#">WhatsApp</a>
+                        </div>
+                    </div>
 
+                    <div class="widget">
+                        <div class="widget__title">Tags</div>
+                        <div class="widget-divider"></div>
+                        <div class="tags-cloud">
+                            @foreach ($rubriquesGuest as $item)
+                                <a href="{{ $categoryUrl($item) }}" class="tag">{{ $item->name }}</a>
+                            @endforeach
+                        </div>
+                    </div>
+                </aside>
             </div>
-            <div class="down-footer">
-                <div class="container">
-
-                    <p>&copy; BY <strong> <a style="color: rgb(145, 34, 34)" href="https://savplus.net">SAVPLUS
-                                CONSEIL</a>
-                        </strong>2024<a href="#" class="go-top"><i class="fa fa-caret-up" aria-hidden="true"></i></a>
-                    </p>
-                </div>
-            </div>
-        </footer>
-        <!-- End footer -->
-
-    </div>
-    <!-- End Container -->
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Popper.js -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-    <!-- Bootstrap JS -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-
-    <script src="myBlogAssets/js/modernmag-plugins.min.js"></script>
-    <script src="myBlogAssets/js/popper.js"></script>
-    <script src="myBlogAssets/js/bootstrap.min.js"></script>
-    <script src="{{ asset('myBlogAssets/js/script.js') }}"></script>
-    <script
-        src="http://maps.google.com/maps/api/js?key=AIzaSyCiqrIen8rWQrvJsu-7f4rOta0fmI5r2SI&amp;sensor=false&amp;language=en">
-        </script>
-    <script src="{{ asset('myBlogAssets/js/gmap3.min.js') }}"></script>
-
-</body>
-
-</html>
+        </div>
+    </main>
+@endsection

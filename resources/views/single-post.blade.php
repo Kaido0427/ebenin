@@ -1,4 +1,8 @@
 <!doctype html>
+@php
+	$host = request()->getHost();
+	$baseDomain = str_contains($host, 'e-benin.bj') ? 'e-benin.bj' : 'e-benin.com';
+@endphp
 
 
 <html lang="en" class="no-js">
@@ -27,7 +31,7 @@
 					<div class="row">
 						<div class="col-sm-5">
 							<a class="navbar-brand" href="index.html">
-								<img src="images/logo.png" alt="">
+								<img src="{{ asset('images/logo.png') }}" alt="">
 							</a>
 						</div>	
 						<div class="col-sm-7">
@@ -39,12 +43,28 @@
 								<li>
 									<i class="fa fa-clock-o"></i>Monday 15.01.2018
 								</li>
+								@guest
 								<li>
 									<a href="#" data-toggle="modal" data-target="#loginModal"><i class="fa fa-user"></i>Log in</a>
 								</li>
 								<li>
-									<a href="register.html">Register</a>
+									<a href="{{ route('userRegister') }}">Register</a>
 								</li>
+								@else
+								@if(!empty(auth()->user()->organization?->subdomain))
+								<li>
+									<a href="https://{{ auth()->user()->organization->subdomain }}.{{ $baseDomain }}/dashboard">
+										<i class="fa fa-tachometer"></i> Dashboard
+									</a>
+								</li>
+								@endif
+								<li>
+									<a href="{{ route('logOut') }}" onclick="event.preventDefault(); document.getElementById('logout-form-single').submit();">Log out</a>
+									<form id="logout-form-single" action="{{ route('logOut') }}" method="POST" style="display:none;">
+										@csrf
+									</form>
+								</li>
+								@endguest
 							</ul>
 						</div>	 
 					</div>
@@ -724,7 +744,7 @@
 
 						<div class="col-lg-3 col-md-6">
 							<div class="footer-widget text-widget">
-								<h1><a href="index.html"><img src="images/logo.png" alt=""></a></h1>
+								<h1><a href="index.html"><img src="{{ asset('images/logo.png') }}" alt=""></a></h1>
 								<p>Duis aute irure dolor in reprehenderit in voluptate velit esse
 								cillum dolore eu fugiat nulla pariatur. Excepteur occaecat cupidatat non
 								proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
