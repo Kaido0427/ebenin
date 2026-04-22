@@ -1,580 +1,236 @@
-<!doctype html>
-
 @php
-    $orgLogoPath = !empty($organization->organization_logo) ? $organization->organization_logo : 'images/ebenins.png';
-    $orgLogoUrl = asset($orgLogoPath);
-    $logoFallback = asset('images/ebenins.png');
-    $contentFallback = asset('assets/vendors/img/upload/placeholder.jpg');
+    use Carbon\Carbon;
+    use Illuminate\Support\Str;
+
+    $host = request()->getHost();
+    $baseDomain = str_contains($host, 'e-benin.bj') ? 'e-benin.bj' : 'e-benin.com';
+    $homeUrl = "https://{$organization->subdomain}.{$baseDomain}/blog";
+
+    $postImageUrl = function ($post) use ($organization) {
+        $image = trim((string) ($post->image ?? ''));
+        if ($image === '') {
+            $logo = trim((string) ($organization->organization_logo ?? 'images/ebenins.png'));
+            return Str::startsWith($logo, ['http://', 'https://']) ? $logo : asset(ltrim($logo, '/'));
+        }
+
+        if (Str::startsWith($image, ['http://', 'https://'])) {
+            return $image;
+        }
+
+        $normalized = ltrim($image, '/');
+        if (Str::startsWith($normalized, ['uploads/', 'images/', 'storage/'])) {
+            return asset($normalized);
+        }
+
+        return asset('uploads/posts/images/' . basename($normalized));
+    };
+
+    $postUrl = fn($post) => "https://{$organization->subdomain}.{$baseDomain}/post/{$post->id}";
+    $categoryUrl = fn($rubrique) => "https://{$organization->subdomain}.{$baseDomain}/category/{$rubrique->id}";
+    $excerpt = fn($post, $limit = 150) => Str::limit(trim(preg_replace('/\s+/', ' ', strip_tags((string) ($post->description ?? '')))), $limit);
+
+    $sidePosts = collect($featuredPosts)
+        ->concat(collect($randomPosts)->pluck('post'))
+        ->unique('id')
+        ->reject(fn($post) => $latestNews && $post->id === $latestNews->id)
+        ->take(3);
+    $randomCards = collect($randomPosts)->take(6);
+    $featuredCards = collect($featuredPosts)->take(4);
+    $reportageItems = collect($reportages)->take(4);
+    $socialLinks = collect($socials)->filter(fn($social) => filled($social->url ?? null))->take(4);
+    $pubIsActive = $pub && Carbon::parse($pub->created_at)->greaterThanOrEqualTo(now()->subDays(7));
+
+    $navItems = $rubriques;
+    $footerRubriques = $rubriques;
+    $tickerPosts = collect($randomPosts)->pluck('post')->filter()->take(6);
+    $tickerLinkResolver = fn($post) => $postUrl($post);
+    $brandLogoPath = $organization->organization_logo ?: 'images/ebenins.png';
 @endphp
 
-<html lang="en" class="no-js">
+@extends('public.layouts.app')
 
-<head>
-    <!-- Title Tag -->
-    <title>{{ $organization->organization_name }} | Accueil</title>
+@section('title', "{$organization->organization_name} | Accueil")
+@section('meta_description', "{$organization->organization_name} couvre l'actualité, les analyses et les reportages du Bénin sur E-Benin.")
+@section('canonical', $homeUrl)
 
-    <!-- Meta Charset -->
-    <meta charset="UTF-8">
-
-    <!-- Meta Viewport -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Meta Description -->
-    <meta name="description"
-        content="{{ $organization->organization_name }} couvre l'actualité, les événements, les analyses et les opinions sur des sujets variés en lien avec le Bénin. Rejoignez-nous pour les dernières nouvelles.">
-
-    <!-- Meta Keywords -->
-    <meta name="keywords"
-        content="actualité, journalisme, {{ $organization->organization_name }}, cotonou, bénin, informations, analyses, opinions, blog">
-
-    <!-- Meta Author -->
-    <meta name="author" content="{{ $organization->organization_name }}">
-
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="{{ $organization->organization_name }} | Accueil">
-    <meta property="og:description"
-        content="{{ $organization->organization_name }} est un blog dédié à l'actualité. Retrouvez les dernières nouvelles et plus encore.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="og:image" content="{{ $orgLogoUrl }}">
-    <!-- Remplacer par le chemin réel de l'image -->
-    <meta property="og:site_name" content="{{ $organization->organization_name }}">
-    <meta property="og:locale" content="fr_FR">
-
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{{ $organization->organization_name }} | Accueil">
-    <meta name="twitter:description"
-        content="{{ $organization->organization_name }} est un blog de journalisme couvrant les dernières actualités et analyses sur l'économie, le sport, la culture et d'autres rubriques.">
-    <!-- Remplacer par le chemin réel de l'image -->
-    <meta name="twitter:site" content="@YourTwitterHandle"> <!-- Remplacer par le compte Twitter réel -->
-
-    <!-- Canonical URL -->
-    <link rel="canonical" href="{{ url()->current() }}">
-
-    <!-- Robots Meta Tag -->
-    <meta name="robots" content="index, follow">
-
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="{{ asset('myBlogAssets/css/modernmag-assets.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('myBlogAssets/css/style.css') }}">
-    <link rel="shortcut icon" type="image/x-icon" href="{{ $orgLogoUrl }}" />
-
-</head>
-
-
-
-<body class="boxed-style">
-
-    <!-- Container -->
-    <div id="container">
-        <!-- Header
-  ================================================== -->
-        <header class="clearfix">
-
-
-
-            <div class="top-line">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-sm-5">
-                            <a class="navbar-brand" href="#">
-                                <img src="{{ $orgLogoUrl }}" class="img-fluid" height="90" width="90" alt="Logo"
-                                    onerror="this.onerror=null;this.src='{{ $logoFallback }}';">
-                            </a>
-                        </div>
-                        <div class="col-sm-7">
-                            <ul class="info-list right-align">
-                                <li id="clock">
-                                    <i class="fa fa-clock-o"></i> {{ now()->formatLocalized('%A %d.%m.%Y %H:%M:%S') }}
-                                </li>
-                                <script>
-                                    function updateClock() {
-                                        document.getElementById('clock').innerHTML = `
-                                <i class="fa fa-clock-o"></i> ${new Date().toLocaleString('fr-FR', {
-                                    weekday: 'long', year: 'numeric', month: 'numeric', 
-                                    day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric'
-                                })}
-                            `;
-                                    }
-                                    setInterval(updateClock, 1000);
-                                </script>
-
-                                @php
-                                $host = request()->getHost();
-                                $baseDomain = str_contains($host, 'e-benin.bj') ? 'e-benin.bj' : 'e-benin.com';
-                                @endphp
-
-                                @guest
-                                <li>
-                                    <a href="https://{{ $baseDomain }}">E-BENIN</a>
-                                </li>
-                                @else
-                                <li>
-                                    <a href="https://{{ $baseDomain }}">E-BENIN</a>
-                                </li>
-
-                                @if (isset(Auth()->user()->organization) && !empty(Auth()->user()->organization->subdomain))
-                                @php
-                                $subdomain = Auth()->user()->organization->subdomain;
-                                @endphp
-                                <li>
-                                    <a href="https://{{ $subdomain }}.{{ $baseDomain }}/dashboard">Tableau de bord</a>
-                                </li>
-                                @endif
-
-                                <li>
-                                    <a href="{{ route('logOut') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                        {{ __('Déconnexion') }}
-                                    </a>
-                                    <form id="logout-form" action="{{ route('logOut') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </li>
-                                @endguest
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <div class="container">
-                    <button class="navbar-toggler" type="button" data-toggle="collapse"
-                        data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav m-auto">
-                            @php
-                            $rubriqueCount = $rubriques->count();
-                            $totalCount = $rubriqueCount + 1; // Include the "Home" link
-                            $fontSize = max(12, 20 - $totalCount); // Adjust font size based on total number of links
-                            @endphp
-                            <li class="nav-item active">
-                                <a class="nav-link"
-                                    href="https://{{ $organization->subdomain }}.{{ $baseDomain }}/blog"
-                                    style="font-size: {{ $fontSize }}px; text-transform: uppercase;">
-                                    Accueil
-                                </a>
-                            </li>
-                            @forelse ($rubriques as $rubrique)
-                            <li class="nav-item">
-                                <a class="nav-link"
-                                    href="https://{{ $subdomain }}.{{ $baseDomain }}/category/{{ $rubrique->id }}"
-                                    style="font-size: {{ $fontSize }}px; text-transform: uppercase;">
-                                    {{ $rubrique->name }}
-                                </a>
-                            </li>
-                            @empty
-                            @auth
-                            <li>
-                                Publier un article dans une rubrique pour la voir apparaitre ici!
-                            </li>
-                            @endauth
-                            <li>
-                                Aucune rubrique disponible!
-                            </li>
-                            @endforelse
-                        </ul>
-                    </div>
-
-                </div>
-            </nav>
-
-
-        </header>
-        <!-- End Header -->
-
-        <!-- content-section
-   ================================================== -->
-        <section id="content-section">
+@section('content')
+    @if ($latestNews)
+        <section class="hero">
             <div class="container">
-
-                <div class="row">
-                    <div class="col-lg-8">
-
-                        <!-- Posts-block -->
-                        <div class="posts-block">
-                            <div class="slider-news">
-                                <div class="flexslider">
-                                    <ul class="slides">
-                                        @if ($latestNews)
-                                        <!-- Vérifier si $latestPost est défini -->
-                                        <li>
-                                            <img alt="" src="{{ asset($latestNews->image) }}"
-                                                onerror="this.onerror=null;this.src='{{ $contentFallback }}';" />
-                                            <div class="slider-caption">
-                                                <h2><a
-                                                        href="https://{{ $subdomain }}.{{ $baseDomain }}/post/{{ $latestNews->id }}">{{ $latestNews->libelle }}</a>
-                                                </h2>
-                                                <p>{{ $latestNews->libelle }}</p>
-                                                <p>{{ $latestNews->sous_titre }}</p>
-                                            </div>
-                                        </li>
-                                        @else
-                                        <li>
-                                            <p>Aucune publication trouvée.</p>
-                                        </li>
-                                        @endif
-                                    </ul>
-
-                                </div>
+                <div class="hero__grid">
+                    <a href="{{ $postUrl($latestNews) }}" class="hero__main">
+                        <img src="{{ $postImageUrl($latestNews) }}" alt="{{ $latestNews->libelle }}">
+                        <div class="hero__overlay"></div>
+                        <div class="hero__content">
+                            <span class="hero__category">{{ $latestNews->rubriques->first()->name ?? 'Actualité' }}</span>
+                            <h1 class="hero__title">{{ $latestNews->libelle }}</h1>
+                            <div class="hero__meta">
+                                <span>{{ optional($latestNews->created_at)->diffForHumans() }}</span>
+                                <span>{{ $latestNews->comments->count() }} commentaires</span>
                             </div>
                         </div>
-
-                        <!-- End Posts-block -->
-
-                        <!-- Posts-block -->
-                        <div class="posts-block standard-box">
-                            <div class="posts-block standard-box">
-                                <div class="row">
-                                    @forelse ($randomPosts as $item)
-                                    @php
-                                    // Récupérer la rubrique et le post
-                                    $rubrique = $item['rubrique'];
-                                    $post = $item['post'];
-                                    @endphp
-                                    <div class="col-sm-6">
-                                        <div class="news-post standart-post">
-                                            <div class="post-image">
-                                                <a
-                                                    href="https://{{ $post->user->organization->subdomain }}.{{ $baseDomain }}/post/{{ $post->id }}">
-                                                    <img src="{{ asset($post->image) }}" alt=""
-                                                        onerror="this.onerror=null;this.src='{{ $contentFallback }}';">
-                                                </a>
-                                                <a href="#" class="category">{{ $rubrique->name }}</a>
-                                            </div>
-                                            <h2><a
-                                                    href="https://{{ $post->user->organization->subdomain }}.{{ $baseDomain }}/post/{{ $post->id }}">{{ $post->libelle }}</a>
-                                            </h2>
-                                            <p>{{ $post->libelle }}</p>
-                                        </div>
-                                    </div>
-                                    @empty
-                                    <p>Rien ici pour le moment!</p>
-                                    @endforelse
-
-                                </div>
-                            </div>
-
-
-                        </div>
-                        <!-- End Posts-block -->
-
-                    </div>
-
-                    <div class="col-lg-4 sidebar-sticky">
-
-                        <!-- Sidebar -->
-                        <div class="sidebar theiaStickySidebar">
-
-                            {{-- <div class="widget news-widget">
-                                <h1>Breaking News</h1>
-                                <ul class="list-news">
-                                    <li>
-                                        <h2><a href="single-post.html">The Guardian view on Germany’s coalition deal:
-                                                Merkel in the balance</a></h2>
-                                    </li>
-                                    <li>
-                                        <h2><a href="single-post.html">Philip Dunne, sacked after his NHS remarks, must
-                                                now face his constituents</a></h2>
-                                    </li>
-                                    <li>
-                                        <h2><a href="single-post.html">Cameroon’s heartbreaking struggles are a relic
-                                                of British colonialism</a></h2>
-                                    </li>
-                                    <li>
-                                        <h2><a href="single-post.html">India has 600 million young people – and they’re
-                                                set to change our world</a></h2>
-                                    </li>
-                                    <li>
-                                        <h2><a href="single-post.html">Ramaphosa vows to fight corruption in ruling
-                                                ANC</a></h2>
-                                    </li>
-                                </ul>
-                            </div> --}}
-                            @php
-                            use Carbon\Carbon;
-                            $now = Carbon::now();
-                            $createdAt = $pub ? new Carbon($pub->created_at) : null;
-                            $isValid = $createdAt ? $now->diffInHours($createdAt) <= 72 : false;
-                                @endphp
-                                @if ($pub)
-                                <div class="advertisement">
-                                <a href="{{ $pub->url }}"><img src="{{ asset($pub->image) }}"
-                                        alt=""></a>
-                        </div>
-                        @else
-                        @endif
-
-
-                        <div class="widget tags-widget">
-                            <div class="widget social-widget">
-                                <h1>Reste connecté</h1>
-                                <p>Nos pages sociales</p>
-                                <ul class="social-share">
-                                    @foreach ($socials as $social)
-                                    @php
-                                    // Assurez-vous que le nom du réseau social correspond à la classe CSS
-                                    $socialClass = strtolower($social->social->nom); // Exemple: 'facebook', 'twitter'
-                                    @endphp
-                                    @if (in_array($socialClass, ['facebook', 'youtube', 'linkedin', 'instagram']))
-                                    <li>
-                                        <a href="{{ $social->url }}" class="{{ $socialClass }}">
-                                            <i class="fa fa-{{ $socialClass }}"></i>
-                                            <span></span>
-                                            <!-- Si vous avez un champ pour le nombre de followers -->
-                                        </a>
-                                    </li>
-                                    @endif
-                                    @endforeach
-                                </ul>
-                            </div>
-
-                            <h1>Rubriques</h1>
-                            <ul class="tags-list">
-                                @php
-                                $subdomain = $organization->subdomain;
-                                @endphp
-                                @forelse ($randomTags as $tag)
-                                <li><a
-                                        href="https://{{ $subdomain }}.{{ $baseDomain }}/category/{{ $tag->id }}">{{ $tag->name }}</a>
-                                </li>
-                                @empty
-                                <li>
-                                    Rien ici pour le moment
-                                </li>
-                                @endforelse
-                            </ul>
-                        </div>
-
-
-                    </div>
-
-                </div>
-            </div>
-
-            <!-- Posts-block -->
-            <div class="posts-block featured-box">
-                <div class="title-section">
-                    <h1>DERNIERES NOUVELLES</h1>
-                </div>
-
-                <div class="owl-wrapper">
-                    <div class="owl-carousel" data-num="4">
-                        @forelse ($rubriques as $rubrique)
-                        @if ($rubrique->posts->isNotEmpty())
-                        @php
-                        $post = $rubrique->posts->first();
-                        @endphp
-                        <div class="item">
-                            <div class="news-post standart-post">
-                                <div class="post-image">
-                                    <a
-                                        href="https://{{ $post->user->organization->subdomain }}.{{ $baseDomain }}/post/{{ $post->id }}">
-                                        <img src="{{ asset($post->image) }}" alt=""
-                                            onerror="this.onerror=null;this.src='{{ $contentFallback }}';">
-                                    </a>
-                                    <a href="#" class="category">{{ $rubrique->name }}</a>
-                                </div>
-                                <h2><a
-                                        href="https://{{ $post->user->organization->subdomain }}.{{ $baseDomain }}/post/{{ $post->id }}">{{ $post->libelle }}</a>
-                                </h2>
-                                <p>{{ Str::limit($post->description, 100) }}</p>
-                                <ul class="post-tags">
-                                    <li>{{ $post->created_at->format('F d, Y, h:i A') }}</li>
-                                </ul>
-                            </div>
-                        </div>
-                        @endif
-                        @empty
-                        <div class="item">
-                            <div class="news-post standart-post">
-                                Pas de derniere nouvelle pour le moment!
-                            </div>
-                        </div>
-                        @endforelse
-                    </div>
-                </div>
-            </div>
-
-            <!-- End Posts-block -->
-            <!-- Advertisement -->
-            <div class="advertisement">
-                <a href="#"><img src="uploads/addsense/620x80grey.jpg" alt=""></a>
-            </div>
-            <!-- End Advertisement -->
-
-            <div class="row">
-                <div class="col-lg-8">
-
-                    <!-- Post-block -->
-                    <div class="post-block video-section">
-                        <div class="title-section">
-                            <h1>Reportages</h1>
-                        </div>
-                        <div class="row">
-                            @forelse($reportages as $key => $reportage)
-                            @if ($key === 0)
-                            <div class="col-lg-8">
-                                @php
-
-                                $videoUrl = $reportage->video;
-
-                                parse_str(parse_url($videoUrl, PHP_URL_QUERY), $queryParams);
-                                $videoId = $queryParams['v'] ?? '';
-
-                                // Crée l'URL d'intégration (embed)
-                                $embedUrl = 'https://www.youtube.com/embed/' . $videoId;
-                                @endphp
-                                <div class="video-holder">
-                                    <!-- youtube -->
-                                    <iframe class="videoembed" src="{{ $embedUrl }}" frameborder="0"
-                                        webkitallowfullscreen="" mozallowfullscreen=""
-                                        allowfullscreen="">
-                                    </iframe>
-                                    <!-- End youtube -->
-                                    <h2><a
-                                            href="https://{{ $organization->subdomain }}.{{ $baseDomain }}/post/{{ $reportage->id }}">
-                                            {{ $reportage->libelle }}
-                                        </a></h2>
-                                    <p>{{ $reportage->sous_titre }}</p>
-                                    <ul class="post-tags">
-                                        <li>{{ $reportage->created_at->format('F j, Y, g:i A') }}</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="video-links">
-                                    @else
-                                    <div class="news-post video-post">
-                                        <div class="post-image">
-                                            <a
-                                                href="https://{{ $organization->subdomain }}.{{ $baseDomain }}/post/{{ $reportage->id }}">
-                                                <img src="{{ $reportage->image_url }}" alt=""
-                                                    onerror="this.onerror=null;this.src='{{ $contentFallback }}';">
-                                                <i class="fa fa-youtube-play" aria-hidden="true"></i>
-                                            </a>
-                                        </div>
-                                        <h2><a
-                                                href="https://{{ $organization->subdomain }}.{{ $baseDomain }}/post/{{ $reportage->id }}">
-                                                {{ $reportage->libelle }}
-                                            </a></h2>
-                                    </div>
-                                    @endif
-
-                                    @if ($loop->last && $key !== 0)
-                                </div>
-                            </div>
-                            @endif
-                            @empty
-                            <p>Aucun reportage disponible pour le moment.</p>
-                            @endforelse
-                        </div>
-                    </div>
-
-                    <!-- End Post-block -->
-                </div>
-
-                <div class="col-lg-4 sidebar-sticky">
-
-                    <!-- Sidebar -->
-                    {{-- <div class="sidebar theiaStickySidebar">
-                            <div class="widget news-widget">
-                                <h1>Publication à la une</h1>
-                                <ul class="small-posts">
-                                    @forelse ($featuredPosts as $post)
-                                    <li>
-                                        <a
-                                            href="https://{{ $subdomain }}.{{ $baseDomain }}/post/{{ $post->id }}">
-                    <img src="{{ asset($post->image) }}" alt="">
                     </a>
-                    <div class="post-cont">
-                        <h2><a
-                                href="https://{{ $subdomain }}.{{ $baseDomain }}/post/{{ $post->id }}">{{ $post->libelle }}</a>
-                        </h2>
-                    </div>
-                    </li>
-                    @empty
-                    <p>Aucune Publication à la une pour le moment!</p>
-                    @endforelse
-                    </ul>
-                </div>
-            </div> --}}
-
-    </div>
-    </div>
-    </div>
-    </section>
-    <!-- End content section -->
-
-    <!-- footer
-   ================================================== -->
-    <footer>
-        <div class="container">
-
-            <div class="up-footer">
-
-                <div class="footer-widget text-widget">
-                    <img src="{{ $orgLogoUrl }}" height="80" width="80"
-                        class="img-fluid" alt="Organization Logo"
-                        onerror="this.onerror=null;this.src='{{ $logoFallback }}';">
-
-                    <ul class="social-icons">
-                        @foreach ($socials as $social)
-                        @php
-                        // Assurez-vous que le nom du réseau social correspond à la classe CSS
-                        $socialClass = strtolower($social->social->nom); // Exemple: 'facebook', 'twitter'
-                        @endphp
-                        @if (in_array($socialClass, ['facebook', 'youtube', 'google', 'linkedin', 'instagram']))
-                        <li>
-                            <a class="{{ $socialClass }}" href="{{ $social->url }}">
-                                <i class="fa fa-{{ $socialClass }}"></i>
+                    <div class="hero__side">
+                        @foreach ($sidePosts as $post)
+                            <a href="{{ $postUrl($post) }}" class="hero__card">
+                                <img src="{{ $postImageUrl($post) }}" alt="{{ $post->libelle }}" class="hero__card-img">
+                                <div class="hero__card-body">
+                                    <div class="hero__card-cat">{{ $post->rubriques->first()->name ?? 'Actualité' }}</div>
+                                    <div class="hero__card-title">{{ $post->libelle }}</div>
+                                    <div class="hero__card-time">{{ optional($post->created_at)->diffForHumans() }}</div>
+                                </div>
                             </a>
-                        </li>
-                        @endif
                         @endforeach
-                    </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    @endif
+
+    <div class="cat-strip">
+        <div class="container">
+            <div class="cat-strip__inner">
+                @foreach ($rubriques as $rubrique)
+                    <a href="{{ $categoryUrl($rubrique) }}" class="cat-tag">{{ $rubrique->name }}</a>
+                @endforeach
+            </div>
+        </div>
+    </div>
+
+    @if ($pubIsActive)
+        <section class="ad-strip">
+            <div class="container">
+                <div class="ad-strip__inner">
+                    <div class="ad-strip__text">
+                        <div class="ad-strip__title">Annonce partenaire</div>
+                        <div class="ad-strip__sub">Cet espace met en avant un partenaire de {{ $organization->organization_name }}</div>
+                    </div>
+                    <div class="ad-strip__logos">
+                        <a href="{{ $pub->url }}" target="_blank" rel="noopener noreferrer">
+                            <img src="{{ asset($pub->image) }}" alt="Publicité" style="max-height:64px;border-radius:12px;">
+                        </a>
+                    </div>
+                    <a href="{{ $pub->url }}" target="_blank" rel="noopener noreferrer" class="ad-strip__cta">Découvrir</a>
+                </div>
+            </div>
+        </section>
+    @endif
+
+    <main>
+        <div class="container">
+            <div class="main-layout">
+                <div class="content-area section-stack">
+                    @if ($featuredCards->isNotEmpty())
+                        <section>
+                            <div class="section-header">
+                                <h2 class="section-title">À la une</h2>
+                            </div>
+                            <div class="news-grid news-grid--2">
+                                @foreach ($featuredCards as $post)
+                                    <a href="{{ $postUrl($post) }}" class="card">
+                                        <div class="card__img-wrap">
+                                            <img class="card__img" src="{{ $postImageUrl($post) }}" alt="{{ $post->libelle }}">
+                                            <span class="card__cat">{{ $post->rubriques->first()->name ?? 'À la une' }}</span>
+                                        </div>
+                                        <div class="card__body">
+                                            <h3 class="card__title">{{ $post->libelle }}</h3>
+                                            <p class="card__excerpt">{{ $excerpt($post, 150) }}</p>
+                                        </div>
+                                    </a>
+                                @endforeach
+                            </div>
+                        </section>
+                    @endif
+
+                    @if ($randomCards->isNotEmpty())
+                        <section>
+                            <div class="section-header">
+                                <h2 class="section-title">Par rubrique</h2>
+                            </div>
+                            <div class="news-grid news-grid--2">
+                                @foreach ($randomCards as $item)
+                                    @php($post = $item['post'])
+                                    @php($rubrique = $item['rubrique'])
+                                    <a href="{{ $postUrl($post) }}" class="card">
+                                        <div class="card__img-wrap">
+                                            <img class="card__img" src="{{ $postImageUrl($post) }}" alt="{{ $post->libelle }}">
+                                            <span class="card__cat">{{ $rubrique->name }}</span>
+                                        </div>
+                                        <div class="card__body">
+                                            <h3 class="card__title">{{ $post->libelle }}</h3>
+                                            <p class="card__excerpt">{{ $excerpt($post, 145) }}</p>
+                                        </div>
+                                        <div class="card__footer">
+                                            <div class="card__meta">
+                                                <span>{{ optional($post->created_at)->diffForHumans() }}</span>
+                                                <span>{{ $post->comments->count() }} com.</span>
+                                            </div>
+                                            <div class="card__author">{{ $organization->organization_name }}</div>
+                                        </div>
+                                    </a>
+                                @endforeach
+                            </div>
+                        </section>
+                    @endif
+
+                    @if ($reportageItems->isNotEmpty())
+                        <section>
+                            <div class="section-header">
+                                <h2 class="section-title">Reportages</h2>
+                            </div>
+                            <div class="news-grid news-grid--2">
+                                @foreach ($reportageItems as $post)
+                                    <a href="{{ $postUrl($post) }}" class="card card--lg">
+                                        <div class="card__img-wrap">
+                                            <img class="card__img" src="{{ $postImageUrl($post) }}" alt="{{ $post->libelle }}">
+                                            <span class="card__cat">Reportage</span>
+                                        </div>
+                                        <div class="card__body">
+                                            <h3 class="card__title">{{ $post->libelle }}</h3>
+                                            <p class="card__excerpt">{{ $excerpt($post, 155) }}</p>
+                                        </div>
+                                    </a>
+                                @endforeach
+                            </div>
+                        </section>
+                    @endif
                 </div>
 
+                <aside class="sidebar">
+                    @if ($socialLinks->isNotEmpty())
+                        <div class="widget">
+                            <div class="widget__title">Réseaux sociaux</div>
+                            <div class="social-grid">
+                                @foreach ($socialLinks as $social)
+                                    <a href="{{ $social->url }}" class="social-btn social-btn--fb" target="_blank" rel="noopener noreferrer">
+                                        {{ ucfirst($social->social->nom ?? 'Réseau') }}
+                                    </a>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
 
+                    <div class="widget">
+                        <div class="widget__title">Rubriques</div>
+                        <div class="tags-cloud">
+                            @foreach ($rubriques as $rubrique)
+                                <a href="{{ $categoryUrl($rubrique) }}" class="tag">{{ $rubrique->name }}</a>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    @if (collect($randomTags)->isNotEmpty())
+                        <div class="widget">
+                            <div class="widget__title">Explorer</div>
+                            <div class="tags-cloud">
+                                @foreach (collect($randomTags)->take(14) as $tag)
+                                    <a href="{{ $categoryUrl($tag) }}" class="tag">{{ $tag->name }}</a>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+                </aside>
             </div>
-
         </div>
-        <div class="down-footer">
-            <div class="container">
-
-                <p>&copy; BY <strong> <a style="color: rgb(145, 34, 34)" href="https://savplus.net">SAVPLUS
-                            CONSEIL</a>
-                    </strong>2024<a href="#" class="go-top"><i class="fa fa-caret-up"
-                            aria-hidden="true"></i></a></p>
-            </div>
-        </div>
-    </footer>
-    <!-- End footer -->
-
-    </div>
-    <!-- End Container -->
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Popper.js -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-    <!-- Bootstrap JS -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-    <script src="myBlogAssets/js/modernmag-plugins.min.js"></script>
-    <script src="myBlogAssets/js/popper.js"></script>
-    <script src="myBlogAssets/js/bootstrap.min.js"></script>
-    <script src="{{ asset('myBlogAssets/js/script.js') }}"></script>
-    <script
-        src="http://maps.google.com/maps/api/js?key=AIzaSyCiqrIen8rWQrvJsu-7f4rOta0fmI5r2SI&amp;sensor=false&amp;language=en">
-    </script>
-    <script src="{{ asset('myBlogAssets/js/gmap3.min.js') }}"></script>
-
-
-</body>
-
-</html>
+    </main>
+@endsection

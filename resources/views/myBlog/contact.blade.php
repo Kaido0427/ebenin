@@ -1,4 +1,8 @@
 <!doctype html>
+@php
+	$host = request()->getHost();
+	$baseDomain = str_contains($host, 'e-benin.bj') ? 'e-benin.bj' : 'e-benin.com';
+@endphp
 
 
 <html lang="en" class="no-js">
@@ -37,12 +41,26 @@
 						</div>	
 						<div class="col-sm-6">
 							<ul class="info-list right-align">
+								@guest
 								<li>
 									<a href="#" data-toggle="modal" data-target="#loginModal">Sign in</a>
 								</li>
 								<li>
-									<a href="register.html">Register</a>
+									<a href="{{ route('userRegister') }}">Register</a>
 								</li>
+								@else
+								@if(!empty(auth()->user()->organization?->subdomain))
+								<li>
+									<a href="https://{{ auth()->user()->organization->subdomain }}.{{ $baseDomain }}/dashboard">Dashboard</a>
+								</li>
+								@endif
+								<li>
+									<a href="{{ route('logOut') }}" onclick="event.preventDefault(); document.getElementById('logout-form-contact').submit();">Log out</a>
+									<form id="logout-form-contact" action="{{ route('logOut') }}" method="POST" style="display:none;">
+										@csrf
+									</form>
+								</li>
+								@endguest
 							</ul>
 						</div>	
 					</div>
@@ -52,7 +70,7 @@
 			<div class="header-banner-place">
 				<div class="container">
 					<a class="navbar-brand" href="index.html">
-						<img src="images/logo.png" alt="">
+						<img src="{{ asset('images/logo.png') }}" alt="">
 					</a>
 				</div>
 			</div>

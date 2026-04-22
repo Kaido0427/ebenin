@@ -74,6 +74,7 @@ $mainDomainRoutes = function () {
     Route::middleware(['auth'])->group(function () {
         Route::post('/articles/store',      [articleController::class, 'store'])->name('articles.store');
         Route::put('/articles/update/{id}', [articleController::class, 'update'])->name('articles.update');
+        Route::delete('/articles/{id}',     [articleController::class, 'destroy'])->name('articles.delete');
 
         Route::post('bio/create',           [bioController::class, 'store'])->name('bio.store');
         Route::put('bio/update/{id}',       [bioController::class, 'update'])->name('bio.update');
@@ -114,6 +115,25 @@ $subdomainRoutes = function ($domain) {
 
         // Dashboard protégé
         Route::middleware(['auth'])->group(function () {
+            // Actions dashboard sur sous-domaine (évite les 419 CSRF entre hôtes)
+            Route::post('/articles/store',      [articleController::class, 'store']);
+            Route::put('/articles/update/{id}', [articleController::class, 'update']);
+            Route::delete('/articles/{id}',     [articleController::class, 'destroy']);
+
+            Route::post('bio/create',           [bioController::class, 'store']);
+            Route::put('bio/update/{id}',       [bioController::class, 'update']);
+            Route::put('org/update{id}',        [bioController::class, 'updateOrg']);
+
+            Route::post('social/store',         [bioController::class, 'storeSocial']);
+            Route::put('social/update{id}',     [bioController::class, 'updateSocial']);
+
+            Route::post('/update-password',     [authController::class, 'updatePassword']);
+            Route::post('/upload-image',        [HomeController::class, 'upload']);
+
+            Route::post('/publicite',           [pubController::class, 'create']);
+            Route::put('/publicites/{id}',      [pubController::class, 'update']);
+            Route::delete('/publicites/{id}',   [pubController::class, 'delete']);
+
             Route::get('/dashboard', function (Request $request) {
                 $user         = Auth::user();
                 $biographie   = biographie::where('user_id', $user->id)->first();

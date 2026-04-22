@@ -841,6 +841,13 @@ textarea.form-control { resize: vertical; min-height: 100px; }
                                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="13" height="13"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                                     <span class="btn-label-mobile">Modifier</span>
                                 </button>
+                                <form method="POST" action="/articles/{{ $post->id }}" onsubmit="return confirm('Supprimer cet article ?')">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-danger" title="Supprimer">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="13" height="13"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                        <span class="btn-label-mobile">Supprimer</span>
+                                    </button>
+                                </form>
                             </div>
                         </td>
                     </tr>
@@ -876,7 +883,7 @@ textarea.form-control { resize: vertical; min-height: 100px; }
                                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="13" height="13"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                                     <span class="btn-label-mobile">Modifier</span>
                                 </button>
-                                <form method="POST" action="{{ route('publicite.delete', $pub->id) }}" onsubmit="return confirm('Supprimer cette publicité ?')">
+                                <form method="POST" action="/publicites/{{ $pub->id }}" onsubmit="return confirm('Supprimer cette publicité ?')">
                                     @csrf @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-danger">
                                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="13" height="13"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
@@ -912,7 +919,7 @@ textarea.form-control { resize: vertical; min-height: 100px; }
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
         </div>
-        <form method="POST" action="{{ route('articles.store') }}" enctype="multipart/form-data">
+        <form method="POST" action="/articles/store" enctype="multipart/form-data">
             @csrf
             <div class="modal-body">
                 <div class="form-group">
@@ -1024,7 +1031,7 @@ textarea.form-control { resize: vertical; min-height: 100px; }
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
         </div>
-        <form method="POST" action="{{ route('publicite.create') }}" enctype="multipart/form-data">
+        <form method="POST" action="/publicite" enctype="multipart/form-data">
             @csrf
             <div class="modal-body">
                 <div class="form-group">
@@ -1112,7 +1119,7 @@ textarea.form-control { resize: vertical; min-height: 100px; }
 
             {{-- Tab Organisation --}}
             <div class="tab-panel active" id="tabOrg">
-                <form method="POST" action="{{ route('org.update', ['id' => $organization->id]) }}" enctype="multipart/form-data">
+                <form method="POST" action="/org/update{{ $organization->id }}" enctype="multipart/form-data">
                     @csrf @method('PUT')
                     <div class="form-group">
                         <label class="form-label">Nom de l'organisation *</label>
@@ -1143,7 +1150,7 @@ textarea.form-control { resize: vertical; min-height: 100px; }
 
             {{-- Tab Mot de passe --}}
             <div class="tab-panel" id="tabPassword">
-                <form method="POST" action="{{ route('password.update') }}">
+                <form method="POST" action="/update-password">
                     @csrf
                     <div class="form-group">
                         <label class="form-label">Mot de passe actuel *</label>
@@ -1164,7 +1171,7 @@ textarea.form-control { resize: vertical; min-height: 100px; }
             {{-- Tab Biographie --}}
             <div class="tab-panel" id="tabBio">
                 <form method="POST"
-                    action="{{ $biographie ? route('bio.update', ['id' => $biographie->id]) : route('bio.store') }}"
+                    action="{{ $biographie ? '/bio/update/'.$biographie->id : '/bio/create' }}"
                     enctype="multipart/form-data">
                     @csrf
                     @if($biographie) @method('PUT') @endif
@@ -1189,7 +1196,7 @@ textarea.form-control { resize: vertical; min-height: 100px; }
             <div class="tab-panel" id="tabSocials">
                 {{-- Ajouter --}}
                 <p style="font-size:.78rem; color:var(--text2); margin-bottom:12px; font-weight:600;">Ajouter un réseau</p>
-                <form method="POST" action="{{ route('social.store') }}">
+                <form method="POST" action="/social/store">
                     @csrf
                     <input type="hidden" name="organization_id" value="{{ $user->organization->id }}">
                     <div class="form-group">
@@ -1211,7 +1218,7 @@ textarea.form-control { resize: vertical; min-height: 100px; }
                 @if($orgSocials->count() > 0)
                 <hr style="border-color:var(--border); margin:20px 0;">
                 <p style="font-size:.78rem; color:var(--text2); margin-bottom:12px; font-weight:600;">Mettre à jour</p>
-                <form method="POST" action="{{ route('social.update', $organization->id) }}">
+                <form method="POST" action="/social/update{{ $organization->id }}">
                     @csrf @method('PUT')
                     <div class="form-group">
                         <label class="form-label">Réseau à modifier</label>
