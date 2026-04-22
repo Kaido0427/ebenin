@@ -449,7 +449,7 @@ body[data-theme="dark"] .sidebar-link.is-active {
 .secondary-btn,
 .danger-btn,
 .success-btn {
-  min-height: 46px;
+  min-height: 52px;
   border-radius: 16px;
   border: 1px solid var(--border-soft);
   padding: 0 18px;
@@ -1103,7 +1103,7 @@ body[data-theme="dark"] .sidebar-link.is-active {
 .invoice-item__amount {
   white-space: nowrap;
   color: var(--text-soft);
-  font-size: 0.82rem;
+  font-size: 0.72rem;
 }
 
 .invoice-item__amount {
