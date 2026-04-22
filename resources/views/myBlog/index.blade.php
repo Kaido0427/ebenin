@@ -42,7 +42,10 @@
 
     $navItems = $rubriques;
     $footerRubriques = $rubriques;
-    $tickerPosts = collect($randomPosts)->pluck('post')->filter()->take(6);
+    $tickerPosts = collect($breakingPosts ?? [])->filter()->take(8);
+    if ($tickerPosts->isEmpty()) {
+        $tickerPosts = collect($randomPosts)->pluck('post')->filter()->take(6);
+    }
     $tickerLinkResolver = fn($post) => $postUrl($post);
     $brandLogoPath = $organization->organization_logo ?: 'images/ebenins.png';
 @endphp

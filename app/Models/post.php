@@ -13,7 +13,7 @@ class post extends Model
  
     protected $table = 'posts';
 
-    protected $fillable = ['description', 'libelle', 'image', 'audio','sous_titre', 'video', 'image_url', 'data_url', 'slug', 'user_id','video_url'];
+    protected $fillable = ['description', 'libelle', 'image', 'audio','sous_titre', 'video', 'image_url', 'data_url', 'slug', 'user_id','video_url', 'featured', 'editorial_status', 'editorial_note', 'is_breaking'];
 
     public function comments()
     {
@@ -35,5 +35,10 @@ class post extends Model
     public function views()
     {
         return $this->hasMany(ArticleView::class, 'article_id');
+    }
+
+    public function scopePublished($query)
+    {
+        return $query->where('editorial_status', 'published');
     }
 }

@@ -256,6 +256,10 @@ class PostController extends Controller
             Log::error('Organization not found with subdomain: ' . $organization);
             return redirect()->back()->with('error', 'Organization not found');
         }
+
+        if (!$org->is_active || !$org->is_publicly_visible) {
+            abort(404);
+        }
     
         // Initialize variables
         $bio = null;
@@ -263,6 +267,7 @@ class PostController extends Controller
     
         // Fetch the post along with related data
         $post = Post::where('id', $id)
+            ->published()
             ->with('rubriques', 'comments', 'user')
             ->first();
     
@@ -299,7 +304,7 @@ class PostController extends Controller
         // Fetch biography if user is available
         if (isset($user)) {
             $bio = Biographie::where('user_id', $user->id)->first(); 
-            $postsByUser = Post::where('user_id', $user->id)->get();
+            $postsByUser = Post::published()->where('user_id', $user->id)->get();
         }
     
         // Fetch comments for the post
