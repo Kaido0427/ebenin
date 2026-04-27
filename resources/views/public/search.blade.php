@@ -8,7 +8,7 @@
     <div class="container">
         <div class="search-header">
             <h1>Recherche</h1>
-            <form action="{{ route('search') }}" method="GET" class="search-form">
+            <form action="{{ url('/search') }}" method="GET" class="search-form">
                 <div class="search-input-wrap">
                     <input type="text" name="q" value="{{ $query }}" placeholder="Rechercher un article..." class="search-input" autofocus>
                     <button type="submit" class="search-btn">🔍</button>

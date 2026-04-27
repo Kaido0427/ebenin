@@ -47,7 +47,7 @@ $mainDomainRoutes = function () {
     Route::get('/', [HomeController::class, 'navbar']);
 
     // Recherche
-    Route::get('/search', [HomeController::class, 'search'])->name('search');
+    Route::get('/search', [HomeController::class, 'search']);
 
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::middleware('guest:admin')->group(function () {
