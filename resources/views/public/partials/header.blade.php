@@ -18,7 +18,7 @@
     $registerUrl = $siteRoot . '/bloger/register';
     $loginUrl = $isMainDomain ? '#auth-login-modal' : $siteRoot . '/?auth=login';
     $forgotUrl = $siteRoot . '/forgot-password';
-    $searchUrl = '#';
+    $searchUrl = $siteRoot . '/search';
     $dashboardUrl = null;
 
     if (auth()->check() && auth()->user()?->organization?->subdomain) {

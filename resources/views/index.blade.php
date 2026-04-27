@@ -41,8 +41,9 @@
         return Str::limit(trim(preg_replace('/\s+/', ' ', strip_tags((string) ($post->description ?? '')))), $limit);
     };
 
-    $headline = $newPosts->first() ?? $latestPosts->first() ?? $featuredPosts->first();
-    $heroSide = collect($newPosts)
+    $heroSlides = collect($newPosts)->concat($latestPosts)->unique('id')->take(5);
+    $headline   = $heroSlides->first();
+    $heroSide   = collect($newPosts)
         ->concat($latestPosts)
         ->unique('id')
         ->reject(fn($post) => $headline && $post->id === $headline->id)
@@ -69,23 +70,37 @@
 @section('canonical', 'https://' . $baseDomain)
 
 @section('content')
-    @if ($headline)
+    @if ($heroSlides->isNotEmpty())
         <section class="hero">
             <div class="container">
                 <div class="hero__grid">
-                    <a href="{{ $postUrl($headline) }}" class="hero__main">
-                        <img src="{{ $postImageUrl($headline) }}" alt="{{ $headline->libelle }}">
-                        <div class="hero__overlay"></div>
-                        <div class="hero__content">
-                            <span class="hero__category">{{ $headline->rubriques->first()->name ?? 'Actualité' }}</span>
-                            <h1 class="hero__title">{{ $headline->libelle }}</h1>
-                            <div class="hero__meta">
-                                <span>{{ optional($headline->created_at)->diffForHumans() }}</span>
-                                <span>{{ $headline->comments->count() }} commentaires</span>
-                                <span>{{ $headline->user->organization->organization_name ?? 'E-Benin' }}</span>
+                    <div class="hero__main hero-slider" id="heroSlider">
+                        @foreach ($heroSlides as $i => $post)
+                            <a href="{{ $postUrl($post) }}" class="hero-slide{{ $i === 0 ? ' is-active' : '' }}">
+                                <img src="{{ $postImageUrl($post) }}" alt="{{ $post->libelle }}">
+                                <div class="hero__overlay"></div>
+                                <div class="hero__content">
+                                    <span class="hero__category">{{ $post->rubriques->first()->name ?? 'Actualité' }}</span>
+                                    <h1 class="hero__title">{{ $post->libelle }}</h1>
+                                    <div class="hero__meta">
+                                        <span>{{ optional($post->created_at)->diffForHumans() }}</span>
+                                        <span>{{ $post->comments->count() }} commentaires</span>
+                                        <span>{{ $post->user->organization->organization_name ?? 'E-Benin' }}</span>
+                                    </div>
+                                </div>
+                            </a>
+                        @endforeach
+
+                        @if ($heroSlides->count() > 1)
+                            <button class="hero-slider__arrow hero-slider__prev" aria-label="Précédent">&#8249;</button>
+                            <button class="hero-slider__arrow hero-slider__next" aria-label="Suivant">&#8250;</button>
+                            <div class="hero-slider__dots">
+                                @foreach ($heroSlides as $i => $post)
+                                    <button class="hero-slider__dot{{ $i === 0 ? ' is-active' : '' }}" data-index="{{ $i }}" aria-label="Slide {{ $i + 1 }}"></button>
+                                @endforeach
                             </div>
-                        </div>
-                    </a>
+                        @endif
+                    </div>
 
                     <div class="hero__side">
                         @foreach ($heroSide as $post)
@@ -326,3 +341,38 @@
         </div>
     </main>
 @endsection
+
+@push('scripts')
+<script>
+(function () {
+    var slider = document.getElementById('heroSlider');
+    if (!slider) return;
+    var slides = slider.querySelectorAll('.hero-slide');
+    var dots   = slider.querySelectorAll('.hero-slider__dot');
+    if (slides.length < 2) return;
+    var current = 0;
+    var timer;
+
+    function goTo(n) {
+        slides[current].classList.remove('is-active');
+        if (dots[current]) dots[current].classList.remove('is-active');
+        current = (n + slides.length) % slides.length;
+        slides[current].classList.add('is-active');
+        if (dots[current]) dots[current].classList.add('is-active');
+    }
+
+    function startTimer() { timer = setInterval(function () { goTo(current + 1); }, 5000); }
+    function resetTimer()  { clearInterval(timer); startTimer(); }
+
+    var btnNext = slider.querySelector('.hero-slider__next');
+    var btnPrev = slider.querySelector('.hero-slider__prev');
+    if (btnNext) btnNext.addEventListener('click', function (e) { e.preventDefault(); goTo(current + 1); resetTimer(); });
+    if (btnPrev) btnPrev.addEventListener('click', function (e) { e.preventDefault(); goTo(current - 1); resetTimer(); });
+    dots.forEach(function (dot) {
+        dot.addEventListener('click', function () { goTo(parseInt(this.dataset.index)); resetTimer(); });
+    });
+
+    startTimer();
+}());
+</script>
+@endpush

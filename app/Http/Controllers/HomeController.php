@@ -549,4 +549,64 @@ class HomeController extends Controller
             abort(404);
         }
     }
+
+    // ─────────────────────────────────────────────
+    //  Recherche
+    // ─────────────────────────────────────────────
+
+    public function search(Request $request)
+    {
+        $subdomain = $this->getSubdomain();
+
+        if ($subdomain) {
+            // Recherche sur un blog spécifique
+            $organization = Organization::where('subdomain', $subdomain)->firstOrFail();
+            $this->abortIfOrganizationUnavailable($organization);
+
+            $query = $request->input('q', '');
+            $rubriqueId = $request->input('rubrique');
+
+            $posts = Post::published()
+                ->whereHas('user', fn($q) => $q->where('organization_id', $organization->id))
+                ->where(function ($q) use ($query) {
+                    $q->where('libelle', 'like', "%{$query}%")
+                      ->orWhere('description', 'like', "%{$query}%");
+                })
+                ->when($rubriqueId, function ($q) use ($rubriqueId) {
+                    $q->whereHas('rubriques', fn($q2) => $q2->where('id', $rubriqueId));
+                })
+                ->with('user', 'rubriques')
+                ->orderByDesc('created_at')
+                ->paginate(12);
+
+            $rubriques = Rubrique::whereHas('posts', function ($q) use ($organization) {
+                $q->published()->whereHas('user', fn($q2) => $q2->where('organization_id', $organization->id));
+            })->get();
+
+            return view('public.search', compact('posts', 'query', 'rubriques', 'organization'));
+        } else {
+            // Recherche globale sur tous les blogs
+            $query = $request->input('q', '');
+            $organizationId = $request->input('blog');
+
+            $posts = Post::published()
+                ->where(function ($q) use ($query) {
+                    $q->where('libelle', 'like', "%{$query}%")
+                      ->orWhere('description', 'like', "%{$query}%");
+                })
+                ->when($organizationId, function ($q) use ($organizationId) {
+                    $q->whereHas('user', fn($q2) => $q2->where('organization_id', $organizationId));
+                })
+                ->with('user.organization', 'rubriques')
+                ->orderByDesc('created_at')
+                ->paginate(12);
+
+            $organizations = Organization::where('is_active', true)
+                ->where('is_publicly_visible', true)
+                ->orderBy('organization_name')
+                ->get();
+
+            return view('public.search-global', compact('posts', 'query', 'organizations'));
+        }
+    }
 }
