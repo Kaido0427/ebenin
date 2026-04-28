@@ -137,7 +137,9 @@
     <div class="mobile-nav__backdrop" data-mobile-close></div>
     <div class="mobile-nav__panel">
         <div class="mobile-nav__head">
-            <img src="{{ $logoUrl }}" alt="{{ $organization->organization_name ?? 'E-Benin' }}" class="logo__img">
+            <div class="mobile-nav__logo-wrap">
+                <img src="{{ $logoUrl }}" alt="{{ $organization->organization_name ?? 'E-Benin' }}" class="logo__img">
+            </div>
             <button class="mobile-nav__close" type="button" data-mobile-close aria-label="Fermer">✕</button>
         </div>
         <div class="mobile-nav__links">

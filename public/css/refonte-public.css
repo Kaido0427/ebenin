@@ -1683,8 +1683,15 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px;
+  padding: 16px 20px;
   border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.mobile-nav__logo-wrap {
+  background: #fff;
+  border-radius: 8px;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
 }
 .mobile-nav__close {
   width: 36px; height: 36px;

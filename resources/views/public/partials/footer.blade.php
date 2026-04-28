@@ -35,7 +35,7 @@
                     <img src="{{ $logoUrl }}" alt="{{ $organization->organization_name ?? 'E-Benin' }}" class="logo__img--light">
                 </a>
                 <p class="footer__desc">
-                    {{ $organization?->organization_name ? "{$organization->organization_name} publie les actualités, analyses et reportages de sa rédaction sur le réseau E-Benin." : "E-Benin fédère les blogs d'actualité, les reportages et les rubriques thématiques autour du Bénin." }}
+                    {{ $organization?->organization_name ? "Blog de {$organization->organization_name}, membre du réseau E-Benin." : "E-Benin fédère les blogs d'actualité, les reportages et les rubriques thématiques autour du Bénin." }}
                 </p>
                 <div class="footer__social">
                     @forelse ($socialLinks as $social)
