@@ -4,8 +4,9 @@
     $host = request()->getHost();
     $baseDomain = str_contains($host, 'e-benin.bj') ? 'e-benin.bj' : 'e-benin.com';
     $siteRoot = 'https://' . $baseDomain;
-    $isMainDomain = in_array($host, ['e-benin.com', 'e-benin.bj'], true);
-    $organization = $organization ?? null;
+    $isMainDomain = in_array($host, ['e-benin.com', 'www.e-benin.com', 'e-benin.bj', 'www.e-benin.bj'], true);
+    $isSubdomain  = !$isMainDomain && count(explode('.', $host)) > 2;
+    $organization = $isSubdomain ? ($organization ?? null) : null;
     $navItems = collect($navItems ?? [])->filter(fn($item) => filled($item->id ?? null) && filled($item->name ?? null))->values();
     $primaryNav = $navItems->take(6);
     $overflowNav = $navItems->slice(6);
