@@ -4,7 +4,9 @@
     $host = request()->getHost();
     $baseDomain = str_contains($host, 'e-benin.bj') ? 'e-benin.bj' : 'e-benin.com';
     $siteRoot = 'https://' . $baseDomain;
-    $organization = $organization ?? null;
+    $isSubdomain = !in_array($host, ['e-benin.com', 'www.e-benin.com', 'e-benin.bj', 'www.e-benin.bj'], true)
+                   && count(explode('.', $host)) > 2;
+    $organization = $isSubdomain ? ($organization ?? null) : null;
     $footerRubriques = collect($footerRubriques ?? ($navItems ?? []))->filter()->take(6);
     $footerOrganizations = collect($footerOrgs ?? [])->filter()->take(6);
     $policyUrl = $siteRoot . '/politique';
