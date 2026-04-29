@@ -946,6 +946,7 @@ textarea.form-control { resize: vertical; min-height: 100px; }
                 <div class="form-group">
                     <label class="form-label">Image de couverture</label>
                     <input type="file" class="form-control" name="image" accept="image/*">
+                    <small class="text-danger d-block mt-1">⚠️ Ratio recommandé : <strong>16:9</strong> (ex : 1200×675 px). Une image trop haute risque d'avoir les visages coupés.</small>
                 </div>
                 <div class="form-group" id="videoGroup" style="display:none;">
                     <label class="form-label">Lien vidéo (Reportage)</label>
@@ -1002,6 +1003,7 @@ textarea.form-control { resize: vertical; min-height: 100px; }
                 <div class="form-group">
                     <label class="form-label">Nouvelle image (optionnel)</label>
                     <input type="file" class="form-control" name="image" accept="image/*">
+                    <small class="text-danger d-block mt-1">⚠️ Ratio recommandé : <strong>16:9</strong> (ex : 1200×675 px). Une image trop haute risque d'avoir les visages coupés.</small>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Lien vidéo</label>

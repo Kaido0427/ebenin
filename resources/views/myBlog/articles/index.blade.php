@@ -116,6 +116,7 @@
                         <div class="mb-3">
                             <label for="image" class="form-label">Image</label>
                             <input type="file" class="form-control" id="image" name="image">
+                            <small class="text-danger d-block mt-1">⚠️ Ratio recommandé : <strong>16:9</strong> (ex : 1200×675 px). Une image trop haute risque d'avoir les visages coupés à l'affichage.</small>
                         </div>
                         <div class="mb-3"> 
                             <label for="video" class="form-label">Lien de la vidéo</label>
@@ -177,6 +178,7 @@
                         <div class="mb-3">
                             <label for="updateImage" class="form-label">Image</label>
                             <input type="file" class="form-control" id="updateImage" name="image">
+                            <small class="text-danger d-block mt-1">⚠️ Ratio recommandé : <strong>16:9</strong> (ex : 1200×675 px). Une image trop haute risque d'avoir les visages coupés à l'affichage.</small>
                         </div>
                         <div class="mb-3">
                             <label for="updatedVideo" class="form-label">Lien de la vidéo</label>
