@@ -45,7 +45,18 @@ class articleController extends Controller
             if ($validator->fails()) {
                 return redirect()->back()->withErrors($validator)->withInput();
             }
-    
+
+            // Bloquer si un article avec le même titre existe déjà pour cet utilisateur
+            $exists = Post::where('user_id', auth()->id())
+                ->where('libelle', trim($request->input('libelle')))
+                ->exists();
+
+            if ($exists) {
+                return redirect()->back()
+                    ->withInput()
+                    ->withErrors(['libelle' => 'Un article avec ce titre existe déjà. Veuillez choisir un titre différent.']);
+            }
+
             // Créer le post
             $post = new Post([
                 'description' => $request->input('description'),
