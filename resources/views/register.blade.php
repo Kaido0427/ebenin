@@ -179,7 +179,7 @@
                 const formData = new FormData(form);
                 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-                fetch('{{ route('register') }}', {
+                fetch('/bloger/register', {
                     method: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': csrfToken,
