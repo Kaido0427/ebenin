@@ -302,12 +302,12 @@ class HomeController extends Controller
                 'phone'                   => $sessionData['phone'],
                 'address'                 => $sessionData['address'],
                 'organization_id'         => $organization->id,
-                'subscription_quantity'   => 1,
-                'subscription_started_at' => now(),  // ✅ colonne dédiée, jamais écrasée accidentellement
+                'subscription_quantity'   => 3,
+                'subscription_started_at' => now(),
                 'is_active'               => true,
             ]);
 
-            $subscription = $this->syncOrganizationSubscription($organization, 1, 'active');
+            $subscription = $this->syncOrganizationSubscription($organization, 3, 'active');
             $this->syncLegacySubscriptionFields($organization, $subscription);
 
             Transaction::create([
@@ -320,8 +320,8 @@ class HomeController extends Controller
                 'source' => 'kkiapay',
                 'reference' => $request->query('transaction_id') ?: 'registration-' . $organization->subdomain,
                 'paid_at' => now(),
-                'months_awarded' => 1,
-                'notes' => 'Activation initiale du blog',
+                'months_awarded' => 3,
+                'notes' => 'Activation initiale — 90 jours d\'essai offerts',
             ]);
 
             UserOrganization::create([
