@@ -102,7 +102,8 @@ class articleController extends Controller
                 'rubrique_id' => $request->input('rubrique_id'),
             ]);
     
-            return redirect()->route('dashboard', ['organization' => $organization->subdomain])->with('success', 'Article créé avec succès!');
+            $baseDomain = str_contains(request()->getHost(), 'e-benin.bj') ? 'e-benin.bj' : 'e-benin.com';
+            return redirect()->to("https://{$organization->subdomain}.{$baseDomain}/dashboard")->with('success', 'Article créé avec succès!');
         } catch (\Exception $e) {
             Log::error('Erreur lors de la création du post', [
                 'user_id' => auth()->id(),
@@ -195,7 +196,8 @@ class articleController extends Controller
             // Mise à jour de la rubrique
             $post->rubriques()->sync([$request->input('rubrique_id')]);
 
-            return redirect()->route('dashboard', ['organization' => $organization->subdomain])->with('success', 'Article mis à jour avec succes!');
+            $baseDomain = str_contains(request()->getHost(), 'e-benin.bj') ? 'e-benin.bj' : 'e-benin.com';
+            return redirect()->to("https://{$organization->subdomain}.{$baseDomain}/dashboard")->with('success', 'Article mis à jour avec succes!');
         } catch (\Exception $e) {
             if ($e instanceof HttpExceptionInterface) {
                 throw $e;
@@ -235,7 +237,8 @@ class articleController extends Controller
             $post->rubriques()->detach();
             $post->delete();
 
-            return redirect()->route('dashboard', ['organization' => $organization->subdomain])
+            $baseDomain = str_contains(request()->getHost(), 'e-benin.bj') ? 'e-benin.bj' : 'e-benin.com';
+            return redirect()->to("https://{$organization->subdomain}.{$baseDomain}/dashboard")
                 ->with('success', 'Article supprimé avec succes!');
         } catch (\Exception $e) {
             if ($e instanceof HttpExceptionInterface) {
