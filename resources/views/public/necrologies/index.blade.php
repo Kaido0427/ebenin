@@ -6,47 +6,88 @@
     <title>Nécrologies | E-Benin</title>
     <link rel="stylesheet" href="{{ asset('css/refonte-public.css') }}">
     <style>
-        body { background: #1a1a2e; font-family: 'Inter', sans-serif; margin: 0; }
+        body { background: #12131a; margin: 0; color: #ddd; font-family: 'Inter', sans-serif; }
 
-        .nec-header { background: #0d0d1a; color: #fff; padding: 0 24px; height: 60px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,.08); }
-        .nec-header__logo img { height: 32px; filter: brightness(0) invert(1); }
-        .nec-header nav a { color: #aaa; text-decoration: none; font-size: .9rem; margin-left: 20px; }
-        .nec-header nav a:hover { color: #fff; }
+        .pub-header {
+            background: #0a0a12;
+            padding: 0 24px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255,255,255,.06);
+        }
+        .pub-header__logo img { height: 30px; filter: brightness(0) invert(1); }
+        .pub-header nav a { color: rgba(255,255,255,.5); text-decoration: none; font-size: .88rem; margin-left: 20px; transition: color .2s; }
+        .pub-header nav a:hover { color: #c9a84c; }
 
-        .nec-hero { background: linear-gradient(180deg, #0d0d1a 0%, #1a1a2e 100%); color: #fff; padding: 48px 24px; text-align: center; border-bottom: 1px solid rgba(255,255,255,.06); }
-        .nec-hero h1 { font-size: 2rem; font-weight: 700; margin: 0 0 8px; }
-        .nec-hero p { color: #999; margin: 0; font-size: .95rem; }
-        .nec-hero .candle { font-size: 2rem; margin-bottom: 12px; }
+        .nec-hero {
+            background: linear-gradient(180deg, #0a0a12 0%, #12131a 100%);
+            color: #fff;
+            padding: 48px 24px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,.05);
+        }
+        .nec-hero h1 { font-size: 1.9rem; font-weight: 700; margin: 0 0 6px; }
+        .nec-hero p { color: #777; margin: 0; font-size: .93rem; }
+        .nec-hero .candle { font-size: 1.8rem; margin-bottom: 10px; }
 
-        .nec-container { max-width: 1100px; margin: 0 auto; padding: 40px 24px; }
+        .nec-container { max-width: 1100px; margin: 0 auto; padding: 36px 20px; }
+        .nec-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(276px, 1fr)); gap: 22px; }
 
-        /* Grid */
-        .nec-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
+        .nec-card {
+            background: #0d0d1a;
+            border: 1px solid rgba(255,255,255,.07);
+            border-radius: 12px;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            transition: border-color .2s, transform .2s;
+            display: flex;
+            flex-direction: column;
+        }
+        .nec-card:hover { border-color: rgba(201,168,76,.35); transform: translateY(-2px); }
 
-        /* Card */
-        .nec-card { background: #0d0d1a; border: 1px solid rgba(255,255,255,.08); border-radius: 12px; overflow: hidden; text-decoration: none; color: inherit; transition: border-color .2s, transform .2s; display: flex; flex-direction: column; }
-        .nec-card:hover { border-color: rgba(255,255,255,.2); transform: translateY(-2px); }
-        .nec-card__photo { height: 200px; overflow: hidden; position: relative; background: #111; display: flex; align-items: center; justify-content: center; color: #444; font-size: 3rem; }
+        .nec-card__photo {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+            background: #0a0a12;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            font-size: 3rem;
+        }
         .nec-card__photo img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
-        .nec-card__body { padding: 20px; flex: 1; }
-        .nec-card__name { font-size: 1.15rem; font-weight: 700; color: #fff; margin-bottom: 6px; }
-        .nec-card__dates { font-size: .82rem; color: #888; margin-bottom: 12px; }
-        .nec-card__msg { font-size: .85rem; color: #aaa; line-height: 1.6; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
-        .nec-card__footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,.06); display: flex; justify-content: space-between; align-items: center; }
-        .nec-card__by { font-size: .75rem; color: #666; }
-        .nec-card__date { font-size: .75rem; color: #555; }
-        .nec-card .has-video { position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,.7); color: #fff; font-size: .72rem; padding: 3px 8px; border-radius: 4px; }
 
-        .empty-state { text-align: center; padding: 60px; color: #555; }
-        .empty-state .icon { font-size: 3rem; margin-bottom: 12px; }
+        .nec-card__body { padding: 18px 20px; flex: 1; }
+        .nec-card__name { font-size: 1.1rem; font-weight: 700; color: #eee; margin-bottom: 5px; }
+        .nec-card__dates { font-size: .8rem; color: #666; margin-bottom: 10px; }
+        .nec-card__msg { font-size: .84rem; color: #888; line-height: 1.6; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
 
-        .pagination-wrap { margin-top: 40px; display: flex; justify-content: center; }
+        .nec-card__footer {
+            padding: 10px 20px;
+            border-top: 1px solid rgba(255,255,255,.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: .74rem;
+        }
+        .nec-card__by { color: #555; }
+        .nec-card__date { color: #444; }
+        .has-video { position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,.7); color: #eee; font-size: .7rem; padding: 3px 8px; border-radius: 4px; }
+
+        .empty-state { text-align: center; padding: 60px; color: #444; }
+        .empty-state .icon { font-size: 2.8rem; margin-bottom: 10px; }
+
+        .pagination-wrap { margin-top: 36px; display: flex; justify-content: center; }
     </style>
 </head>
 <body>
 
-<header class="nec-header">
-    <div class="nec-header__logo">
+<header class="pub-header">
+    <div class="pub-header__logo">
         <a href="{{ str_contains(request()->getHost(), 'e-benin.bj') ? 'https://e-benin.bj' : 'https://e-benin.com' }}">
             <img src="{{ asset('images/ebenins.png') }}" alt="E-Benin">
         </a>
