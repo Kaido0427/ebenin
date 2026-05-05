@@ -4,9 +4,19 @@ namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
 use App\Models\Necrologie;
+use App\Models\Rubrique;
 
 class NecrologiePublicController extends Controller
 {
+    private function sharedViewData(): array
+    {
+        return [
+            'navItems'      => Rubrique::all(),
+            'tickerPosts'   => collect([]),
+            'showAuthModal' => false,
+        ];
+    }
+
     public function index()
     {
         $necrologies = Necrologie::with('advertiser')
@@ -14,12 +24,18 @@ class NecrologiePublicController extends Controller
             ->latest()
             ->paginate(20);
 
-        return view('public.necrologies.index', compact('necrologies'));
+        return view('public.necrologies.index', array_merge(
+            compact('necrologies'),
+            $this->sharedViewData()
+        ));
     }
 
     public function show(Necrologie $necrologie)
     {
         abort_if($necrologie->status !== 'active', 404);
-        return view('public.necrologies.show', compact('necrologie'));
+        return view('public.necrologies.show', array_merge(
+            compact('necrologie'),
+            $this->sharedViewData()
+        ));
     }
 }

@@ -4,9 +4,19 @@ namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
 use App\Models\Annonce;
+use App\Models\Rubrique;
 
 class AnnoncePublicController extends Controller
 {
+    private function sharedViewData(): array
+    {
+        return [
+            'navItems'      => Rubrique::all(),
+            'tickerPosts'   => collect([]),
+            'showAuthModal' => false,
+        ];
+    }
+
     public function index()
     {
         $category = request('category');
@@ -24,12 +34,18 @@ class AnnoncePublicController extends Controller
             'evenements'     => 'Évènements',
         ];
 
-        return view('public.annonces.index', compact('annonces', 'categories', 'category'));
+        return view('public.annonces.index', array_merge(
+            compact('annonces', 'categories', 'category'),
+            $this->sharedViewData()
+        ));
     }
 
     public function show(Annonce $annonce)
     {
         abort_if($annonce->status !== 'active', 404);
-        return view('public.annonces.show', compact('annonce'));
+        return view('public.annonces.show', array_merge(
+            compact('annonce'),
+            $this->sharedViewData()
+        ));
     }
 }
