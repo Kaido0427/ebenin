@@ -4,14 +4,14 @@ namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
 use App\Models\Annonce;
-use App\Models\Rubrique;
+use App\Models\rubrique;
 
 class AnnoncePublicController extends Controller
 {
     private function sharedViewData(): array
     {
         return [
-            'navItems'      => Rubrique::all(),
+            'navItems'      => rubrique::all(),
             'tickerPosts'   => collect([]),
             'showAuthModal' => false,
         ];

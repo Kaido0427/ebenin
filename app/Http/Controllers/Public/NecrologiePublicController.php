@@ -4,14 +4,14 @@ namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
 use App\Models\Necrologie;
-use App\Models\Rubrique;
+use App\Models\rubrique;
 
 class NecrologiePublicController extends Controller
 {
     private function sharedViewData(): array
     {
         return [
-            'navItems'      => Rubrique::all(),
+            'navItems'      => rubrique::all(),
             'tickerPosts'   => collect([]),
             'showAuthModal' => false,
         ];
