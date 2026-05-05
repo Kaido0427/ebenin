@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class RegisterController extends Controller
 {
@@ -42,92 +43,74 @@ class RegisterController extends Controller
     public function register(Request $request)
     {
         try {
-            // Valider la requête
-            Log::info('Début de la validation des données du formulaire.', ['request' => $request->all()]);
-            $this->validator($request->all())->validate();
-            Log::info('Validation des données du formulaire réussie.');
+            $validator = $this->validator($request->all());
 
-            // Normalisation du nom de l'organisation pour le sous-domaine
-            $organizationName = $request->input('organization_name');
-
-            $organizationName = trim($organizationName);
-            // Supprimer les espaces
-            $organizationName = str_replace(' ', '-', $organizationName);
-
-            // Convertir en minuscules
-            $subdomain = strtolower($organizationName);
-
-            // Nettoyer les espaces au début et à la fin
-            $subdomain = trim($subdomain);
-            Log::info('Sous-domaine normalisé.', ['organization_name' => $organizationName, 'subdomain' => $subdomain]);
-
-            // Gérer le fichier logo s'il est fourni
-            $logoPath = null;
-            if ($request->hasFile('organization_logo')) {
-                try {
-                    $file = $request->file('organization_logo');
-                    $originalFilename = $file->getClientOriginalName();
-                    $timestamp = time();
-                    $extension = $file->getClientOriginalExtension();
-                    $filename = $timestamp . '.' . $extension;
-                    $destinationPath = public_path('images/logos');
-
-                    // Créer le répertoire si nécessaire
-                    if (!file_exists($destinationPath)) {
-                        mkdir($destinationPath, 0755, true);
-                        Log::info('Répertoire de destination créé.', ['path' => $destinationPath]);
-                    }
-
-                    // Déplacer le fichier vers le répertoire 'public/images/logos'
-                    $file->move($destinationPath, $filename);
-                    Log::info('Fichier de logo déplacé avec succès.', [
-                        'original_filename' => $originalFilename,
-                        'new_filename' => $filename,
-                        'destination_path' => $destinationPath . '/' . $filename
-                    ]);
-
-                    $logoPath = 'images/logos/' . $filename;
-                } catch (\Exception $e) {
-                    Log::error('Erreur lors du traitement du logo.', ['error' => $e->getMessage()]);
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Erreur lors du traitement du logo.'
-                    ], 500);
-                }
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator)->withInput();
             }
 
-            // Stocker les informations dans la session
-            session()->put('registration_data', [
-                'organization_name' => $request->input('organization_name'),
-                'organization_email' => $request->input('organization_email'),
+            $subdomain = strtolower(trim(str_replace(' ', '-', $request->input('organization_name'))));
+
+            // Logo upload
+            $logoPath = null;
+            if ($request->hasFile('organization_logo')) {
+                $file = $request->file('organization_logo');
+                $filename = time() . '.' . $file->getClientOriginalExtension();
+                $destinationPath = public_path('images/logos');
+                if (!file_exists($destinationPath)) {
+                    mkdir($destinationPath, 0755, true);
+                }
+                $file->move($destinationPath, $filename);
+                $logoPath = 'images/logos/' . $filename;
+            }
+
+            // Création organisation
+            $organization = organization::create([
+                'organization_name'    => $request->input('organization_name'),
+                'organization_email'   => $request->input('organization_email'),
                 'organization_address' => $request->input('organization_address'),
-                'organization_phone' => $request->input('organization_phone'),
-                'organization_logo' => $logoPath,
-                'subdomain' => $subdomain,
-                'name' => $request->input('name'),
-                'email' => $request->input('email'),
-                'password' => $request->input('password'),
-                'phone' => $request->input('phone'),
-                'address' => $request->input('address'),
+                'organization_phone'   => $request->input('organization_phone'),
+                'organization_logo'    => $logoPath,
+                'subdomain'            => $subdomain,
+                'is_active'            => true,
+                'is_publicly_visible'  => true,
             ]);
 
-            // Répondre avec succès pour lancer le paiement
-            Log::info('Réponse JSON envoyée pour le lancement du paiement.', [
-                'amount' => 10000,
-                'organization_subdomain' => $subdomain
+            // Création utilisateur avec 90 jours d'essai gratuit
+            $user = User::create([
+                'name'                    => $request->input('name'),
+                'email'                   => $request->input('email'),
+                'password'                => Hash::make($request->input('password')),
+                'phone'                   => $request->input('phone'),
+                'address'                 => $request->input('address'),
+                'organization_id'         => $organization->id,
+                'subscription_quantity'   => 3,
+                'subscription_started_at' => now(),
+                'is_active'               => true,
             ]);
 
-            return response()->json([
-                'success' => true,
-                'amount' => 10000,
-                'organization' => $subdomain,
+            user_organization::create([
+                'user_id'         => $user->id,
+                'organization_id' => $organization->id,
             ]);
+
+            Auth::login($user);
+
+            $baseDomain = str_contains($request->getHost(), 'e-benin.bj') ? 'e-benin.bj' : 'e-benin.com';
+
+            Log::info('Inscription gratuite — essai 90 jours', [
+                'user_id' => $user->id,
+                'org_id'  => $organization->id,
+                'expiry'  => now()->addMonths(3)->toDateTimeString(),
+            ]);
+
+            return redirect()->to("https://{$subdomain}.{$baseDomain}/dashboard")
+                ->with('success', 'Bienvenue ! Votre période d\'essai de 90 jours a démarré.');
         } catch (\Exception $e) {
-            Log::error('Erreur lors de l\'enregistrement : ' . $e->getMessage());
-            return response()->json([
-                'success' => false,
-                'message' => 'Une erreur est survenue lors de l\'enregistrement. ' . $e->getMessage(),
-            ], 500);
+            Log::error('Erreur inscription : ' . $e->getMessage());
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['error' => 'Une erreur est survenue : ' . $e->getMessage()]);
         }
     }
 

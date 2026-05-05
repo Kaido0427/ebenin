@@ -64,8 +64,16 @@
                             <p>Vous avez déjà un compte ? <a href="{{ $siteRoot }}/?auth=login">Se connecter</a></p>
                         </div>
 
+                        @if ($errors->any())
+                            <div class="auth-error" style="margin-bottom:12px;">
+                                @foreach ($errors->all() as $error)
+                                    <p>{{ $error }}</p>
+                                @endforeach
+                            </div>
+                        @endif
+
                         <div class="auth-card">
-                            <form id="register-form" enctype="multipart/form-data">
+                            <form id="register-form" method="POST" action="/bloger/register" enctype="multipart/form-data">
                                 @csrf
 
                                 <div class="auth-grid">
@@ -135,12 +143,10 @@
                                     </div>
                                 </div>
 
-                                <div id="form-error" class="auth-error" style="display:none;"></div>
-
-                                <button id="kkiapay-button" type="button" class="btn btn--primary" style="width:100%;justify-content:center;margin-top:18px;">
-                                    Créer mon blog
+                                <button type="submit" class="btn btn--primary" style="width:100%;justify-content:center;margin-top:18px;">
+                                    Créer mon blog gratuitement
                                 </button>
-                                <p class="auth-form-note">Le paiement d'activation s'ouvrira ensuite dans la fenêtre sécurisée Kkiapay.</p>
+                                <p class="auth-form-note">90 jours d'essai gratuit. Aucun paiement requis à l'inscription.</p>
                             </form>
                         </div>
                     </div>
@@ -151,7 +157,6 @@
 @endsection
 
 @push('scripts')
-    <script src="https://cdn.kkiapay.me/k.js"></script>
     <script>
         document.getElementById('organization_logo').addEventListener('change', function() {
             const file = this.files[0];
@@ -164,61 +169,6 @@
             img.style.display = 'block';
             reader.addEventListener('load', () => img.setAttribute('src', reader.result));
             reader.readAsDataURL(file);
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const btn = document.getElementById('kkiapay-button');
-            const form = document.getElementById('register-form');
-            const errorDiv = document.getElementById('form-error');
-
-            btn.addEventListener('click', function() {
-                errorDiv.style.display = 'none';
-                btn.disabled = true;
-                btn.textContent = 'Traitement en cours...';
-
-                const formData = new FormData(form);
-                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-                fetch('/bloger/register', {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken,
-                        'Accept': 'application/json'
-                    },
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        const callbackUrl = window.location.origin + '/transaction/' + data.organization;
-
-                        openKkiapayWidget({
-                            amount: data.amount,
-                            callback: callbackUrl,
-                            data: JSON.stringify({ organization: data.organization }),
-                            position: 'center',
-                            theme: '#003f7f',
-                            sandbox: false,
-                            key: 'cb876650e192fdf79d12342d023a6f4ebe257de4'
-                        });
-                    } else {
-                        let message = data.message || 'Une erreur est survenue.';
-                        if (data.errors) {
-                            message = Object.values(data.errors).flat().join('<br>');
-                        }
-                        errorDiv.innerHTML = message;
-                        errorDiv.style.display = 'block';
-                    }
-                })
-                .catch(() => {
-                    errorDiv.innerHTML = 'Erreur de communication avec le serveur. Veuillez réessayer.';
-                    errorDiv.style.display = 'block';
-                })
-                .finally(() => {
-                    btn.disabled = false;
-                    btn.textContent = 'Créer mon blog';
-                });
-            });
         });
     </script>
 @endpush
