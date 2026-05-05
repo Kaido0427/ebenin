@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-Bénin — L'actualité du Bénin en temps réel</title>
+  <meta name="description" content="E-Bénin, le portail d'information du Bénin. Suivez toute l'actualité politique, sportive, économique et culturelle du Bénin." />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/png" href="logo/e-benin.png" />
+</head>
+<body>
+
+  <!-- ── Progress Bar ── -->
+  <div class="progress-bar" id="progressBar" style="width:0"></div>
+
+  <!-- ── Breaking News Ticker ── -->
+  <div class="ticker">
+    <div class="ticker__label">Breaking</div>
+    <div class="ticker__track">
+      <div class="ticker__item">Romuald Wadagni élu président du Bénin avec 94% des voix</div>
+      <div class="ticker__item">Assemblée nationale : adoption du budget 2026</div>
+      <div class="ticker__item">Kémi Séba arrêté en Afrique du Sud — demande d'extradition en cours</div>
+      <div class="ticker__item">Boni Yayi félicite le président élu Wadagni</div>
+      <div class="ticker__item">Sécurité routière : nouvelles réglementations sur les tricycles à Natitingou</div>
+      <div class="ticker__item">Économie : le Bénin maintient sa croissance à 6,2%</div>
+      <!-- duplicate for seamless loop -->
+      <div class="ticker__item">Romuald Wadagni élu président du Bénin avec 94% des voix</div>
+      <div class="ticker__item">Assemblée nationale : adoption du budget 2026</div>
+      <div class="ticker__item">Kémi Séba arrêté en Afrique du Sud — demande d'extradition en cours</div>
+      <div class="ticker__item">Boni Yayi félicite le président élu Wadagni</div>
+      <div class="ticker__item">Sécurité routière : nouvelles réglementations sur les tricycles à Natitingou</div>
+      <div class="ticker__item">Économie : le Bénin maintient sa croissance à 6,2%</div>
+    </div>
+  </div>
+
+  <!-- ── Top Bar ── -->
+  <div class="topbar">
+    <div class="container">
+      <div class="topbar__inner">
+        <div class="topbar__date">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+          Lundi 20 Avril 2026 — Cotonou, Bénin
+        </div>
+        <div class="topbar__links">
+          <a href="contact.html">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            Contact
+          </a>
+          <a href="politique-confidentialite.html">Confidentialité</a>
+          <div class="topbar__social">
+            <a href="#" title="Facebook">f</a>
+            <a href="#" title="Twitter">𝕏</a>
+            <a href="#" title="YouTube">▶</a>
+            <a href="#" title="WhatsApp">✆</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Header ── -->
+  <header class="header">
+    <div class="container">
+      <div class="header__inner">
+
+        <a href="index.html" class="logo">
+          <img src="logo/e-benin.png" alt="E-Bénin" class="logo__img" />
+        </a>
+
+        <nav class="nav" aria-label="Navigation principale">
+          <ul class="nav__list">
+
+            <li class="nav__item active">
+              <a href="index.html" class="nav__link">Accueil</a>
+            </li>
+
+            <li class="nav__item">
+              <a href="categorie.html?cat=politique" class="nav__link">
+                Politique
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+              </a>
+              <div class="nav__dropdown">
+                <a href="categorie.html?cat=politique">Politique nationale</a>
+                <a href="categorie.html?cat=politique">Gouvernement</a>
+                <a href="categorie.html?cat=politique">Assemblée nationale</a>
+                <a href="categorie.html?cat=politique">Élections</a>
+                <a href="categorie.html?cat=politique">Diplomatie</a>
+              </div>
+            </li>
+
+            <li class="nav__item">
+              <a href="categorie.html?cat=sport" class="nav__link">
+                Sport
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+              </a>
+              <div class="nav__dropdown">
+                <a href="categorie.html?cat=sport">Football</a>
+                <a href="categorie.html?cat=sport">Basketball</a>
+                <a href="categorie.html?cat=sport">Athlétisme</a>
+                <a href="categorie.html?cat=sport">Sports locaux</a>
+              </div>
+            </li>
+
+            <li class="nav__item">
+              <a href="categorie.html?cat=societe" class="nav__link">Société</a>
+            </li>
+            <li class="nav__item">
+              <a href="categorie.html?cat=economie" class="nav__link">Économie</a>
+            </li>
+            <li class="nav__item">
+              <a href="categorie.html?cat=culture" class="nav__link">Culture</a>
+            </li>
+            <li class="nav__item">
+              <a href="categorie.html?cat=international" class="nav__link">International</a>
+            </li>
+            <li class="nav__item">
+              <a href="categorie.html?cat=technologie" class="nav__link">Techno</a>
+            </li>
+            <li class="nav__item">
+              <a href="categorie.html?cat=sante" class="nav__link">
+                Plus
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+              </a>
+              <div class="nav__dropdown">
+                <a href="categorie.html?cat=sante">Santé</a>
+                <a href="categorie.html?cat=environnement">Environnement</a>
+                <a href="categorie.html?cat=education">Éducation</a>
+                <a href="categorie.html?cat=justice">Justice</a>
+                <a href="categorie.html?cat=agriculture">Agriculture</a>
+              </div>
+            </li>
+
+          </ul>
+        </nav>
+
+        <div class="header__actions">
+          <a href="recherche.html" class="btn btn--icon" title="Rechercher" aria-label="Rechercher">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          </a>
+          <a href="connexion.html" class="btn btn--outline">Connexion</a>
+          <a href="inscription.html" class="btn btn--primary">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            S'inscrire
+          </a>
+          <button class="hamburger" aria-label="Menu mobile" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Mobile Nav ── -->
+  <div class="mobile-nav" id="mobileNav">
+    <div class="mobile-nav__backdrop" onclick="toggleMenu()"></div>
+    <div class="mobile-nav__panel">
+      <div class="mobile-nav__head">
+        <img src="logo/e-benin.png" alt="E-Bénin" class="logo__img--light" />
+        <button class="mobile-nav__close" onclick="toggleMenu()">✕</button>
+      </div>
+      <div class="mobile-nav__links">
+        <a href="index.html">🏠 Accueil</a>
+        <a href="categorie.html?cat=politique">🏛️ Politique</a>
+        <a href="categorie.html?cat=sport">⚽ Sport</a>
+        <a href="categorie.html?cat=societe">👥 Société</a>
+        <a href="categorie.html?cat=economie">📈 Économie</a>
+        <a href="categorie.html?cat=culture">🎭 Culture</a>
+        <a href="categorie.html?cat=international">🌍 International</a>
+        <a href="categorie.html?cat=technologie">💻 Technologie</a>
+        <a href="categorie.html?cat=sante">🏥 Santé</a>
+        <a href="categorie.html?cat=environnement">🌿 Environnement</a>
+        <a href="categorie.html?cat=education">📚 Éducation</a>
+        <a href="categorie.html?cat=justice">⚖️ Justice</a>
+        <a href="categorie.html?cat=agriculture">🌾 Agriculture</a>
+        <a href="contact.html">📬 Contact</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── HERO ── -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero__grid">
+
+        <!-- Main featured -->
+        <a href="article.html" class="hero__main">
+          <img src="https://picsum.photos/seed/benin1/900/600" alt="Romuald Wadagni élu président" loading="eager" />
+          <div class="hero__overlay"></div>
+          <div class="hero__content">
+            <span class="hero__category">Politique</span>
+            <h2 class="hero__title">Romuald Wadagni remporte l'élection présidentielle avec 94% des suffrages</h2>
+            <div class="hero__meta">
+              <span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                Il y a 2 heures
+              </span>
+              <span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                42 commentaires
+              </span>
+              <span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                3 847 vues
+              </span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Side cards -->
+        <div class="hero__side">
+          <a href="article.html" class="hero__card">
+            <img class="hero__card-img" src="https://picsum.photos/seed/benin2/200/160" alt="" />
+            <div class="hero__card-body">
+              <div class="hero__card-cat">International</div>
+              <div class="hero__card-title">Kémi Séba arrêté en Afrique du Sud : une demande d'extradition en cours</div>
+              <div class="hero__card-time">Il y a 3 heures</div>
+            </div>
+          </a>
+          <a href="article.html" class="hero__card">
+            <img class="hero__card-img" src="https://picsum.photos/seed/benin3/200/160" alt="" />
+            <div class="hero__card-body">
+              <div class="hero__card-cat">Politique</div>
+              <div class="hero__card-title">Boni Yayi adresse ses félicitations au président élu Wadagni</div>
+              <div class="hero__card-time">Il y a 5 heures</div>
+            </div>
+          </a>
+          <a href="article.html" class="hero__card">
+            <img class="hero__card-img" src="https://picsum.photos/seed/benin4/200/160" alt="" />
+            <div class="hero__card-body">
+              <div class="hero__card-cat">Société</div>
+              <div class="hero__card-title">Natitingou : de nouvelles réglementations sur les tricycles pour réduire les accidents</div>
+              <div class="hero__card-time">Il y a 6 heures</div>
+            </div>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       ESPACE PUBLICITAIRE — CARROUSEL AUTO-DÉFILANT
+       Pour ajouter / modifier une pub, éditez le tableau ADS_DATA
+       dans le bloc <script id="ads-config"> ci-dessous.
+  ════════════════════════════════════════════════════════ -->
+  <section class="ad-carousel-section">
+    <div class="container">
+      <div class="ad-carousel-header">
+        <span class="ad-carousel-label">Espaces publicitaires</span>
+        <div class="ad-carousel-controls">
+          <button class="ad-nav-btn" id="adPrev" aria-label="Précédent">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <div class="ad-dots" id="adDots"></div>
+          <button class="ad-nav-btn" id="adNext" aria-label="Suivant">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="ad-carousel-viewport" id="adViewport">
+        <div class="ad-carousel-track" id="adTrack"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ CONFIGURATION DES PUBLICITÉS — ÉDITEZ ICI ════ -->
+  <script id="ads-config">
+  const ADS_DATA = [
+    {
+      bg:      "linear-gradient(135deg, #003f7f 0%, #0057b3 100%)",
+      emoji:   "🏦",
+      sponsor: "Partenaire bancaire",
+      title:   "ECOBANK Bénin",
+      desc:    "Ouvrez votre compte en ligne en 5 min · Zéro frais",
+      cta:     "Découvrir",
+      url:     "#",
+      color:   "#fff"
+    },
+    {
+      bg:      "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)",
+      emoji:   "🎓",
+      sponsor: "Formation",
+      title:   "UAC — Inscriptions 2026",
+      desc:    "Licence · Master · Doctorat · +80 filières",
+      cta:     "S'inscrire",
+      url:     "#",
+      color:   "#fff"
+    },
+    {
+      bg:      "linear-gradient(135deg, #1a8a40 0%, #0f5c28 100%)",
+      emoji:   "📱",
+      sponsor: "Téléphonie",
+      title:   "MTN Bénin — Forfait 5G",
+      desc:    "Internet illimité dès 5 000 FCFA/mois",
+      cta:     "Souscrire",
+      url:     "#",
+      color:   "#fff"
+    },
+    {
+      bg:      "linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%)",
+      emoji:   "🏥",
+      sponsor: "Santé",
+      title:   "Clinique Bon Secours",
+      desc:    "Consultations · Urgences 24h/24 · Cotonou",
+      cta:     "Prendre RDV",
+      url:     "#",
+      color:   "#fff"
+    },
+    {
+      bg:      "linear-gradient(135deg, #e8191e 0%, #a00f13 100%)",
+      emoji:   "🚗",
+      sponsor: "Automobile",
+      title:   "Auto Bénin — Vente & Location",
+      desc:    "Plus de 200 véhicules disponibles dès 8 000 FCFA/j",
+      cta:     "Voir les offres",
+      url:     "#",
+      color:   "#fff"
+    },
+    {
+      bg:      "linear-gradient(135deg, #0891b2 0%, #164e63 100%)",
+      emoji:   "✈️",
+      sponsor: "Voyage",
+      title:   "Air Bénin — Vols intérieurs",
+      desc:    "Cotonou ↔ Parakou · Réservez en ligne",
+      cta:     "Réserver",
+      url:     "#",
+      color:   "#fff"
+    }
+  ];
+  </script>
+  <!-- ════════════════════════════════════════════════════════ -->
+
+  <!-- ── Category Strip ── -->
+  <div class="cat-strip">
+    <div class="container">
+      <div class="cat-strip__inner">
+        <a href="categorie.html?cat=all" class="cat-tag active">Tout</a>
+        <a href="categorie.html?cat=politique" class="cat-tag">Politique</a>
+        <a href="categorie.html?cat=sport" class="cat-tag">Sport</a>
+        <a href="categorie.html?cat=societe" class="cat-tag">Société</a>
+        <a href="categorie.html?cat=economie" class="cat-tag">Économie</a>
+        <a href="categorie.html?cat=culture" class="cat-tag">Culture</a>
+        <a href="categorie.html?cat=international" class="cat-tag">International</a>
+        <a href="categorie.html?cat=technologie" class="cat-tag">Technologie</a>
+        <a href="categorie.html?cat=sante" class="cat-tag">Santé</a>
+        <a href="categorie.html?cat=environnement" class="cat-tag">Environnement</a>
+        <a href="categorie.html?cat=education" class="cat-tag">Éducation</a>
+        <a href="categorie.html?cat=justice" class="cat-tag">Justice</a>
+        <a href="categorie.html?cat=agriculture" class="cat-tag">Agriculture</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Main Content ── -->
+  <main>
+    <div class="container">
+      <div class="main-layout">
+
+        <!-- Content Area -->
+        <div class="content-area">
+
+          <!-- Dernières Nouvelles -->
+          <section style="margin-bottom:40px">
+            <div class="section-header">
+              <h2 class="section-title">Dernières Nouvelles</h2>
+              <a href="categorie.html" class="section-more">Tout voir →</a>
+            </div>
+            <div class="news-grid">
+
+              <a href="article.html" class="card">
+                <div class="card__img-wrap">
+                  <img class="card__img" src="https://picsum.photos/seed/news1/600/400" alt="" loading="lazy" />
+                  <span class="card__cat">Politique</span>
+                </div>
+                <div class="card__body">
+                  <h3 class="card__title">L'Assemblée nationale adopte le projet de loi sur la révision du code électoral</h3>
+                  <p class="card__excerpt">Les députés ont voté à l'unanimité pour la révision du code électoral lors de la session plénière de ce vendredi.</p>
+                </div>
+                <div class="card__footer">
+                  <div class="card__meta">
+                    <span>
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                      Il y a 1 h
+                    </span>
+                    <span>
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                      18
+                    </span>
+                  </div>
+                  <div class="card__author">
+                    <div class="card__avatar" style="background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;">AN</div>
+                    Aura News
+                  </div>
+                </div>
+              </a>
+
+              <a href="article.html" class="card">
+                <div class="card__img-wrap">
+                  <img class="card__img" src="https://picsum.photos/seed/news2/600/400" alt="" loading="lazy" />
+                  <span class="card__cat" style="background:var(--green)">Sport</span>
+                </div>
+                <div class="card__body">
+                  <h3 class="card__title">Football : les Écureuils du Bénin qualifiés pour la prochaine CAN</h3>
+                  <p class="card__excerpt">Une victoire 2-1 face au Nigeria permet à l'équipe nationale de décrocher son billet pour la Coupe d'Afrique des Nations.</p>
+                </div>
+                <div class="card__footer">
+                  <div class="card__meta">
+                    <span>
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                      Il y a 4 h
+                    </span>
+                    <span>
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                      57
+                    </span>
+                  </div>
+                  <div class="card__author">
+                    <div class="card__avatar" style="background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;">AN</div>
+                    Aura News
+                  </div>
+                </div>
+              </a>
+
+              <a href="article.html" class="card">
+                <div class="card__img-wrap">
+                  <img class="card__img" src="https://picsum.photos/seed/news3/600/400" alt="" loading="lazy" />
+                  <span class="card__cat" style="background:var(--gold)">Économie</span>
+                </div>
+                <div class="card__body">
+                  <h3 class="card__title">Le port de Cotonou enregistre un record de trafic au premier trimestre 2026</h3>
+                  <p class="card__excerpt">Avec plus de 10 millions de tonnes de marchandises traitées, le port de Cotonou confirme son rôle de hub régional.</p>
+                </div>
+                <div class="card__footer">
+                  <div class="card__meta">
+                    <span>
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                      Il y a 7 h
+                    </span>
+                    <span>
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                      23
+                    </span>
+                  </div>
+                  <div class="card__author">
+                    <div class="card__avatar" style="background:var(--gold);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;">AN</div>
+                    Aura News
+                  </div>
+                </div>
+              </a>
+
+              <a href="article.html" class="card">
+                <div class="card__img-wrap">
+                  <img class="card__img" src="https://picsum.photos/seed/news4/600/400" alt="" loading="lazy" />
+                  <span class="card__cat">Santé</span>
+                </div>
+                <div class="card__body">
+                  <h3 class="card__title">Bénin : lancement d'une campagne nationale de vaccination contre le paludisme</h3>
+                  <p class="card__excerpt">Le gouvernement annonce une campagne de vaccination touchant les 12 départements du pays.</p>
+                </div>
+                <div class="card__footer">
+                  <div class="card__meta">
+                    <span>Il y a 9 h</span>
+                    <span>12 💬</span>
+                  </div>
+                  <div class="card__author">
+                    <div class="card__avatar" style="background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;">AN</div>
+                    Aura News
+                  </div>
+                </div>
+              </a>
+
+              <a href="article.html" class="card">
+                <div class="card__img-wrap">
+                  <img class="card__img" src="https://picsum.photos/seed/news5/600/400" alt="" loading="lazy" />
+                  <span class="card__cat" style="background:#0891b2">Culture</span>
+                </div>
+                <div class="card__body">
+                  <h3 class="card__title">Festival Vodoun 2026 : retour en force des traditions ancestrales à Ouidah</h3>
+                  <p class="card__excerpt">Des milliers de visiteurs étrangers ont convergé vers Ouidah pour la grande célébration du culte Vodoun.</p>
+                </div>
+                <div class="card__footer">
+                  <div class="card__meta">
+                    <span>Hier</span>
+                    <span>34 💬</span>
+                  </div>
+                  <div class="card__author">
+                    <div class="card__avatar" style="background:#0891b2;color:#fff;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;">AN</div>
+                    Aura News
+                  </div>
+                </div>
+              </a>
+
+              <a href="article.html" class="card">
+                <div class="card__img-wrap">
+                  <img class="card__img" src="https://picsum.photos/seed/news6/600/400" alt="" loading="lazy" />
+                  <span class="card__cat" style="background:#065f46">Agriculture</span>
+                </div>
+                <div class="card__body">
+                  <h3 class="card__title">Coton : le Bénin vise 800 000 tonnes pour la campagne 2025-2026</h3>
+                  <p class="card__excerpt">Le ministre de l'Agriculture annonce des mesures incitatives pour dépasser l'objectif de production cotonnière.</p>
+                </div>
+                <div class="card__footer">
+                  <div class="card__meta">
+                    <span>Hier</span>
+                    <span>9 💬</span>
+                  </div>
+                  <div class="card__author">
+                    <div class="card__avatar" style="background:#065f46;color:#fff;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;">AN</div>
+                    Aura News
+                  </div>
+                </div>
+              </a>
+
+            </div>
+          </section>
+
+          <!-- Politique -->
+          <section style="margin-bottom:40px">
+            <div class="section-header">
+              <h2 class="section-title">Politique</h2>
+              <a href="categorie.html?cat=politique" class="section-more">Voir tout →</a>
+            </div>
+            <div class="news-grid news-grid--2">
+              <a href="article.html" class="card card--lg">
+                <div class="card__img-wrap">
+                  <img class="card__img" src="https://picsum.photos/seed/pol1/600/400" alt="" loading="lazy" />
+                  <span class="card__cat">Politique</span>
+                </div>
+                <div class="card__body">
+                  <h3 class="card__title">Le gouvernement présente son programme quinquennal pour 2026-2031</h3>
+                  <p class="card__excerpt">Un plan ambitieux articulé autour de cinq axes stratégiques : infrastructures, santé, éducation, agriculture et numérique.</p>
+                </div>
+                <div class="card__footer">
+                  <div class="card__meta"><span>Il y a 10 h</span><span>28 💬</span></div>
+                </div>
+              </a>
+              <div style="display:flex;flex-direction:column;gap:12px">
+                <a href="article.html" class="card card--h">
+                  <div class="card__img-wrap"><img class="card__img" src="https://picsum.photos/seed/pol2/300/200" alt="" loading="lazy" /></div>
+                  <div class="card__body"><h3 class="card__title">Réunion du conseil des ministres : 12 décrets adoptés</h3><p class="card__meta" style="color:var(--muted);font-size:.75rem;margin-top:6px">Il y a 2 j</p></div>
+                </a>
+                <a href="article.html" class="card card--h">
+                  <div class="card__img-wrap"><img class="card__img" src="https://picsum.photos/seed/pol3/300/200" alt="" loading="lazy" /></div>
+                  <div class="card__body"><h3 class="card__title">Remaniement ministériel : trois nouveaux portefeuilles créés</h3><p class="card__meta" style="color:var(--muted);font-size:.75rem;margin-top:6px">Il y a 3 j</p></div>
+                </a>
+                <a href="article.html" class="card card--h">
+                  <div class="card__img-wrap"><img class="card__img" src="https://picsum.photos/seed/pol4/300/200" alt="" loading="lazy" /></div>
+                  <div class="card__body"><h3 class="card__title">Décentralisation : le gouvernement renforce les compétences des communes</h3><p class="card__meta" style="color:var(--muted);font-size:.75rem;margin-top:6px">Il y a 4 j</p></div>
+                </a>
+              </div>
+            </div>
+          </section>
+
+          <!-- Sport -->
+          <section style="margin-bottom:40px">
+            <div class="section-header">
+              <h2 class="section-title">Sport</h2>
+              <a href="categorie.html?cat=sport" class="section-more">Voir tout →</a>
+            </div>
+            <div class="news-grid">
+              <a href="article.html" class="card">
+                <div class="card__img-wrap">
+                  <img class="card__img" src="https://picsum.photos/seed/sport1/600/400" alt="" loading="lazy" />
+                  <span class="card__cat" style="background:var(--green)">Sport</span>
+                </div>
+                <div class="card__body">
+                  <h3 class="card__title">CAN 2027 : le tirage au sort favorable aux Écureuils du Bénin</h3>
+                </div>
+                <div class="card__footer"><div class="card__meta"><span>Il y a 5 h</span></div></div>
+              </a>
+              <a href="article.html" class="card">
+                <div class="card__img-wrap">
+                  <img class="card__img" src="https://picsum.photos/seed/sport2/600/400" alt="" loading="lazy" />
+                  <span class="card__cat" style="background:var(--green)">Basketball</span>
+                </div>
+                <div class="card__body">
+                  <h3 class="card__title">Basketball Africa League : les Dragons de l'Atlantique en demi-finale</h3>
+                </div>
+                <div class="card__footer"><div class="card__meta"><span>Il y a 8 h</span></div></div>
+              </a>
+              <a href="article.html" class="card">
+                <div class="card__img-wrap">
+                  <img class="card__img" src="https://picsum.photos/seed/sport3/600/400" alt="" loading="lazy" />
+                  <span class="card__cat" style="background:var(--green)">Athlétisme</span>
+                </div>
+                <div class="card__body">
+                  <h3 class="card__title">Jeux africains 2026 : le Bénin décroche 5 médailles d'or</h3>
+                </div>
+                <div class="card__footer"><div class="card__meta"><span>Hier</span></div></div>
+              </a>
+            </div>
+          </section>
+
+        </div>
+
+        <!-- ── Sidebar ── -->
+        <aside class="sidebar">
+
+          <!-- Newsletter -->
+          <div class="widget">
+            <div class="widget__title">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              Newsletter
+            </div>
+            <p style="font-size:.82rem;color:var(--muted);margin-bottom:14px;line-height:1.5">Recevez les dernières nouvelles directement dans votre boîte mail.</p>
+            <form class="newsletter-form" onsubmit="return false">
+              <input type="email" placeholder="Votre adresse e-mail" />
+              <button type="submit" class="btn btn--primary">S'abonner gratuitement</button>
+            </form>
+          </div>
+
+          <!-- Trending -->
+          <div class="widget">
+            <div class="widget__title">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+              Les plus lus
+            </div>
+            <div class="trending">
+              <a href="article.html" class="trending__item">
+                <span class="trending__num">01</span>
+                <div><div class="trending__title">Wadagni élu président avec 94% des voix</div><div class="trending__cat">Politique · 3 847 vues</div></div>
+              </a>
+              <a href="article.html" class="trending__item">
+                <span class="trending__num">02</span>
+                <div><div class="trending__title">Les Écureuils qualifiés pour la CAN 2027</div><div class="trending__cat">Sport · 2 913 vues</div></div>
+              </a>
+              <a href="article.html" class="trending__item">
+                <span class="trending__num">03</span>
+                <div><div class="trending__title">Kémi Séba arrêté en Afrique du Sud</div><div class="trending__cat">International · 2 461 vues</div></div>
+              </a>
+              <a href="article.html" class="trending__item">
+                <span class="trending__num">04</span>
+                <div><div class="trending__title">Festival Vodoun 2026 à Ouidah</div><div class="trending__cat">Culture · 1 892 vues</div></div>
+              </a>
+              <a href="article.html" class="trending__item">
+                <span class="trending__num">05</span>
+                <div><div class="trending__title">Le port de Cotonou bat son record de trafic</div><div class="trending__cat">Économie · 1 677 vues</div></div>
+              </a>
+            </div>
+          </div>
+
+          <!-- Social -->
+          <div class="widget">
+            <div class="widget__title">Réseaux sociaux</div>
+            <div class="social-grid">
+              <a href="#" class="social-btn social-btn--fb">f Facebook</a>
+              <a href="#" class="social-btn social-btn--tw">𝕏 Twitter</a>
+              <a href="#" class="social-btn social-btn--yt">▶ YouTube</a>
+              <a href="#" class="social-btn social-btn--wa">✆ WhatsApp</a>
+            </div>
+          </div>
+
+          <!-- Ad -->
+          <div class="ad-widget">
+            <div class="ad-widget__label">Publiez votre article</div>
+            <div class="ad-widget__title">Vous êtes journaliste ?</div>
+            <div class="ad-widget__sub">Rejoignez notre réseau de blogueurs et partagez vos reportages avec des milliers de lecteurs.</div>
+            <a href="#" class="btn">Créer un compte</a>
+          </div>
+
+          <!-- Tags -->
+          <div class="widget">
+            <div class="widget__title">Tags populaires</div>
+            <div class="tags-cloud">
+              <a href="#" class="tag">Présidentielle</a>
+              <a href="#" class="tag">Cotonou</a>
+              <a href="#" class="tag">Économie</a>
+              <a href="#" class="tag">Football</a>
+              <a href="#" class="tag">Vodoun</a>
+              <a href="#" class="tag">CEDEAO</a>
+              <a href="#" class="tag">Environnement</a>
+              <a href="#" class="tag">Porto-Novo</a>
+              <a href="#" class="tag">Agriculture</a>
+              <a href="#" class="tag">Santé</a>
+              <a href="#" class="tag">Numérique</a>
+              <a href="#" class="tag">Justice</a>
+            </div>
+          </div>
+
+        </aside>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- ── Footer ── -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+
+        <div class="footer__brand">
+          <div class="logo">
+            <img src="logo/e-benin.png" alt="E-Bénin" class="logo__img--light" />
+          </div>
+          <p class="footer__desc">E-Bénin est un portail d'information multi-auteurs dédié aux journalistes et blogueurs béninois. Notre mission : relayer une information fiable, vérifiée et accessible à tous.</p>
+          <div class="footer__social">
+            <a href="#" title="Facebook">f</a>
+            <a href="#" title="Twitter">𝕏</a>
+            <a href="#" title="YouTube">▶</a>
+            <a href="#" title="WhatsApp">✆</a>
+            <a href="#" title="Instagram">◈</a>
+          </div>
+        </div>
+
+        <div>
+          <div class="footer__col-title">Rubriques</div>
+          <div class="footer__links">
+            <a href="categorie.html?cat=politique">Politique</a>
+            <a href="categorie.html?cat=sport">Sport</a>
+            <a href="categorie.html?cat=societe">Société</a>
+            <a href="categorie.html?cat=economie">Économie</a>
+            <a href="categorie.html?cat=culture">Culture</a>
+            <a href="categorie.html?cat=international">International</a>
+            <a href="categorie.html?cat=technologie">Technologie</a>
+            <a href="categorie.html?cat=sante">Santé</a>
+          </div>
+        </div>
+
+        <div>
+          <div class="footer__col-title">Liens utiles</div>
+          <div class="footer__links">
+            <a href="#">À propos</a>
+            <a href="#">Blog Aura News</a>
+            <a href="politique-confidentialite.html">Politique de confidentialité</a>
+            <a href="#">Mentions légales</a>
+            <a href="#">Charte éditoriale</a>
+            <a href="contact.html">Contact</a>
+            <a href="#">Publicité</a>
+            <a href="#">Soumettre un article</a>
+          </div>
+        </div>
+
+        <div>
+          <div class="footer__col-title">Contact</div>
+          <div class="footer__contact-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Godomey, Cotonou — Bénin
+          </div>
+          <div class="footer__contact-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <span>(+229) 20 21 37 59<br />(+229) 69 41 66 66</span>
+          </div>
+          <div class="footer__contact-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            contact@savplus.net
+          </div>
+        </div>
+
+      </div>
+      <div class="footer__bottom">
+        <span>© 2026 E-Bénin — SAVPLUS CONSEIL. Tous droits réservés.</span>
+        <div class="footer__bottom-links">
+          <a href="politique-confidentialite.html">Confidentialité</a>
+          <a href="#">CGU</a>
+          <a href="#">Cookies</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ── Scroll to top ── -->
+  <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Retour en haut">↑</button>
+
+  <script>
+    // Mobile menu
+    function toggleMenu() {
+      document.getElementById('mobileNav').classList.toggle('open');
+      document.body.style.overflow = document.getElementById('mobileNav').classList.contains('open') ? 'hidden' : '';
+    }
+
+    // Scroll events
+    window.addEventListener('scroll', () => {
+      const scrolled = window.scrollY;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      document.getElementById('progressBar').style.width = (scrolled / max * 100) + '%';
+      document.getElementById('scrollTop').classList.toggle('visible', scrolled > 400);
+    });
+  </script>
+
+  <!-- ── Carrousel publicitaire ── -->
+  <script>
+  (function () {
+    const track    = document.getElementById('adTrack');
+    const dotsWrap = document.getElementById('adDots');
+    const btnPrev  = document.getElementById('adPrev');
+    const btnNext  = document.getElementById('adNext');
+
+    if (!track || !ADS_DATA || !ADS_DATA.length) return;
+
+    // Calcul du nombre de cartes visibles selon la largeur
+    function visibleCount() {
+      const vw = document.getElementById('adViewport').offsetWidth;
+      return Math.max(1, Math.floor((vw + 14) / (280 + 14)));
+    }
+
+    let current  = 0;
+    let autoTimer = null;
+    const CARD_W  = 280;
+    const GAP     = 14;
+    const DELAY   = 3200; // ms entre chaque défilement automatique
+
+    // Construire les cartes
+    function buildCards() {
+      track.innerHTML = '';
+      ADS_DATA.forEach((ad, i) => {
+        const a = document.createElement('a');
+        a.href      = ad.url || '#';
+        a.className = 'ad-card';
+        a.setAttribute('aria-label', ad.title);
+        a.innerHTML = `
+          <div class="ad-card__inner" style="background:${ad.bg};color:${ad.color || '#fff'}">
+            <span class="ad-card__emoji">${ad.emoji}</span>
+            <div class="ad-card__body">
+              <div class="ad-card__sponsor">${ad.sponsor}</div>
+              <div class="ad-card__title">${ad.title}</div>
+              <div class="ad-card__desc">${ad.desc}</div>
+            </div>
+            <span class="ad-card__cta" style="color:${ad.color || '#fff'}">${ad.cta} →</span>
+          </div>`;
+        track.appendChild(a);
+      });
+    }
+
+    // Construire les points de navigation
+    function buildDots() {
+      dotsWrap.innerHTML = '';
+      const total = ADS_DATA.length;
+      for (let i = 0; i < total; i++) {
+        const btn = document.createElement('button');
+        btn.className = 'ad-dot' + (i === 0 ? ' active' : '');
+        btn.setAttribute('aria-label', 'Publicité ' + (i + 1));
+        btn.addEventListener('click', () => goTo(i));
+        dotsWrap.appendChild(btn);
+      }
+    }
+
+    // Aller à un index donné
+    function goTo(index) {
+      const total = ADS_DATA.length;
+      const vis   = visibleCount();
+      const max   = Math.max(0, total - vis);
+      current = Math.max(0, Math.min(index, max));
+      track.style.transform = `translateX(-${current * (CARD_W + GAP)}px)`;
+      dotsWrap.querySelectorAll('.ad-dot').forEach((d, i) => {
+        d.classList.toggle('active', i === current);
+      });
+    }
+
+    function next() { goTo(current + 1 >= ADS_DATA.length - visibleCount() + 1 ? 0 : current + 1); }
+    function prev() { goTo(current - 1 < 0 ? Math.max(0, ADS_DATA.length - visibleCount()) : current - 1); }
+
+    function startAuto() {
+      stopAuto();
+      autoTimer = setInterval(next, DELAY);
+    }
+    function stopAuto() {
+      clearInterval(autoTimer);
+    }
+
+    // Init
+    buildCards();
+    buildDots();
+    goTo(0);
+    startAuto();
+
+    // Contrôles manuels
+    btnNext.addEventListener('click', () => { next(); startAuto(); });
+    btnPrev.addEventListener('click', () => { prev(); startAuto(); });
+
+    // Pause au survol
+    document.getElementById('adViewport').addEventListener('mouseenter', stopAuto);
+    document.getElementById('adViewport').addEventListener('mouseleave', startAuto);
+
+    // Recalcul au redimensionnement
+    window.addEventListener('resize', () => goTo(current));
+
+    // Swipe tactile
+    let touchStartX = 0;
+    document.getElementById('adViewport').addEventListener('touchstart', e => {
+      touchStartX = e.touches[0].clientX;
+    }, { passive: true });
+    document.getElementById('adViewport').addEventListener('touchend', e => {
+      const diff = touchStartX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 40) { diff > 0 ? next() : prev(); startAuto(); }
+    }, { passive: true });
+  })();
+  </script>
+
+</body>
+</html>

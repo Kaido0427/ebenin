@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(sshpass -p 'kaido2704' ssh -o StrictHostKeyChecking=no kaido@51.77.195.191 'find / -name \"artisan\" -maxdepth 8 2>/dev/null | head -10')",
+      "Bash(git fetch *)",
+      "Bash(sshpass -p 'kaido2704' ssh -o StrictHostKeyChecking=no kaido@51.77.195.191 'cd /home/kaido/ebenin && echo \"=== SERVER LAST COMMIT ===\" && git log --oneline -10 && echo \"=== SERVER STATUS ===\" && git status --short && echo \"=== SERVER BRANCH ===\" && git branch -a && echo \"=== SERVER REMOTE ===\" && git remote -v')",
+      "Bash(sshpass -p 'kaido2704' ssh -o StrictHostKeyChecking=no kaido@51.77.195.191 'cd /home/kaido/ebenin && git log --oneline -10 && echo \"==STATUS==\" && git status --short && echo \"==BRANCH==\" && git branch -a')",
+      "Bash(sshpass -p 'kaido2704' ssh -o StrictHostKeyChecking=no kaido@51.77.195.191 'cd /home/kaido/ebenin && php artisan --version && echo \"==ENV==\" && cat .env | grep -E \"^\\(APP_ENV|APP_URL|DB_DATABASE|DB_HOST|APP_DEBUG\\)\" 2>/dev/null')",
+      "Bash(php artisan *)",
+      "Bash(sshpass -p 'kaido2704' ssh -o StrictHostKeyChecking=no kaido@51.77.195.191 'cd /home/kaido/ebenin && diff <\\(git show origin/main:routes/web.php 2>/dev/null | head -20\\) <\\(cat routes/web.php | head -20\\) 2>&1 | head -30 && echo \"==FILES DIFF COUNT==\" && git diff --name-only HEAD 2>/dev/null | wc -l')",
+      "Bash(sshpass -p 'kaido2704' ssh -o StrictHostKeyChecking=no kaido@51.77.195.191 'ls /home/kaido/ebenin/storage/app/public/uploads/ 2>/dev/null | tail -20 && echo \"==TOTAL UPLOADS==\" && find /home/kaido/ebenin/storage/app/public -type f 2>/dev/null | wc -l')"
+    ]
+  }
+}

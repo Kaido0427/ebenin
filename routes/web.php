@@ -19,6 +19,12 @@ use App\Http\Controllers\bioController;
 use App\Http\Controllers\pubController;
 use App\Http\Controllers\Admin\Auth\LoginController as AdminLoginController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Advertiser\AuthController as AdvertiserAuthController;
+use App\Http\Controllers\Advertiser\DashboardController as AdvertiserDashboardController;
+use App\Http\Controllers\Advertiser\AnnonceController;
+use App\Http\Controllers\Advertiser\NecrologieController;
+use App\Http\Controllers\Public\AnnoncePublicController;
+use App\Http\Controllers\Public\NecrologiePublicController;
 use Illuminate\Http\Request;
 
 /*
@@ -26,6 +32,50 @@ use Illuminate\Http\Request;
 | Web Routes
 |--------------------------------------------------------------------------
 */
+
+// ═══════════════════════════════════════════════════════════════════════
+//  Routes Annonceurs
+// ═══════════════════════════════════════════════════════════════════════
+Route::prefix('advertiser')->name('advertiser.')->group(function () {
+
+    // Auth (guests only)
+    Route::middleware('guest:advertiser')->group(function () {
+        Route::get('/register', [AdvertiserAuthController::class, 'showRegister'])->name('register');
+        Route::post('/register', [AdvertiserAuthController::class, 'register']);
+        Route::get('/login',    [AdvertiserAuthController::class, 'showLogin'])->name('login');
+        Route::post('/login',   [AdvertiserAuthController::class, 'login']);
+    });
+
+    Route::post('/logout', [AdvertiserAuthController::class, 'logout'])->name('logout');
+
+    // Page abonnement (accessible après expiration de l'essai)
+    Route::get('/subscribe', fn() => view('advertiser.subscribe'))->name('subscribe');
+
+    // Zone protégée
+    Route::middleware('advertiser.auth')->group(function () {
+        Route::get('/dashboard', [AdvertiserDashboardController::class, 'index'])->name('dashboard');
+
+        // Annonces
+        Route::get('/annonces/create',        [AnnonceController::class, 'create'])->name('annonces.create');
+        Route::post('/annonces',              [AnnonceController::class, 'store'])->name('annonces.store');
+        Route::get('/annonces/{annonce}/edit',[AnnonceController::class, 'edit'])->name('annonces.edit');
+        Route::put('/annonces/{annonce}',     [AnnonceController::class, 'update'])->name('annonces.update');
+        Route::delete('/annonces/{annonce}',  [AnnonceController::class, 'destroy'])->name('annonces.destroy');
+
+        // Nécrologies
+        Route::get('/necrologies/create',           [NecrologieController::class, 'create'])->name('necrologies.create');
+        Route::post('/necrologies',                 [NecrologieController::class, 'store'])->name('necrologies.store');
+        Route::get('/necrologies/{necrologie}/edit',[NecrologieController::class, 'edit'])->name('necrologies.edit');
+        Route::put('/necrologies/{necrologie}',     [NecrologieController::class, 'update'])->name('necrologies.update');
+        Route::delete('/necrologies/{necrologie}',  [NecrologieController::class, 'destroy'])->name('necrologies.destroy');
+    });
+});
+
+// Pages publiques annonces & nécrologies
+Route::get('/annonces',             [AnnoncePublicController::class, 'index'])->name('annonces.index');
+Route::get('/annonces/{annonce}',   [AnnoncePublicController::class, 'show'])->name('annonces.show');
+Route::get('/necrologies',          [NecrologiePublicController::class, 'index'])->name('necrologies.index');
+Route::get('/necrologies/{necrologie}', [NecrologiePublicController::class, 'show'])->name('necrologies.show');
 
 // ═══════════════════════════════════════════════════════════════════════
 //  Routes communes (pas de contrainte de domaine)

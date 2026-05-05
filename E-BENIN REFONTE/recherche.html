@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Recherche — E-Bénin</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/png" href="logo/e-benin.png" />
+</head>
+<body>
+
+  <div class="progress-bar" id="progressBar" style="width:0"></div>
+
+  <!-- Ticker -->
+  <div class="ticker">
+    <div class="ticker__label">Breaking</div>
+    <div class="ticker__track">
+      <div class="ticker__item">Romuald Wadagni élu président du Bénin avec 94% des voix</div>
+      <div class="ticker__item">Assemblée nationale : adoption du budget 2026</div>
+      <div class="ticker__item">Romuald Wadagni élu président du Bénin avec 94% des voix</div>
+      <div class="ticker__item">Assemblée nationale : adoption du budget 2026</div>
+    </div>
+  </div>
+
+  <!-- Top Bar -->
+  <div class="topbar">
+    <div class="container">
+      <div class="topbar__inner">
+        <div class="topbar__date">Lundi 20 Avril 2026 — Cotonou, Bénin</div>
+        <div class="topbar__links">
+          <a href="contact.html">Contact</a>
+          <div class="topbar__social"><a href="#">f</a><a href="#">𝕏</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="header__inner">
+        <a href="index.html" class="logo">
+          <img src="logo/e-benin.png" alt="E-Bénin" class="logo__img" />
+        </a>
+        <nav class="nav">
+          <ul class="nav__list">
+            <li class="nav__item"><a href="index.html" class="nav__link">Accueil</a></li>
+            <li class="nav__item"><a href="categorie.html?cat=politique" class="nav__link">Politique</a></li>
+            <li class="nav__item"><a href="categorie.html?cat=sport" class="nav__link">Sport</a></li>
+            <li class="nav__item"><a href="categorie.html?cat=societe" class="nav__link">Société</a></li>
+            <li class="nav__item"><a href="categorie.html?cat=economie" class="nav__link">Économie</a></li>
+            <li class="nav__item"><a href="categorie.html?cat=culture" class="nav__link">Culture</a></li>
+            <li class="nav__item"><a href="categorie.html?cat=international" class="nav__link">International</a></li>
+            <li class="nav__item"><a href="categorie.html?cat=technologie" class="nav__link">Techno</a></li>
+          </ul>
+        </nav>
+        <div class="header__actions">
+          <a href="recherche.html" class="btn btn--icon" style="background:var(--bg)">🔍</a>
+          <a href="connexion.html" class="btn btn--outline">Connexion</a>
+          <a href="inscription.html" class="btn btn--primary">S'inscrire</a>
+          <button class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Nav -->
+  <div class="mobile-nav" id="mobileNav">
+    <div class="mobile-nav__backdrop" onclick="toggleMenu()"></div>
+    <div class="mobile-nav__panel">
+      <div class="mobile-nav__head">
+        <img src="logo/e-benin.png" alt="E-Bénin" class="logo__img--light" />
+        <button class="mobile-nav__close" onclick="toggleMenu()">✕</button>
+      </div>
+      <div class="mobile-nav__links">
+        <a href="index.html">🏠 Accueil</a>
+        <a href="categorie.html?cat=politique">🏛️ Politique</a>
+        <a href="contact.html">📬 Contact</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search Hero -->
+  <div class="search-hero">
+    <div class="container" style="text-align:center">
+      <h1 style="font-family:var(--font-serif);font-size:2rem;margin-bottom:8px">Rechercher une actualité</h1>
+      <p style="opacity:.6;font-size:.9rem;margin-bottom:28px">Trouvez rapidement l'article qui vous intéresse parmi nos milliers de publications</p>
+      <div class="search-hero__form">
+        <input class="search-hero__input" type="search" id="searchInput" placeholder="Ex : élections, économie, santé..." oninput="doSearch(this.value)" />
+        <button class="search-hero__btn" aria-label="Rechercher">🔍</button>
+      </div>
+      <p id="searchHint" style="margin-top:12px;font-size:.82rem;opacity:.5">Tapez au moins 2 caractères</p>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="cat-strip">
+    <div class="container">
+      <div class="cat-strip__inner">
+        <a href="#" class="cat-tag active" onclick="filterCat(event,'all')">Tout</a>
+        <a href="#" class="cat-tag" onclick="filterCat(event,'politique')">Politique</a>
+        <a href="#" class="cat-tag" onclick="filterCat(event,'sport')">Sport</a>
+        <a href="#" class="cat-tag" onclick="filterCat(event,'societe')">Société</a>
+        <a href="#" class="cat-tag" onclick="filterCat(event,'economie')">Économie</a>
+        <a href="#" class="cat-tag" onclick="filterCat(event,'culture')">Culture</a>
+        <a href="#" class="cat-tag" onclick="filterCat(event,'international')">International</a>
+        <a href="#" class="cat-tag" onclick="filterCat(event,'technologie')">Technologie</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <main>
+    <div class="container" style="padding:32px 24px">
+
+      <div id="resultsHeader" style="margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+        <h2 class="section-title" id="resultsTitle">Résultats récents</h2>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:.78rem;color:var(--muted)" id="resultsCount">Affichage de 12 articles</span>
+          <select onchange="sortResults(this.value)" style="padding:6px 12px;border:1.5px solid var(--border);border-radius:var(--radius);font-size:.78rem;font-family:var(--font);outline:none">
+            <option value="recent">Plus récents</option>
+            <option value="popular">Plus populaires</option>
+            <option value="comments">Plus commentés</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="news-grid" id="resultsGrid">
+
+        <a href="article.html" class="card" data-cat="politique">
+          <div class="card__img-wrap">
+            <img class="card__img" src="https://picsum.photos/seed/sr1/600/400" alt="" loading="lazy" />
+            <span class="card__cat">Politique</span>
+          </div>
+          <div class="card__body">
+            <h3 class="card__title">Wadagni élu président avec 94% des suffrages</h3>
+            <p class="card__excerpt">La CENA proclame les résultats officiels de l'élection présidentielle du 19 avril 2026.</p>
+          </div>
+          <div class="card__footer"><div class="card__meta"><span>Il y a 2 h</span><span>42 💬</span></div></div>
+        </a>
+
+        <a href="article.html" class="card" data-cat="sport">
+          <div class="card__img-wrap">
+            <img class="card__img" src="https://picsum.photos/seed/sr2/600/400" alt="" loading="lazy" />
+            <span class="card__cat" style="background:var(--green)">Sport</span>
+          </div>
+          <div class="card__body">
+            <h3 class="card__title">Les Écureuils qualifiés pour la CAN 2027</h3>
+            <p class="card__excerpt">Victoire 2-1 face au Nigeria pour une qualification historique.</p>
+          </div>
+          <div class="card__footer"><div class="card__meta"><span>Il y a 4 h</span><span>57 💬</span></div></div>
+        </a>
+
+        <a href="article.html" class="card" data-cat="international">
+          <div class="card__img-wrap">
+            <img class="card__img" src="https://picsum.photos/seed/sr3/600/400" alt="" loading="lazy" />
+            <span class="card__cat">International</span>
+          </div>
+          <div class="card__body">
+            <h3 class="card__title">Kémi Séba arrêté en Afrique du Sud</h3>
+            <p class="card__excerpt">Une demande d'extradition est en cours après l'arrestation de l'activiste.</p>
+          </div>
+          <div class="card__footer"><div class="card__meta"><span>Il y a 3 h</span><span>38 💬</span></div></div>
+        </a>
+
+        <a href="article.html" class="card" data-cat="economie">
+          <div class="card__img-wrap">
+            <img class="card__img" src="https://picsum.photos/seed/sr4/600/400" alt="" loading="lazy" />
+            <span class="card__cat" style="background:var(--gold)">Économie</span>
+          </div>
+          <div class="card__body">
+            <h3 class="card__title">Le port de Cotonou bat son record de trafic</h3>
+            <p class="card__excerpt">Plus de 10 millions de tonnes traitées au premier trimestre 2026.</p>
+          </div>
+          <div class="card__footer"><div class="card__meta"><span>Il y a 7 h</span><span>23 💬</span></div></div>
+        </a>
+
+        <a href="article.html" class="card" data-cat="culture">
+          <div class="card__img-wrap">
+            <img class="card__img" src="https://picsum.photos/seed/sr5/600/400" alt="" loading="lazy" />
+            <span class="card__cat" style="background:#0891b2">Culture</span>
+          </div>
+          <div class="card__body">
+            <h3 class="card__title">Festival Vodoun 2026 : Ouidah en fête</h3>
+            <p class="card__excerpt">Des milliers de visiteurs pour la grande fête des traditions ancestrales.</p>
+          </div>
+          <div class="card__footer"><div class="card__meta"><span>Hier</span><span>34 💬</span></div></div>
+        </a>
+
+        <a href="article.html" class="card" data-cat="sante">
+          <div class="card__img-wrap">
+            <img class="card__img" src="https://picsum.photos/seed/sr6/600/400" alt="" loading="lazy" />
+            <span class="card__cat">Santé</span>
+          </div>
+          <div class="card__body">
+            <h3 class="card__title">Campagne nationale de vaccination contre le paludisme</h3>
+            <p class="card__excerpt">12 départements touchés par cette initiative gouvernementale de santé publique.</p>
+          </div>
+          <div class="card__footer"><div class="card__meta"><span>Il y a 9 h</span><span>12 💬</span></div></div>
+        </a>
+
+        <a href="article.html" class="card" data-cat="politique">
+          <div class="card__img-wrap">
+            <img class="card__img" src="https://picsum.photos/seed/sr7/600/400" alt="" loading="lazy" />
+            <span class="card__cat">Politique</span>
+          </div>
+          <div class="card__body">
+            <h3 class="card__title">Programme quinquennal 2026-2031 présenté</h3>
+            <p class="card__excerpt">Cinq axes stratégiques au cœur du nouveau mandat présidentiel.</p>
+          </div>
+          <div class="card__footer"><div class="card__meta"><span>Il y a 10 h</span><span>28 💬</span></div></div>
+        </a>
+
+        <a href="article.html" class="card" data-cat="sport">
+          <div class="card__img-wrap">
+            <img class="card__img" src="https://picsum.photos/seed/sr8/600/400" alt="" loading="lazy" />
+            <span class="card__cat" style="background:var(--green)">Basketball</span>
+          </div>
+          <div class="card__body">
+            <h3 class="card__title">Dragons de l'Atlantique en demi-finale de la BAL</h3>
+            <p class="card__excerpt">Une belle performance de l'équipe béninoise en Basketball Africa League.</p>
+          </div>
+          <div class="card__footer"><div class="card__meta"><span>Il y a 8 h</span><span>19 💬</span></div></div>
+        </a>
+
+        <a href="article.html" class="card" data-cat="technologie">
+          <div class="card__img-wrap">
+            <img class="card__img" src="https://picsum.photos/seed/sr9/600/400" alt="" loading="lazy" />
+            <span class="card__cat" style="background:#7c3aed">Technologie</span>
+          </div>
+          <div class="card__body">
+            <h3 class="card__title">Bénin Digital : lancement de la plateforme e-gouvernement</h3>
+            <p class="card__excerpt">Le gouvernement déploie un portail centralisé pour les démarches administratives en ligne.</p>
+          </div>
+          <div class="card__footer"><div class="card__meta"><span>Il y a 2 j</span><span>44 💬</span></div></div>
+        </a>
+
+        <a href="article.html" class="card" data-cat="agriculture">
+          <div class="card__img-wrap">
+            <img class="card__img" src="https://picsum.photos/seed/sr10/600/400" alt="" loading="lazy" />
+            <span class="card__cat" style="background:#065f46">Agriculture</span>
+          </div>
+          <div class="card__body">
+            <h3 class="card__title">Coton : le Bénin vise 800 000 tonnes en 2026</h3>
+            <p class="card__excerpt">Des mesures incitatives pour booster la production cotonnière nationale.</p>
+          </div>
+          <div class="card__footer"><div class="card__meta"><span>Hier</span><span>9 💬</span></div></div>
+        </a>
+
+        <a href="article.html" class="card" data-cat="societe">
+          <div class="card__img-wrap">
+            <img class="card__img" src="https://picsum.photos/seed/sr11/600/400" alt="" loading="lazy" />
+            <span class="card__cat" style="background:#b45309">Société</span>
+          </div>
+          <div class="card__body">
+            <h3 class="card__title">Natitingou : réglementation des tricycles pour réduire les accidents</h3>
+            <p class="card__excerpt">Les nouvelles règles de circulation entreront en vigueur le 1er mai prochain.</p>
+          </div>
+          <div class="card__footer"><div class="card__meta"><span>Il y a 6 h</span><span>15 💬</span></div></div>
+        </a>
+
+        <a href="article.html" class="card" data-cat="international">
+          <div class="card__img-wrap">
+            <img class="card__img" src="https://picsum.photos/seed/sr12/600/400" alt="" loading="lazy" />
+            <span class="card__cat">International</span>
+          </div>
+          <div class="card__body">
+            <h3 class="card__title">Sommet CEDEAO : le Bénin prend la parole sur la sécurité régionale</h3>
+            <p class="card__excerpt">Cotonou appelle à une réponse collective face aux groupes armés dans le Sahel.</p>
+          </div>
+          <div class="card__footer"><div class="card__meta"><span>Il y a 4 j</span><span>21 💬</span></div></div>
+        </a>
+
+      </div>
+
+      <!-- No results message -->
+      <div id="noResults" style="display:none;text-align:center;padding:64px 0;color:var(--muted)">
+        <div style="font-size:3rem;margin-bottom:12px">🔍</div>
+        <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:6px">Aucun résultat trouvé</h3>
+        <p style="font-size:.9rem">Essayez d'autres mots-clés ou parcourez nos rubriques ci-dessous.</p>
+        <div style="margin-top:20px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap">
+          <a href="categorie.html?cat=politique" class="cat-tag">Politique</a>
+          <a href="categorie.html?cat=sport" class="cat-tag">Sport</a>
+          <a href="categorie.html?cat=economie" class="cat-tag">Économie</a>
+          <a href="categorie.html?cat=culture" class="cat-tag">Culture</a>
+        </div>
+      </div>
+
+      <!-- Load more -->
+      <div style="text-align:center;padding:28px 0">
+        <button class="btn btn--outline" style="padding:12px 32px" onclick="loadMore()">Voir plus d'articles</button>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <img src="logo/e-benin.png" alt="E-Bénin" class="logo__img--light" />
+          <p class="footer__desc">E-Bénin est un portail d'information multi-auteurs dédié aux journalistes et blogueurs béninois.</p>
+          <div class="footer__social"><a href="#">f</a><a href="#">𝕏</a><a href="#">▶</a><a href="#">✆</a></div>
+        </div>
+        <div>
+          <div class="footer__col-title">Rubriques</div>
+          <div class="footer__links">
+            <a href="categorie.html?cat=politique">Politique</a>
+            <a href="categorie.html?cat=sport">Sport</a>
+            <a href="categorie.html?cat=societe">Société</a>
+            <a href="categorie.html?cat=economie">Économie</a>
+            <a href="categorie.html?cat=culture">Culture</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer__col-title">Liens utiles</div>
+          <div class="footer__links">
+            <a href="#">À propos</a>
+            <a href="politique-confidentialite.html">Confidentialité</a>
+            <a href="contact.html">Contact</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer__col-title">Contact</div>
+          <div class="footer__contact-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>contact@savplus.net</div>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <span>© 2026 E-Bénin — SAVPLUS CONSEIL. Tous droits réservés.</span>
+        <div class="footer__bottom-links">
+          <a href="politique-confidentialite.html">Confidentialité</a>
+          <a href="#">CGU</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('mobileNav').classList.toggle('open');
+      document.body.style.overflow = document.getElementById('mobileNav').classList.contains('open') ? 'hidden' : '';
+    }
+
+    function doSearch(val) {
+      const grid = document.getElementById('resultsGrid');
+      const cards = grid.querySelectorAll('.card');
+      const noRes = document.getElementById('noResults');
+      const count = document.getElementById('resultsCount');
+      const hint = document.getElementById('searchHint');
+
+      if (val.length < 2) {
+        cards.forEach(c => c.style.display = '');
+        noRes.style.display = 'none';
+        hint.style.display = 'block';
+        count.textContent = 'Affichage de ' + cards.length + ' articles';
+        return;
+      }
+      hint.style.display = 'none';
+      let found = 0;
+      cards.forEach(c => {
+        const text = c.textContent.toLowerCase();
+        const show = text.includes(val.toLowerCase());
+        c.style.display = show ? '' : 'none';
+        if (show) found++;
+      });
+      count.textContent = found + ' résultat' + (found > 1 ? 's' : '') + ' pour "' + val + '"';
+      noRes.style.display = found === 0 ? 'block' : 'none';
+    }
+
+    function filterCat(e, cat) {
+      e.preventDefault();
+      document.querySelectorAll('.cat-tag').forEach(t => t.classList.remove('active'));
+      e.target.classList.add('active');
+      const cards = document.querySelectorAll('#resultsGrid .card');
+      cards.forEach(c => {
+        c.style.display = (cat === 'all' || c.dataset.cat === cat) ? '' : 'none';
+      });
+    }
+
+    function sortResults(val) {
+      console.log('Sort by:', val);
+    }
+
+    function loadMore() {
+      alert('Chargement de plus d\'articles... (fonctionnalité à connecter au backend)');
+    }
+
+    window.addEventListener('scroll', () => {
+      const s = window.scrollY, m = document.documentElement.scrollHeight - window.innerHeight;
+      document.getElementById('progressBar').style.width = (s/m*100)+'%';
+      document.getElementById('scrollTop').classList.toggle('visible', s > 400);
+    });
+
+    // Focus search on page load
+    window.addEventListener('load', () => {
+      document.getElementById('searchInput').focus();
+    });
+  </script>
+</body>
+</html>

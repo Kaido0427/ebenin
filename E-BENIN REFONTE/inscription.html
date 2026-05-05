@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inscription - E-Bénin</title>
+  <meta name="description" content="Créez votre compte E-Bénin et rejoignez notre communauté de journalistes béninois." />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/png" href="logo/e-benin.png" />
+  <style>
+    /* ── Auth Layout ─────────────────────────────────────── */
+    .auth-page {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+    }
+
+    /* Left visual */
+    .auth-visual {
+      position: relative;
+      background: linear-gradient(160deg, #001f4d 0%, var(--primary) 50%, #1a3a1a 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 40px;
+      overflow: hidden;
+    }
+    .auth-visual::before {
+      content: '';
+      position: absolute;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.04);
+      top: -150px; right: -150px;
+    }
+    .auth-visual::after {
+      content: '';
+      position: absolute;
+      width: 350px; height: 350px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.03);
+      bottom: -80px; left: -80px;
+    }
+    .auth-visual__logo { position: relative; z-index: 1; }
+
+    .auth-visual__body { position: relative; z-index: 1; margin-top: 32px; }
+    .auth-visual__tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.15);
+      color: rgba(255,255,255,.8);
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+    .auth-visual__tag::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #4ade80;
+    }
+    .auth-visual__title {
+      font-family: var(--font-serif);
+      font-size: 2.2rem;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .auth-visual__desc {
+      font-size: .9rem;
+      color: rgba(255,255,255,.6);
+      line-height: 1.7;
+      max-width: 340px;
+    }
+
+    /* Feature list */
+    .auth-features {
+      position: relative;
+      z-index: 1;
+      margin-top: 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .auth-feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+    .auth-feature__icon {
+      width: 36px; height: 36px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 1rem;
+    }
+    .auth-feature__text strong {
+      display: block;
+      font-size: .85rem;
+      font-weight: 700;
+      color: rgba(255,255,255,.9);
+      margin-bottom: 2px;
+    }
+    .auth-feature__text span {
+      font-size: .78rem;
+      color: rgba(255,255,255,.45);
+      line-height: 1.4;
+    }
+
+    .auth-visual__footer {
+      position: relative;
+      z-index: 1;
+      margin-top: 40px;
+      font-size: .72rem;
+      color: rgba(255,255,255,.25);
+    }
+
+    /* Right form */
+    .auth-form-panel {
+      background: var(--bg);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 48px 40px;
+      overflow-y: auto;
+    }
+    .auth-form-wrap {
+      width: 100%;
+      max-width: 520px;
+    }
+    .auth-form-wrap__head {
+      margin-bottom: 28px;
+    }
+    .auth-form-wrap__head h1 {
+      font-family: var(--font-serif);
+      font-size: 1.9rem;
+      color: var(--dark);
+      margin-bottom: 6px;
+    }
+    .auth-form-wrap__head p {
+      font-size: .9rem;
+      color: var(--muted);
+    }
+    .auth-form-wrap__head p a {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    /* Progress steps */
+    .steps {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 28px;
+    }
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+    }
+    .step__num {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .75rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      border: 2px solid var(--border);
+      color: var(--muted);
+      background: var(--white);
+      transition: all .3s;
+    }
+    .step.active .step__num {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+    }
+    .step.done .step__num {
+      background: var(--green);
+      border-color: var(--green);
+      color: #fff;
+    }
+    .step__label {
+      font-size: .76rem;
+      font-weight: 600;
+      color: var(--muted);
+      transition: color .3s;
+    }
+    .step.active .step__label { color: var(--primary); }
+    .step.done .step__label { color: var(--green); }
+    .step__line {
+      flex: 1;
+      height: 2px;
+      background: var(--border);
+      margin: 0 8px;
+      border-radius: 2px;
+      transition: background .3s;
+    }
+    .step__line.done { background: var(--green); }
+
+    /* Form card */
+    .auth-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      box-shadow: var(--shadow);
+    }
+
+    /* Social */
+    .social-login {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .social-login-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px;
+      border-radius: var(--radius);
+      border: 1.5px solid var(--border);
+      font-size: .84rem;
+      font-weight: 600;
+      color: var(--mid);
+      background: var(--white);
+      transition: all var(--transition);
+      cursor: pointer;
+    }
+    .social-login-btn:hover { border-color: var(--primary); background: var(--bg); }
+
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .auth-divider::before, .auth-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .auth-divider span {
+      font-size: .75rem;
+      font-weight: 600;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    /* Input group */
+    .input-group { position: relative; }
+    .input-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+    }
+    .input-group input,
+    .input-group select {
+      width: 100%;
+      padding: 12px 14px 12px 42px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      font-family: var(--font);
+      font-size: .9rem;
+      outline: none;
+      transition: all var(--transition);
+      background: var(--white);
+      color: var(--dark);
+    }
+    .input-group input:focus,
+    .input-group select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0,63,127,.08);
+    }
+    .input-group input.error { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(232,25,30,.08); }
+    .input-group input.success { border-color: var(--green); }
+    .input-toggle {
+      position: absolute;
+      right: 12px; top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--muted);
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      transition: color var(--transition);
+    }
+    .input-toggle:hover { color: var(--primary); }
+
+    /* Password strength */
+    .password-strength { margin-top: 8px; }
+    .strength-bar {
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 4px;
+    }
+    .strength-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: all .3s;
+      width: 0;
+    }
+    .strength-label {
+      font-size: .72rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .field-error {
+      font-size: .75rem;
+      color: var(--accent);
+      margin-top: 5px;
+      display: none;
+      align-items: center;
+      gap: 4px;
+    }
+    .field-error.show { display: flex; }
+
+    /* Account type selector */
+    .account-type {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 0;
+    }
+    .account-type-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 16px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all var(--transition);
+      background: var(--white);
+    }
+    .account-type-btn:hover { border-color: var(--primary); background: rgba(0,63,127,.03); }
+    .account-type-btn.selected {
+      border-color: var(--primary);
+      background: rgba(0,63,127,.05);
+    }
+    .account-type-btn input[type="radio"] { display: none; }
+    .account-type-btn__icon {
+      width: 40px; height: 40px;
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      background: var(--bg);
+    }
+    .account-type-btn.selected .account-type-btn__icon { background: rgba(0,63,127,.1); }
+    .account-type-btn__label {
+      font-size: .82rem;
+      font-weight: 700;
+      color: var(--mid);
+    }
+    .account-type-btn.selected .account-type-btn__label { color: var(--primary); }
+    .account-type-btn__sub {
+      font-size: .72rem;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    /* Checkbox */
+    .auth-check {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: .84rem;
+      color: var(--mid);
+      cursor: pointer;
+      line-height: 1.5;
+    }
+    .auth-check input[type="checkbox"] {
+      width: 16px; height: 16px;
+      accent-color: var(--primary);
+      cursor: pointer;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .auth-check a { color: var(--primary); }
+
+    /* Submit */
+    .btn--auth {
+      width: 100%;
+      justify-content: center;
+      padding: 13px;
+      font-size: .95rem;
+      border-radius: var(--radius);
+      position: relative;
+      overflow: hidden;
+    }
+    .btn--auth::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, transparent, rgba(255,255,255,.1), transparent);
+      transform: translateX(-100%);
+      transition: transform .5s;
+    }
+    .btn--auth:hover::after { transform: translateX(100%); }
+
+    /* Step panels */
+    .step-panel { display: none; }
+    .step-panel.active { display: block; }
+
+    /* Success screen */
+    .success-screen {
+      text-align: center;
+      padding: 16px 0;
+    }
+    .success-icon {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: #dcfce7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 2rem;
+    }
+    .success-screen h2 { font-family: var(--font-serif); font-size: 1.5rem; margin-bottom: 8px; }
+    .success-screen p { color: var(--muted); font-size: .9rem; line-height: 1.6; }
+
+    /* Auth footer note */
+    .auth-footer-note {
+      text-align: center;
+      font-size: .78rem;
+      color: var(--muted);
+      margin-top: 20px;
+      line-height: 1.6;
+    }
+    .auth-footer-note a { color: var(--primary); }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes check-draw {
+      from { stroke-dashoffset: 50; }
+      to   { stroke-dashoffset: 0; }
+    }
+
+    @media (max-width: 900px) {
+      .auth-page { grid-template-columns: 1fr; }
+      .auth-visual { display: none; }
+      .auth-form-panel { padding: 28px 20px; }
+      .auth-form-wrap { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="auth-page">
+
+    <!-- ── Left Visual Panel ── -->
+    <div class="auth-visual">
+      <div class="auth-visual__logo">
+        <a href="index.html" class="logo">
+          <img src="logo/e-benin.png" alt="E-Bénin" class="logo__img--light" />
+        </a>
+      </div>
+
+      <div class="auth-visual__body">
+        <div class="auth-visual__tag">Inscription gratuite</div>
+        <h2 class="auth-visual__title">Donnez une voix à l'information béninoise</h2>
+        <p class="auth-visual__desc">
+          Rejoignez plus de 380 journalistes et blogueurs qui publient chaque jour sur E-Bénin. Votre inscription est gratuite et prend moins de 2 minutes.
+        </p>
+
+        <div class="auth-features">
+          <div class="auth-feature">
+            <div class="auth-feature__icon">✍️</div>
+            <div class="auth-feature__text">
+              <strong>Publiez vos articles</strong>
+              <span>Un éditeur moderne, des photos, des catégories — tout ce qu'il faut pour votre reportage.</span>
+            </div>
+          </div>
+          <div class="auth-feature">
+            <div class="auth-feature__icon">📊</div>
+            <div class="auth-feature__text">
+              <strong>Suivez vos statistiques</strong>
+              <span>Vues, partages, commentaires — analysez l'impact de vos publications en temps réel.</span>
+            </div>
+          </div>
+          <div class="auth-feature">
+            <div class="auth-feature__icon">🌍</div>
+            <div class="auth-feature__text">
+              <strong>Touchez des milliers de lecteurs</strong>
+              <span>Plus de 14 000 lecteurs actifs parcourent E-Bénin chaque jour.</span>
+            </div>
+          </div>
+          <div class="auth-feature">
+            <div class="auth-feature__icon">🔒</div>
+            <div class="auth-feature__text">
+              <strong>Données sécurisées</strong>
+              <span>Connexion HTTPS, vos données ne sont jamais revendues.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="auth-visual__footer">
+        © 2026 E-Bénin · SAVPLUS CONSEIL · Cotonou, Bénin
+      </div>
+    </div>
+
+    <!-- ── Right Form Panel ── -->
+    <div class="auth-form-panel">
+      <div class="auth-form-wrap">
+
+        <div class="auth-form-wrap__head">
+          <h1>Créer un compte</h1>
+          <p>Déjà inscrit ? <a href="connexion.html">Se connecter →</a></p>
+        </div>
+
+        <!-- Steps indicator -->
+        <div class="steps" id="stepsBar">
+          <div class="step active" id="step-ind-1">
+            <div class="step__num" id="stepNum1">1</div>
+            <span class="step__label">Compte</span>
+          </div>
+          <div class="step__line" id="line-1"></div>
+          <div class="step" id="step-ind-2">
+            <div class="step__num" id="stepNum2">2</div>
+            <span class="step__label">Profil</span>
+          </div>
+          <div class="step__line" id="line-2"></div>
+          <div class="step" id="step-ind-3">
+            <div class="step__num" id="stepNum3">3</div>
+            <span class="step__label">Confirmation</span>
+          </div>
+        </div>
+
+        <div class="auth-card">
+
+          <!-- ── STEP 1 — Compte ── -->
+          <div class="step-panel active" id="panel-1">
+
+            <div class="social-login">
+              <button class="social-login-btn" onclick="socialSignup('Google')">
+                <svg viewBox="0 0 24 24" width="18" height="18"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                S'inscrire avec Google
+              </button>
+              <button class="social-login-btn" onclick="socialSignup('Facebook')">
+                <svg viewBox="0 0 24 24" width="18" height="18"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" fill="#1877F2"/></svg>
+                S'inscrire avec Facebook
+              </button>
+            </div>
+
+            <div class="auth-divider"><span>ou avec un e-mail</span></div>
+
+            <div class="form-group">
+              <label>Type de compte</label>
+              <div class="account-type">
+                <label class="account-type-btn selected" onclick="selectType(this)">
+                  <input type="radio" name="accountType" value="journalist" checked />
+                  <div class="account-type-btn__icon">📰</div>
+                  <div class="account-type-btn__label">Journaliste</div>
+                  <div class="account-type-btn__sub">Publiez des articles et reportages</div>
+                </label>
+                <label class="account-type-btn" onclick="selectType(this)">
+                  <input type="radio" name="accountType" value="reader" />
+                  <div class="account-type-btn__icon">👤</div>
+                  <div class="account-type-btn__label">Lecteur</div>
+                  <div class="account-type-btn__sub">Commentez et enregistrez des articles</div>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-row" style="margin-top:16px">
+              <div class="form-group">
+                <label for="firstName">Prénom *</label>
+                <div class="input-group">
+                  <span class="input-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+                  <input type="text" id="firstName" placeholder="Votre prénom" autocomplete="given-name" />
+                </div>
+                <div class="field-error" id="firstNameError">⚠ Prénom requis.</div>
+              </div>
+              <div class="form-group">
+                <label for="lastName">Nom *</label>
+                <div class="input-group">
+                  <span class="input-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+                  <input type="text" id="lastName" placeholder="Votre nom" autocomplete="family-name" />
+                </div>
+                <div class="field-error" id="lastNameError">⚠ Nom requis.</div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="regEmail">Adresse e-mail *</label>
+              <div class="input-group">
+                <span class="input-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
+                <input type="email" id="regEmail" placeholder="exemple@email.com" autocomplete="email" oninput="checkEmail(this)" />
+              </div>
+              <div class="field-error" id="regEmailError">⚠ E-mail invalide.</div>
+            </div>
+
+            <div class="form-group">
+              <label for="regPassword">Mot de passe *</label>
+              <div class="input-group">
+                <span class="input-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+                <input type="password" id="regPassword" placeholder="Minimum 8 caractères" autocomplete="new-password" oninput="checkStrength(this.value)" />
+                <button type="button" class="input-toggle" onclick="togglePwd('regPassword', this)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+              <div class="password-strength" id="pwdStrength" style="display:none">
+                <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+                <div class="strength-label" id="strengthLabel"></div>
+              </div>
+              <div class="field-error" id="regPasswordError">⚠ Mot de passe trop court (min. 8 caractères).</div>
+            </div>
+
+            <div class="form-group">
+              <label for="confirmPassword">Confirmer le mot de passe *</label>
+              <div class="input-group">
+                <span class="input-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+                <input type="password" id="confirmPassword" placeholder="Retapez votre mot de passe" autocomplete="new-password" />
+                <button type="button" class="input-toggle" onclick="togglePwd('confirmPassword', this)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+              <div class="field-error" id="confirmPasswordError">⚠ Les mots de passe ne correspondent pas.</div>
+            </div>
+
+            <button type="button" class="btn btn--primary btn--auth" style="margin-top:8px" onclick="goStep2()">
+              Continuer
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+
+          </div>
+
+          <!-- ── STEP 2 — Profil ── -->
+          <div class="step-panel" id="panel-2">
+
+            <p style="font-size:.85rem;color:var(--muted);margin-bottom:20px">Complétez votre profil pour que les lecteurs vous connaissent. Ces informations sont optionnelles.</p>
+
+            <div class="form-group">
+              <label for="phone">Téléphone</label>
+              <div class="input-group">
+                <span class="input-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
+                <input type="tel" id="phone" placeholder="(+229) __ __ __ __" autocomplete="tel" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="city">Ville</label>
+              <div class="input-group">
+                <span class="input-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+                <select id="city" style="padding-left:42px">
+                  <option value="">Sélectionnez votre ville</option>
+                  <option>Cotonou</option>
+                  <option>Porto-Novo</option>
+                  <option>Parakou</option>
+                  <option>Abomey-Calavi</option>
+                  <option>Natitingou</option>
+                  <option>Ouidah</option>
+                  <option>Kandi</option>
+                  <option>Bohicon</option>
+                  <option>Djougou</option>
+                  <option>Autre</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group" id="specialtyGroup">
+              <label for="specialty">Spécialité journalistique</label>
+              <div class="input-group">
+                <span class="input-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+                <select id="specialty" style="padding-left:42px">
+                  <option value="">Choisir une spécialité</option>
+                  <option>Politique</option>
+                  <option>Économie</option>
+                  <option>Sport</option>
+                  <option>Culture & Arts</option>
+                  <option>Société</option>
+                  <option>International</option>
+                  <option>Technologie</option>
+                  <option>Santé</option>
+                  <option>Environnement</option>
+                  <option>Éducation</option>
+                  <option>Justice</option>
+                  <option>Agriculture</option>
+                  <option>Journalisme d'investigation</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group" id="bioGroup">
+              <label for="bio">Bio courte</label>
+              <textarea id="bio" placeholder="Présentez-vous en quelques mots..." style="width:100%;padding:12px;border:1.5px solid var(--border);border-radius:var(--radius);font-family:var(--font);font-size:.9rem;resize:vertical;min-height:90px;outline:none;transition:border-color var(--transition)" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+              <div style="font-size:.72rem;color:var(--muted);text-align:right;margin-top:3px" id="bioCount">0 / 200</div>
+            </div>
+
+            <div style="display:flex;gap:10px;margin-top:8px">
+              <button type="button" class="btn btn--outline" style="flex:1;justify-content:center" onclick="goStep(1)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                Retour
+              </button>
+              <button type="button" class="btn btn--primary btn--auth" style="flex:2" onclick="goStep3()">
+                Continuer
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </button>
+            </div>
+
+          </div>
+
+          <!-- ── STEP 3 — Confirmation ── -->
+          <div class="step-panel" id="panel-3">
+
+            <p style="font-size:.85rem;color:var(--muted);margin-bottom:20px">Vérifiez vos informations avant de finaliser votre inscription.</p>
+
+            <!-- Summary -->
+            <div id="summary" style="background:var(--bg);border-radius:var(--radius);padding:16px;margin-bottom:20px;font-size:.84rem">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+                <span style="font-weight:700;font-size:.85rem">Récapitulatif</span>
+                <button type="button" onclick="goStep(1)" style="font-size:.75rem;color:var(--primary);font-weight:600;background:none;border:none;cursor:pointer">Modifier</button>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:8px;color:var(--mid)">
+                <div style="display:flex;gap:8px"><span style="color:var(--muted);width:90px;flex-shrink:0">Nom</span><strong id="sumName">—</strong></div>
+                <div style="display:flex;gap:8px"><span style="color:var(--muted);width:90px;flex-shrink:0">E-mail</span><strong id="sumEmail">—</strong></div>
+                <div style="display:flex;gap:8px"><span style="color:var(--muted);width:90px;flex-shrink:0">Compte</span><strong id="sumType">—</strong></div>
+                <div style="display:flex;gap:8px"><span style="color:var(--muted);width:90px;flex-shrink:0">Ville</span><strong id="sumCity">—</strong></div>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom:16px">
+              <label class="auth-check">
+                <input type="checkbox" id="terms" required />
+                J'accepte les <a href="politique-confidentialite.html" target="_blank">conditions d'utilisation</a> et la <a href="politique-confidentialite.html" target="_blank">politique de confidentialité</a> d'E-Bénin.
+              </label>
+              <div class="field-error" id="termsError">⚠ Vous devez accepter les conditions.</div>
+            </div>
+
+            <div class="form-group" style="margin-bottom:20px">
+              <label class="auth-check">
+                <input type="checkbox" id="newsletter" />
+                Je souhaite recevoir la newsletter E-Bénin (optionnel)
+              </label>
+            </div>
+
+            <div id="submitAlert" style="display:none;padding:12px;border-radius:var(--radius);font-size:.84rem;margin-bottom:14px;background:#fef2f2;border:1px solid #fecaca;color:#991b1b"></div>
+
+            <div style="display:flex;gap:10px">
+              <button type="button" class="btn btn--outline" style="flex:1;justify-content:center" onclick="goStep(2)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                Retour
+              </button>
+              <button type="button" class="btn btn--primary btn--auth" style="flex:2" id="finalBtn" onclick="submitRegistration()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                Créer mon compte
+              </button>
+            </div>
+
+          </div>
+
+          <!-- ── SUCCESS ── -->
+          <div class="step-panel" id="panel-success">
+            <div class="success-screen">
+              <div class="success-icon">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12" style="stroke-dasharray:50;stroke-dashoffset:50;animation:check-draw .5s .2s forwards ease-out"></polyline>
+                </svg>
+              </div>
+              <h2>Compte créé avec succès !</h2>
+              <p id="successMsg" style="margin-top:8px"></p>
+              <div style="margin-top:24px;display:flex;flex-direction:column;gap:10px">
+                <a href="connexion.html" class="btn btn--primary" style="width:100%;justify-content:center">
+                  Se connecter maintenant
+                </a>
+                <a href="index.html" class="btn btn--outline" style="width:100%;justify-content:center">
+                  Retour à l'accueil
+                </a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="auth-footer-note">
+          En vous inscrivant, vous acceptez nos
+          <a href="politique-confidentialite.html">conditions d'utilisation</a>
+          et notre <a href="politique-confidentialite.html">politique de confidentialité</a>.
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // ── Helpers ──
+    function $(id) { return document.getElementById(id); }
+    function showError(id, show) {
+      const el = $(id);
+      el.classList.toggle('show', show);
+      const input = el.previousElementSibling?.querySelector('input') || el.previousElementSibling;
+      if (input?.tagName === 'DIV') {
+        const inp = input.querySelector('input');
+        if (inp) inp.classList.toggle('error', show);
+      }
+    }
+
+    function selectType(el) {
+      document.querySelectorAll('.account-type-btn').forEach(b => b.classList.remove('selected'));
+      el.classList.add('selected');
+      const isJournalist = el.querySelector('input').value === 'journalist';
+      $('specialtyGroup').style.display = isJournalist ? '' : 'none';
+      $('bioGroup').style.display = isJournalist ? '' : 'none';
+    }
+
+    function togglePwd(id, btn) {
+      const inp = $(id);
+      inp.type = inp.type === 'text' ? 'password' : 'text';
+      btn.innerHTML = inp.type === 'password'
+        ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`
+        : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
+    }
+
+    function checkEmail(inp) {
+      const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inp.value);
+      inp.classList.toggle('success', valid && inp.value);
+      inp.classList.toggle('error', !valid && inp.value.length > 3);
+    }
+
+    function checkStrength(val) {
+      const bar = $('pwdStrength');
+      const fill = $('strengthFill');
+      const label = $('strengthLabel');
+      if (!val) { bar.style.display = 'none'; return; }
+      bar.style.display = 'block';
+
+      let score = 0;
+      if (val.length >= 8) score++;
+      if (/[A-Z]/.test(val)) score++;
+      if (/[0-9]/.test(val)) score++;
+      if (/[^A-Za-z0-9]/.test(val)) score++;
+
+      const levels = [
+        { pct: '25%', color: '#ef4444', text: '⚠ Faible' },
+        { pct: '50%', color: '#f97316', text: '⚡ Moyen' },
+        { pct: '75%', color: '#eab308', text: '✅ Bon' },
+        { pct: '100%', color: '#22c55e', text: '🔒 Excellent' },
+      ];
+      const lvl = levels[Math.max(0, score - 1)];
+      fill.style.width = lvl.pct;
+      fill.style.background = lvl.color;
+      label.innerHTML = `<span style="color:${lvl.color}">${lvl.text}</span>`;
+    }
+
+    // Bio counter
+    $('bio').addEventListener('input', function() {
+      const len = Math.min(this.value.length, 200);
+      this.value = this.value.substring(0, 200);
+      $('bioCount').textContent = len + ' / 200';
+    });
+
+    // ── Step Navigation ──
+    function goStep(n) {
+      document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+      $('panel-' + n).classList.add('active');
+
+      // Update indicators
+      for (let i = 1; i <= 3; i++) {
+        const ind = $('step-ind-' + i);
+        const num = $('stepNum' + i);
+        ind.className = 'step' + (i < n ? ' done' : i === n ? ' active' : '');
+        num.textContent = i < n ? '✓' : i;
+      }
+      for (let i = 1; i <= 2; i++) {
+        $('line-' + i).className = 'step__line' + (i < n ? ' done' : '');
+      }
+    }
+
+    function goStep2() {
+      const firstName = $('firstName').value.trim();
+      const lastName = $('lastName').value.trim();
+      const email = $('regEmail').value.trim();
+      const pwd = $('regPassword').value;
+      const confirm = $('confirmPassword').value;
+
+      let ok = true;
+      if (!firstName) { $('firstNameError').classList.add('show'); $('firstName').classList.add('error'); ok = false; }
+      else { $('firstNameError').classList.remove('show'); $('firstName').classList.remove('error'); }
+
+      if (!lastName) { $('lastNameError').classList.add('show'); $('lastName').classList.add('error'); ok = false; }
+      else { $('lastNameError').classList.remove('show'); $('lastName').classList.remove('error'); }
+
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { $('regEmailError').classList.add('show'); $('regEmail').classList.add('error'); ok = false; }
+      else { $('regEmailError').classList.remove('show'); $('regEmail').classList.remove('error'); }
+
+      if (pwd.length < 8) { $('regPasswordError').classList.add('show'); $('regPassword').classList.add('error'); ok = false; }
+      else { $('regPasswordError').classList.remove('show'); $('regPassword').classList.remove('error'); }
+
+      if (pwd !== confirm || !confirm) { $('confirmPasswordError').classList.add('show'); $('confirmPassword').classList.add('error'); ok = false; }
+      else { $('confirmPasswordError').classList.remove('show'); $('confirmPassword').classList.remove('error'); }
+
+      if (ok) goStep(2);
+    }
+
+    function goStep3() {
+      // Fill summary
+      const type = document.querySelector('input[name="accountType"]:checked')?.value;
+      $('sumName').textContent = ($('firstName').value + ' ' + $('lastName').value).trim() || '—';
+      $('sumEmail').textContent = $('regEmail').value || '—';
+      $('sumType').textContent = type === 'journalist' ? '📰 Journaliste' : '👤 Lecteur';
+      $('sumCity').textContent = $('city').value || '—';
+      goStep(3);
+    }
+
+    function submitRegistration() {
+      if (!$('terms').checked) {
+        $('termsError').classList.add('show');
+        $('submitAlert').style.display = 'block';
+        $('submitAlert').textContent = '⚠ Veuillez accepter les conditions d\'utilisation pour continuer.';
+        return;
+      }
+      $('termsError').classList.remove('show');
+      $('submitAlert').style.display = 'none';
+
+      const btn = $('finalBtn');
+      btn.disabled = true;
+      btn.innerHTML = `<span style="width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;display:inline-block;animation:spin .7s linear infinite"></span> Création du compte...`;
+
+      setTimeout(() => {
+        // Success
+        document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+        $('panel-success').classList.add('active');
+        $('stepsBar').style.display = 'none';
+
+        const name = $('firstName').value;
+        const email = $('regEmail').value;
+        const type = document.querySelector('input[name="accountType"]:checked')?.value;
+        $('successMsg').innerHTML = `Bienvenue <strong>${name}</strong> ! Un e-mail de confirmation a été envoyé à <strong>${email}</strong>.<br><br>${type === 'journalist' ? 'Votre demande de compte journaliste est en cours de validation par notre équipe.' : 'Vous pouvez dès maintenant vous connecter et commenter les articles.'}`;
+      }, 2200);
+    }
+
+    function socialSignup(provider) {
+      alert(`Inscription ${provider} — à connecter au backend OAuth`);
+    }
+
+    const style = document.createElement('style');
+    style.textContent = `@keyframes spin { to { transform: rotate(360deg); } }`;
+    document.head.appendChild(style);
+  </script>
+</body>
+</html>

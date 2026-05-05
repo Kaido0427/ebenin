@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Politique de confidentialité — E-Bénin</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/png" href="logo/e-benin.png" />
+</head>
+<body>
+
+  <div class="progress-bar" id="progressBar" style="width:0"></div>
+
+  <!-- Ticker -->
+  <div class="ticker">
+    <div class="ticker__label">Breaking</div>
+    <div class="ticker__track">
+      <div class="ticker__item">Romuald Wadagni élu président du Bénin avec 94% des voix</div>
+      <div class="ticker__item">Assemblée nationale : adoption du budget 2026</div>
+      <div class="ticker__item">Romuald Wadagni élu président du Bénin avec 94% des voix</div>
+      <div class="ticker__item">Assemblée nationale : adoption du budget 2026</div>
+    </div>
+  </div>
+
+  <!-- Top Bar -->
+  <div class="topbar">
+    <div class="container">
+      <div class="topbar__inner">
+        <div class="topbar__date">Lundi 20 Avril 2026 — Cotonou, Bénin</div>
+        <div class="topbar__links">
+          <a href="contact.html">Contact</a>
+          <div class="topbar__social"><a href="#">f</a><a href="#">𝕏</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="header__inner">
+        <a href="index.html" class="logo">
+          <img src="logo/e-benin.png" alt="E-Bénin" class="logo__img" />
+        </a>
+        <nav class="nav">
+          <ul class="nav__list">
+            <li class="nav__item"><a href="index.html" class="nav__link">Accueil</a></li>
+            <li class="nav__item"><a href="categorie.html?cat=politique" class="nav__link">Politique</a></li>
+            <li class="nav__item"><a href="categorie.html?cat=sport" class="nav__link">Sport</a></li>
+            <li class="nav__item"><a href="categorie.html?cat=societe" class="nav__link">Société</a></li>
+            <li class="nav__item"><a href="categorie.html?cat=economie" class="nav__link">Économie</a></li>
+            <li class="nav__item"><a href="categorie.html?cat=culture" class="nav__link">Culture</a></li>
+            <li class="nav__item"><a href="categorie.html?cat=international" class="nav__link">International</a></li>
+            <li class="nav__item"><a href="categorie.html?cat=technologie" class="nav__link">Techno</a></li>
+          </ul>
+        </nav>
+        <div class="header__actions">
+          <a href="recherche.html" class="btn btn--icon">🔍</a>
+          <a href="connexion.html" class="btn btn--outline">Connexion</a>
+          <a href="inscription.html" class="btn btn--primary">S'inscrire</a>
+          <button class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Nav -->
+  <div class="mobile-nav" id="mobileNav">
+    <div class="mobile-nav__backdrop" onclick="toggleMenu()"></div>
+    <div class="mobile-nav__panel">
+      <div class="mobile-nav__head">
+        <img src="logo/e-benin.png" alt="E-Bénin" class="logo__img--light" />
+        <button class="mobile-nav__close" onclick="toggleMenu()">✕</button>
+      </div>
+      <div class="mobile-nav__links">
+        <a href="index.html">🏠 Accueil</a>
+        <a href="categorie.html?cat=politique">🏛️ Politique</a>
+        <a href="contact.html">📬 Contact</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page Hero -->
+  <div style="background:var(--dark);padding:40px 0;color:#fff;border-bottom:1px solid rgba(255,255,255,.06)">
+    <div class="container">
+      <div style="display:flex;align-items:center;gap:6px;font-size:.78rem;color:rgba(255,255,255,.45);margin-bottom:14px">
+        <a href="index.html" style="color:rgba(255,255,255,.45)">Accueil</a>
+        <span>›</span>
+        <span>Politique de confidentialité</span>
+      </div>
+      <h1 style="font-family:var(--font-serif);font-size:2.2rem;margin-bottom:8px">Politique de confidentialité</h1>
+      <p style="opacity:.6;font-size:.88rem">Dernière mise à jour : 1er janvier 2026</p>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <main>
+    <div class="policy-layout">
+
+      <p class="lead" style="color:var(--muted);line-height:1.7;margin-bottom:32px">
+        E-Bénin, opéré par <strong>SAVPLUS CONSEIL</strong>, est une plateforme de blog multi-utilisateurs dédiée aux journalistes, blogueurs et citoyens souhaitant partager des informations sur le Bénin et l'Afrique. La présente politique de confidentialité décrit comment nous collectons, utilisons et protégeons vos données personnelles.
+      </p>
+
+      <div class="policy-section">
+        <h2><span>1</span> Qui sommes-nous ?</h2>
+        <p>E-Bénin est un portail d'information en ligne géré par SAVPLUS CONSEIL, agence web basée à Godomey, Cotonou, Bénin. Pour toute question relative à vos données personnelles, vous pouvez nous contacter à : <strong>contact@savplus.net</strong> ou par téléphone au <strong>(+229) 20 21 37 59</strong>.</p>
+      </div>
+
+      <div class="policy-section">
+        <h2><span>2</span> Données collectées</h2>
+        <p>Nous collectons deux catégories de données :</p>
+        <ul>
+          <li><strong>Journalistes / blogueurs :</strong> nom, prénom, adresse e-mail, numéro de téléphone, biographie, photo de profil, articles publiés.</li>
+          <li><strong>Lecteurs :</strong> adresse IP, données de navigation (pages visitées, durée de session), commentaires publiés, adresse e-mail (si inscription à la newsletter).</li>
+        </ul>
+      </div>
+
+      <div class="policy-section">
+        <h2><span>3</span> Finalités du traitement</h2>
+        <p>Vos données sont collectées pour :</p>
+        <ul>
+          <li>Gérer votre compte et accès à la plateforme</li>
+          <li>Publier et modérer vos contenus</li>
+          <li>Vous envoyer notre newsletter (avec votre consentement)</li>
+          <li>Améliorer nos services grâce à des statistiques anonymisées</li>
+          <li>Prévenir les abus et assurer la sécurité de la plateforme</li>
+          <li>Respecter nos obligations légales</li>
+        </ul>
+      </div>
+
+      <div class="policy-section">
+        <h2><span>4</span> Base légale</h2>
+        <p>Le traitement de vos données repose sur :</p>
+        <ul>
+          <li><strong>Consentement</strong> : pour l'envoi de la newsletter et les cookies non essentiels</li>
+          <li><strong>Exécution d'un contrat</strong> : pour la gestion de votre compte auteur</li>
+          <li><strong>Intérêt légitime</strong> : pour la sécurité et l'amélioration du service</li>
+          <li><strong>Obligation légale</strong> : conservation des logs de connexion</li>
+        </ul>
+      </div>
+
+      <div class="policy-section">
+        <h2><span>5</span> Durée de conservation</h2>
+        <p>Vos données sont conservées :</p>
+        <ul>
+          <li>Données de compte : pendant la durée d'activité du compte + 3 ans</li>
+          <li>Commentaires : jusqu'à leur suppression par l'utilisateur ou la modération</li>
+          <li>Logs de connexion : 12 mois conformément à la réglementation</li>
+          <li>Newsletter : jusqu'au désabonnement</li>
+        </ul>
+      </div>
+
+      <div class="policy-section">
+        <h2><span>6</span> Partage des données</h2>
+        <p>Nous ne vendons jamais vos données personnelles. Elles peuvent être partagées avec :</p>
+        <ul>
+          <li>Nos prestataires techniques (hébergement, emailing) soumis à des accords de confidentialité</li>
+          <li>Les autorités compétentes sur réquisition judiciaire</li>
+        </ul>
+      </div>
+
+      <div class="policy-section">
+        <h2><span>7</span> Cookies</h2>
+        <p>Nous utilisons des cookies pour :</p>
+        <ul>
+          <li><strong>Cookies essentiels</strong> : nécessaires au fonctionnement du site (session, sécurité)</li>
+          <li><strong>Cookies analytiques</strong> : mesure d'audience anonymisée (avec votre consentement)</li>
+          <li><strong>Cookies de préférence</strong> : mémorisation de vos paramètres d'affichage</li>
+        </ul>
+        <p style="margin-top:10px">Vous pouvez gérer vos préférences cookies à tout moment via le panneau de gestion des cookies.</p>
+      </div>
+
+      <div class="policy-section">
+        <h2><span>8</span> Vos droits</h2>
+        <p>Conformément à la loi n°2017-20 portant Code du Numérique en République du Bénin, vous disposez des droits suivants :</p>
+        <ul>
+          <li><strong>Droit d'accès</strong> : obtenir une copie de vos données</li>
+          <li><strong>Droit de rectification</strong> : corriger des données inexactes</li>
+          <li><strong>Droit à l'effacement</strong> : demander la suppression de vos données</li>
+          <li><strong>Droit d'opposition</strong> : vous opposer à certains traitements</li>
+          <li><strong>Droit à la portabilité</strong> : recevoir vos données dans un format structuré</li>
+        </ul>
+        <p style="margin-top:10px">Pour exercer ces droits, contactez-nous à : <strong>contact@savplus.net</strong></p>
+      </div>
+
+      <div class="policy-section">
+        <h2><span>9</span> Sécurité</h2>
+        <p>Nous mettons en œuvre des mesures techniques et organisationnelles pour protéger vos données : chiffrement HTTPS, accès restreint aux données, audits de sécurité réguliers. En cas de violation de données, nous vous informerons dans les délais légaux.</p>
+      </div>
+
+      <div class="policy-section">
+        <h2><span>10</span> Modifications de cette politique</h2>
+        <p>Cette politique peut être mise à jour pour refléter les évolutions légales ou de nos services. Toute modification significative vous sera notifiée par e-mail ou via une bannière sur le site. La date de dernière mise à jour est toujours visible en haut de cette page.</p>
+      </div>
+
+      <!-- Contact CTA -->
+      <div style="background:var(--white);border-radius:var(--radius-lg);padding:28px;text-align:center;box-shadow:var(--shadow);margin-top:24px">
+        <div style="font-size:1.5rem;margin-bottom:8px">💬</div>
+        <h3 style="font-family:var(--font-serif);font-size:1.3rem;margin-bottom:6px">Une question sur vos données ?</h3>
+        <p style="color:var(--muted);font-size:.88rem;margin-bottom:16px">Notre équipe est disponible pour répondre à toutes vos questions relatives à la protection de vos données personnelles.</p>
+        <a href="contact.html" class="btn btn--primary">Nous contacter</a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <img src="logo/e-benin.png" alt="E-Bénin" class="logo__img--light" />
+          <p class="footer__desc">E-Bénin est un portail d'information multi-auteurs dédié aux journalistes et blogueurs béninois.</p>
+          <div class="footer__social"><a href="#">f</a><a href="#">𝕏</a><a href="#">▶</a><a href="#">✆</a></div>
+        </div>
+        <div>
+          <div class="footer__col-title">Rubriques</div>
+          <div class="footer__links">
+            <a href="categorie.html?cat=politique">Politique</a>
+            <a href="categorie.html?cat=sport">Sport</a>
+            <a href="categorie.html?cat=societe">Société</a>
+            <a href="categorie.html?cat=economie">Économie</a>
+            <a href="categorie.html?cat=culture">Culture</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer__col-title">Liens utiles</div>
+          <div class="footer__links">
+            <a href="#">À propos</a>
+            <a href="politique-confidentialite.html">Confidentialité</a>
+            <a href="#">Mentions légales</a>
+            <a href="contact.html">Contact</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer__col-title">Contact</div>
+          <div class="footer__contact-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Godomey, Cotonou — Bénin</div>
+          <div class="footer__contact-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>contact@savplus.net</div>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <span>© 2026 E-Bénin — SAVPLUS CONSEIL. Tous droits réservés.</span>
+        <div class="footer__bottom-links">
+          <a href="politique-confidentialite.html">Confidentialité</a>
+          <a href="#">CGU</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('mobileNav').classList.toggle('open');
+      document.body.style.overflow = document.getElementById('mobileNav').classList.contains('open') ? 'hidden' : '';
+    }
+    window.addEventListener('scroll', () => {
+      const s = window.scrollY, m = document.documentElement.scrollHeight - window.innerHeight;
+      document.getElementById('progressBar').style.width = (s/m*100)+'%';
+      document.getElementById('scrollTop').classList.toggle('visible', s > 400);
+    });
+  </script>
+</body>
+</html>

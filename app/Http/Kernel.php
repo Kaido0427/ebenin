@@ -48,8 +48,9 @@ class Kernel extends HttpKernel
 
     protected $routeMiddleware = [
         // autres middlewares
-        'subdomain' => \App\Http\Middleware\SubdomainMiddleware::class,
-        'redirect.root' => \App\Http\Middleware\RedirectRootToBlog::class,
+        'subdomain'       => \App\Http\Middleware\SubdomainMiddleware::class,
+        'redirect.root'   => \App\Http\Middleware\RedirectRootToBlog::class,
+        'advertiser.auth' => \App\Http\Middleware\AdvertiserAccess::class,
     ];
     
     /**

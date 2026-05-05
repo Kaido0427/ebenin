@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Romuald Wadagni élu président — E-Bénin</title>
+  <meta name="description" content="Romuald Wadagni remporte l'élection présidentielle avec 94% des suffrages exprimés." />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/png" href="logo/e-benin.png" />
+</head>
+<body>
+
+  <div class="progress-bar" id="progressBar" style="width:0"></div>
+
+  <!-- Ticker -->
+  <div class="ticker">
+    <div class="ticker__label">Breaking</div>
+    <div class="ticker__track">
+      <div class="ticker__item">Romuald Wadagni élu président du Bénin avec 94% des voix</div>
+      <div class="ticker__item">Assemblée nationale : adoption du budget 2026</div>
+      <div class="ticker__item">Boni Yayi félicite le président élu Wadagni</div>
+      <div class="ticker__item">Romuald Wadagni élu président du Bénin avec 94% des voix</div>
+      <div class="ticker__item">Assemblée nationale : adoption du budget 2026</div>
+      <div class="ticker__item">Boni Yayi félicite le président élu Wadagni</div>
+    </div>
+  </div>
+
+  <!-- Top Bar -->
+  <div class="topbar">
+    <div class="container">
+      <div class="topbar__inner">
+        <div class="topbar__date">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+          Lundi 20 Avril 2026
+        </div>
+        <div class="topbar__links">
+          <a href="contact.html">Contact</a>
+          <a href="politique-confidentialite.html">Confidentialité</a>
+          <div class="topbar__social">
+            <a href="#">f</a><a href="#">𝕏</a><a href="#">▶</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="header__inner">
+        <a href="index.html" class="logo">
+          <img src="logo/e-benin.png" alt="E-Bénin" class="logo__img" />
+        </a>
+        <nav class="nav">
+          <ul class="nav__list">
+            <li class="nav__item"><a href="index.html" class="nav__link">Accueil</a></li>
+            <li class="nav__item active"><a href="categorie.html?cat=politique" class="nav__link">Politique</a></li>
+            <li class="nav__item"><a href="categorie.html?cat=sport" class="nav__link">Sport</a></li>
+            <li class="nav__item"><a href="categorie.html?cat=societe" class="nav__link">Société</a></li>
+            <li class="nav__item"><a href="categorie.html?cat=economie" class="nav__link">Économie</a></li>
+            <li class="nav__item"><a href="categorie.html?cat=culture" class="nav__link">Culture</a></li>
+            <li class="nav__item"><a href="categorie.html?cat=international" class="nav__link">International</a></li>
+            <li class="nav__item"><a href="categorie.html?cat=technologie" class="nav__link">Techno</a></li>
+            <li class="nav__item">
+              <a href="#" class="nav__link">Plus <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></a>
+              <div class="nav__dropdown">
+                <a href="categorie.html?cat=sante">Santé</a>
+                <a href="categorie.html?cat=environnement">Environnement</a>
+                <a href="categorie.html?cat=education">Éducation</a>
+                <a href="categorie.html?cat=justice">Justice</a>
+                <a href="categorie.html?cat=agriculture">Agriculture</a>
+              </div>
+            </li>
+          </ul>
+        </nav>
+        <div class="header__actions">
+          <a href="recherche.html" class="btn btn--icon">🔍</a>
+          <a href="connexion.html" class="btn btn--outline">Connexion</a>
+          <a href="inscription.html" class="btn btn--primary">S'inscrire</a>
+          <button class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Nav -->
+  <div class="mobile-nav" id="mobileNav">
+    <div class="mobile-nav__backdrop" onclick="toggleMenu()"></div>
+    <div class="mobile-nav__panel">
+      <div class="mobile-nav__head">
+        <img src="logo/e-benin.png" alt="E-Bénin" class="logo__img--light" />
+        <button class="mobile-nav__close" onclick="toggleMenu()">✕</button>
+      </div>
+      <div class="mobile-nav__links">
+        <a href="index.html">🏠 Accueil</a>
+        <a href="categorie.html?cat=politique">🏛️ Politique</a>
+        <a href="categorie.html?cat=sport">⚽ Sport</a>
+        <a href="categorie.html?cat=societe">👥 Société</a>
+        <a href="categorie.html?cat=economie">📈 Économie</a>
+        <a href="contact.html">📬 Contact</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Article -->
+  <div class="container">
+    <div class="main-layout">
+
+      <!-- Article Body -->
+      <article>
+        <div class="article-header">
+
+          <!-- Breadcrumb -->
+          <div class="article-breadcrumb">
+            <a href="index.html">Accueil</a>
+            <span>›</span>
+            <a href="categorie.html?cat=politique">Politique</a>
+            <span>›</span>
+            <span>Présidentielle 2026</span>
+          </div>
+
+          <span class="article-cat">Politique</span>
+
+          <h1 class="article-title">
+            Romuald Wadagni remporte l'élection présidentielle avec 94% des suffrages exprimés
+          </h1>
+
+          <p class="article-lead">
+            La Commission Électorale Nationale Autonome (CENA) a proclamé les résultats officiels du scrutin du 19 avril 2026, confirmant la victoire écrasante de Romuald Wadagni, candidat du parti au pouvoir, avec 94,3% des voix exprimées.
+          </p>
+
+          <div class="article-meta">
+            <div class="article-author">
+              <div class="article-author__avatar" style="background:var(--primary);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;">AN</div>
+              <div>
+                <div class="article-author__name">Aura News</div>
+                <div class="article-author__role">Rédaction E-Bénin</div>
+              </div>
+            </div>
+            <div class="article-date">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              20 avril 2026 à 08:15
+            </div>
+            <div class="article-date">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              3 847 vues
+            </div>
+            <div class="article-date">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              42 commentaires
+            </div>
+            <div class="article-share">
+              Partager :
+              <a href="#" class="share-btn share-btn--fb" title="Facebook">f</a>
+              <a href="#" class="share-btn share-btn--tw" title="Twitter">𝕏</a>
+              <a href="#" class="share-btn share-btn--wa" title="WhatsApp">✆</a>
+              <a href="#" class="share-btn share-btn--ln" title="LinkedIn">in</a>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Hero image -->
+        <div class="article-hero">
+          <img src="https://picsum.photos/seed/article-hero/1200/600" alt="Romuald Wadagni lors de son discours de victoire" />
+          <div class="article-hero__caption">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            Romuald Wadagni lors de son discours de victoire à Cotonou. © Aura News / E-Bénin
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="article-body">
+
+          <p>
+            Dans une atmosphère de liesse populaire, la Commission Électorale Nationale Autonome du Bénin a annoncé dans la soirée du dimanche 19 avril 2026 les résultats officiels de l'élection présidentielle. Romuald Wadagni, ancien ministre de l'Économie et des Finances sous la présidence de Patrice Talon, a été élu à la tête de l'État béninois avec un score sans appel de <strong>94,3% des suffrages exprimés</strong>.
+          </p>
+
+          <p>
+            Le taux de participation s'est établi à 68,4%, un chiffre en légère hausse par rapport au scrutin précédent, témoignant d'un intérêt renouvelé des citoyens pour le processus démocratique. Le vote s'est déroulé dans le calme et la sérénité dans l'ensemble des 77 communes du pays.
+          </p>
+
+          <h2>Un discours de victoire tourné vers l'avenir</h2>
+
+          <p>
+            Depuis le siège de son parti à Cotonou, Romuald Wadagni a pris la parole devant des milliers de sympathisants rassemblés pour célébrer cette victoire. Son discours, empreint d'humilité et de détermination, a tracé les grandes lignes de son mandat à venir.
+          </p>
+
+          <blockquote>
+            "Ce soir, c'est le Bénin tout entier qui a gagné. J'ai entendu votre voix, j'ai compris votre espoir, et je m'engage à porter, avec chaque fibre de mon être, le destin de ce pays vers un avenir de dignité, de prospérité et de paix."
+            <footer style="margin-top:8px;font-style:normal;font-size:.85rem;opacity:.7">— Romuald Wadagni, discours de victoire, 19 avril 2026</footer>
+          </blockquote>
+
+          <p>
+            Le nouveau président a insisté sur trois priorités immédiates : la consolidation de la croissance économique, l'amélioration de l'accès aux services sociaux de base, et le renforcement de la sécurité sur l'ensemble du territoire national, notamment dans le nord du pays où des incursions djihadistes sont régulièrement signalées.
+          </p>
+
+          <h2>Les réactions nationales et internationales</h2>
+
+          <p>
+            La communauté internationale a rapidement salué les résultats du scrutin. L'Union africaine, dans un communiqué publié dans la nuit, a félicité le peuple béninois pour le déroulement pacifique de l'élection, qualifiant ce scrutin d'<em>"exemple de maturité démocratique pour le continent"</em>.
+          </p>
+
+          <p>
+            La France, premier partenaire commercial du Bénin, a exprimé par la voix de son ministre des Affaires étrangères sa volonté de renforcer les liens bilatéraux avec la nouvelle administration. La Russie, qui avait renforcé ses relations avec Cotonou ces dernières années, a également adressé ses félicitations officielles.
+          </p>
+
+          <h3>L'opposant historique Boni Yayi réagit</h3>
+
+          <p>
+            Thomas Yayi Boni, ancien président du Bénin (2006-2016), a pris la parole depuis son domicile de Cotonou. Dans un message diffusé sur ses réseaux sociaux, l'ex-chef d'État a appelé à l'unité nationale et invité ses partisans à "travailler constructivement avec le nouveau président pour le bien du Bénin".
+          </p>
+
+          <ul>
+            <li>Taux de participation : 68,4%</li>
+            <li>Wadagni : 94,3% des suffrages</li>
+            <li>Votes blancs et nuls : 5,7%</li>
+            <li>Nombre de bureaux de vote : 14 200</li>
+            <li>Électeurs inscrits : 4,8 millions</li>
+          </ul>
+
+          <h2>Investiture prévue le 5 mai</h2>
+
+          <p>
+            La cérémonie d'investiture du nouveau président de la République du Bénin est officiellement fixée au <strong>5 mai 2026</strong> à Cotonou. Des délégations de plus de 30 pays africains et de nombreux partenaires internationaux sont attendus pour l'occasion. La ville de Cotonou se prépare d'ores et déjà à accueillir cet événement historique.
+          </p>
+
+        </div>
+
+        <!-- Tags -->
+        <div class="article-tags">
+          <span class="article-tags-label">Tags :</span>
+          <a href="#" class="tag">Présidentielle 2026</a>
+          <a href="#" class="tag">Wadagni</a>
+          <a href="#" class="tag">CENA</a>
+          <a href="#" class="tag">Bénin</a>
+          <a href="#" class="tag">Élections</a>
+          <a href="#" class="tag">Cotonou</a>
+        </div>
+
+        <!-- Comments -->
+        <section class="comments">
+          <div class="section-header" style="margin-bottom:24px">
+            <h2 class="section-title">42 Commentaires</h2>
+          </div>
+
+          <!-- Comment form -->
+          <div style="background:var(--white);border-radius:var(--radius);padding:24px;margin-bottom:28px;box-shadow:var(--shadow-sm)">
+            <h3 style="font-size:1rem;font-weight:700;margin-bottom:16px">Laisser un commentaire</h3>
+            <form class="comment-form" onsubmit="return false">
+              <div class="comment-form__row">
+                <input type="text" placeholder="Votre nom *" required />
+                <input type="email" placeholder="Votre e-mail *" required />
+              </div>
+              <textarea placeholder="Votre commentaire..." style="width:100%;margin-bottom:12px"></textarea>
+              <button type="submit" class="btn btn--primary">Publier le commentaire</button>
+            </form>
+          </div>
+
+          <!-- Comments list -->
+          <div class="comment">
+            <div class="comment__avatar">JD</div>
+            <div class="comment__body">
+              <div class="comment__header">
+                <span class="comment__author">Jean-Daniel Assogba</span>
+                <span class="comment__date">20 avril 2026 à 09:12</span>
+                <span class="badge badge--green">Vérifié</span>
+              </div>
+              <p class="comment__text">Une victoire historique pour le Bénin ! Esperons que ce nouveau mandat apportera enfin le changement tant attendu pour les populations rurales. Le défi sécuritaire dans le nord reste la priorité absolue.</p>
+              <div class="comment__actions">
+                <span class="comment__action">👍 24 J'aime</span>
+                <span class="comment__action">💬 Répondre</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="comment">
+            <div class="comment__avatar" style="background:var(--green)">AM</div>
+            <div class="comment__body">
+              <div class="comment__header">
+                <span class="comment__author">Aminata Moussa</span>
+                <span class="comment__date">20 avril 2026 à 10:34</span>
+              </div>
+              <p class="comment__text">94% c'est impressionnant ! Le taux de participation en hausse est également un signe très positif. Les béninois ont démontré leur attachement à la démocratie.</p>
+              <div class="comment__actions">
+                <span class="comment__action">👍 17 J'aime</span>
+                <span class="comment__action">💬 Répondre</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="comment">
+            <div class="comment__avatar" style="background:var(--gold)">FK</div>
+            <div class="comment__body">
+              <div class="comment__header">
+                <span class="comment__author">Félix Kpossou</span>
+                <span class="comment__date">20 avril 2026 à 11:05</span>
+              </div>
+              <p class="comment__text">Félicitations au président élu ! J'espère que la promesse d'améliorer l'accès aux soins de santé sera tenue. C'est la priorité numéro un pour les familles béninoises.</p>
+              <div class="comment__actions">
+                <span class="comment__action">👍 9 J'aime</span>
+                <span class="comment__action">💬 Répondre</span>
+              </div>
+            </div>
+          </div>
+
+        </section>
+      </article>
+
+      <!-- Sidebar -->
+      <aside class="sidebar">
+
+        <!-- Share sticky -->
+        <div class="widget">
+          <div class="widget__title">Partager</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <a href="#" class="social-btn social-btn--fb" style="justify-content:flex-start;padding:10px 14px;gap:10px">f Partager sur Facebook</a>
+            <a href="#" class="social-btn social-btn--tw" style="justify-content:flex-start;padding:10px 14px;gap:10px">𝕏 Partager sur Twitter</a>
+            <a href="#" class="social-btn social-btn--wa" style="justify-content:flex-start;padding:10px 14px;gap:10px">✆ Envoyer sur WhatsApp</a>
+            <a href="#" class="social-btn social-btn--ln" style="background:#0a66c2;color:#fff;justify-content:flex-start;padding:10px 14px;gap:10px">in Partager sur LinkedIn</a>
+          </div>
+        </div>
+
+        <!-- Related -->
+        <div class="widget">
+          <div class="widget__title">À lire aussi</div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <a href="article.html" class="card card--h">
+              <div class="card__img-wrap"><img class="card__img" src="https://picsum.photos/seed/rel1/300/200" alt="" loading="lazy" /></div>
+              <div class="card__body"><h3 class="card__title" style="font-size:.83rem">Boni Yayi réagit à la victoire de Wadagni</h3><p style="font-size:.73rem;color:var(--muted);margin-top:4px">Il y a 5 h</p></div>
+            </a>
+            <a href="article.html" class="card card--h">
+              <div class="card__img-wrap"><img class="card__img" src="https://picsum.photos/seed/rel2/300/200" alt="" loading="lazy" /></div>
+              <div class="card__body"><h3 class="card__title" style="font-size:.83rem">La Russie reconnaît l'élection de Wadagni</h3><p style="font-size:.73rem;color:var(--muted);margin-top:4px">Il y a 6 h</p></div>
+            </a>
+            <a href="article.html" class="card card--h">
+              <div class="card__img-wrap"><img class="card__img" src="https://picsum.photos/seed/rel3/300/200" alt="" loading="lazy" /></div>
+              <div class="card__body"><h3 class="card__title" style="font-size:.83rem">Programme quinquennal 2026-2031 présenté</h3><p style="font-size:.73rem;color:var(--muted);margin-top:4px">Il y a 10 h</p></div>
+            </a>
+          </div>
+        </div>
+
+        <!-- Trending -->
+        <div class="widget">
+          <div class="widget__title">Les plus lus</div>
+          <div class="trending">
+            <a href="article.html" class="trending__item">
+              <span class="trending__num">01</span>
+              <div><div class="trending__title">Wadagni élu avec 94%</div><div class="trending__cat">Politique · 3 847 vues</div></div>
+            </a>
+            <a href="article.html" class="trending__item">
+              <span class="trending__num">02</span>
+              <div><div class="trending__title">Les Écureuils qualifiés pour la CAN</div><div class="trending__cat">Sport · 2 913 vues</div></div>
+            </a>
+            <a href="article.html" class="trending__item">
+              <span class="trending__num">03</span>
+              <div><div class="trending__title">Kémi Séba arrêté en Afrique du Sud</div><div class="trending__cat">International · 2 461 vues</div></div>
+            </a>
+          </div>
+        </div>
+
+        <div class="ad-widget">
+          <div class="ad-widget__label">Publiez votre article</div>
+          <div class="ad-widget__title">Vous êtes journaliste ?</div>
+          <div class="ad-widget__sub">Rejoignez notre réseau et partagez vos reportages.</div>
+          <a href="#" class="btn">Créer un compte</a>
+        </div>
+
+      </aside>
+    </div>
+
+    <!-- Related Articles (full width) -->
+    <div class="related">
+      <div class="section-header" style="margin-bottom:20px">
+        <h2 class="section-title">Articles similaires</h2>
+        <a href="categorie.html?cat=politique" class="section-more">Voir tout →</a>
+      </div>
+      <div class="news-grid news-grid--4">
+        <a href="article.html" class="card">
+          <div class="card__img-wrap"><img class="card__img" src="https://picsum.photos/seed/sim1/600/400" alt="" loading="lazy" /><span class="card__cat">Politique</span></div>
+          <div class="card__body"><h3 class="card__title">Investiture le 5 mai : les préparatifs avancent à Cotonou</h3></div>
+          <div class="card__footer"><div class="card__meta"><span>Il y a 3 h</span></div></div>
+        </a>
+        <a href="article.html" class="card">
+          <div class="card__img-wrap"><img class="card__img" src="https://picsum.photos/seed/sim2/600/400" alt="" loading="lazy" /><span class="card__cat">Politique</span></div>
+          <div class="card__body"><h3 class="card__title">CENA : le déroulement du scrutin jugé exemplaire</h3></div>
+          <div class="card__footer"><div class="card__meta"><span>Il y a 6 h</span></div></div>
+        </a>
+        <a href="article.html" class="card">
+          <div class="card__img-wrap"><img class="card__img" src="https://picsum.photos/seed/sim3/600/400" alt="" loading="lazy" /><span class="card__cat">International</span></div>
+          <div class="card__body"><h3 class="card__title">L'Union africaine salue la maturité démocratique du Bénin</h3></div>
+          <div class="card__footer"><div class="card__meta"><span>Il y a 8 h</span></div></div>
+        </a>
+        <a href="article.html" class="card">
+          <div class="card__img-wrap"><img class="card__img" src="https://picsum.photos/seed/sim4/600/400" alt="" loading="lazy" /><span class="card__cat">Politique</span></div>
+          <div class="card__body"><h3 class="card__title">Le programme économique de Wadagni : les grandes lignes</h3></div>
+          <div class="card__footer"><div class="card__meta"><span>Hier</span></div></div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <img src="logo/e-benin.png" alt="E-Bénin" class="logo__img--light" />
+          <p class="footer__desc">E-Bénin est un portail d'information multi-auteurs dédié aux journalistes et blogueurs béninois.</p>
+          <div class="footer__social">
+            <a href="#">f</a><a href="#">𝕏</a><a href="#">▶</a><a href="#">✆</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer__col-title">Rubriques</div>
+          <div class="footer__links">
+            <a href="categorie.html?cat=politique">Politique</a>
+            <a href="categorie.html?cat=sport">Sport</a>
+            <a href="categorie.html?cat=societe">Société</a>
+            <a href="categorie.html?cat=economie">Économie</a>
+            <a href="categorie.html?cat=culture">Culture</a>
+            <a href="categorie.html?cat=international">International</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer__col-title">Liens utiles</div>
+          <div class="footer__links">
+            <a href="#">À propos</a>
+            <a href="politique-confidentialite.html">Confidentialité</a>
+            <a href="#">Mentions légales</a>
+            <a href="contact.html">Contact</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer__col-title">Contact</div>
+          <div class="footer__contact-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Godomey, Cotonou — Bénin</div>
+          <div class="footer__contact-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>contact@savplus.net</div>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <span>© 2026 E-Bénin — SAVPLUS CONSEIL. Tous droits réservés.</span>
+        <div class="footer__bottom-links">
+          <a href="politique-confidentialite.html">Confidentialité</a>
+          <a href="#">CGU</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('mobileNav').classList.toggle('open');
+      document.body.style.overflow = document.getElementById('mobileNav').classList.contains('open') ? 'hidden' : '';
+    }
+    window.addEventListener('scroll', () => {
+      const s = window.scrollY, m = document.documentElement.scrollHeight - window.innerHeight;
+      document.getElementById('progressBar').style.width = (s/m*100)+'%';
+      document.getElementById('scrollTop').classList.toggle('visible', s > 400);
+    });
+  </script>
+</body>
+</html>
