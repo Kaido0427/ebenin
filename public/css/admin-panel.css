@@ -2367,3 +2367,208 @@ body[data-theme="dark"] .profile-identity {
     clip-path: none;
   }
 }
+
+/* =====================================================
+   E-BENIN BRAND OVERRIDES — align admin with main domain
+   ===================================================== */
+
+/* 1. CSS variable overrides — flat design tokens */
+body[data-theme="light"] {
+  --surface-body: #f5f6f8;
+  --surface-panel: #ffffff;
+  --surface-panel-strong: #ffffff;
+  --surface-muted: #f0f2f5;
+  --surface-accent: #e8edf5;
+  --border-soft: #e2e6ec;
+  --border-strong: #ccd2dc;
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,.06);
+  --shadow-md: 0 4px 16px rgba(0,0,0,.08);
+  --shadow-lg: 0 8px 28px rgba(0,0,0,.1);
+}
+
+/* 2. Body — no radial gradients */
+body {
+  background: var(--surface-body);
+}
+
+/* 3. Sidebar — solid dark-blue, full height, no glass card */
+.admin-sidebar {
+  padding: 0;
+  background: var(--eb-blue);
+}
+
+.admin-sidebar__inner {
+  background: var(--eb-blue);
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  padding: 24px 16px;
+  border-right: 1px solid rgba(255,255,255,.1);
+}
+
+/* 4. Brand block on dark bg */
+.admin-brand__copy strong,
+.admin-brand__copy small {
+  color: rgba(255,255,255,.9);
+}
+
+.admin-brand__copy small {
+  color: rgba(255,255,255,.6);
+}
+
+.admin-brand__mark {
+  background: rgba(255,255,255,.15);
+  color: #fff;
+  border-radius: 10px;
+  box-shadow: none;
+}
+
+/* 5. Sidebar toggle/close on dark bg */
+.sidebar-close,
+.sidebar-toggle {
+  background: rgba(255,255,255,.12);
+  border-color: rgba(255,255,255,.18);
+  color: #fff;
+  box-shadow: none;
+}
+
+/* 6. Section labels on dark bg */
+.sidebar-group__label {
+  color: rgba(255,255,255,.45);
+}
+
+/* 7. Sidebar links — white text, gold active */
+.sidebar-link {
+  color: rgba(255,255,255,.72);
+  border-color: transparent;
+  border-radius: 8px;
+}
+
+.sidebar-link:hover {
+  background: rgba(255,255,255,.1);
+  border-color: transparent;
+  color: #fff;
+  transform: none;
+}
+
+.sidebar-link.is-active {
+  background: var(--eb-gold);
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(240,165,0,.35);
+}
+
+body[data-theme="dark"] .sidebar-link.is-active {
+  color: #fff;
+}
+
+.sidebar-link__icon {
+  background: rgba(255,255,255,.12);
+  border-color: rgba(255,255,255,.1);
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+/* 8. Profile section on dark bg */
+.sidebar-profile {
+  background: rgba(255,255,255,.08);
+  border-color: rgba(255,255,255,.12);
+  border-radius: 10px;
+}
+
+.sidebar-profile__copy span,
+.sidebar-profile__copy small {
+  color: rgba(255,255,255,.7);
+}
+
+/* 9. Support card */
+.sidebar-support {
+  background: rgba(0,0,0,.25);
+  border-radius: 10px;
+  box-shadow: none;
+}
+
+/* 10. Cards — flat white, simple border, no blur */
+.topbar-shell,
+.page-tabs-shell,
+.alert,
+.soft-card,
+.table-card,
+.filter-card,
+.metric-card,
+.chart-card,
+.hero-card,
+.watch-card,
+.activity-card,
+.billing-card,
+.profile-card,
+.auth-card,
+.stat-tile {
+  background: #ffffff;
+  border-color: var(--border-soft);
+  border-radius: 10px;
+  box-shadow: var(--shadow-sm);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/* 11. Main content area */
+.admin-main {
+  padding: 24px 28px 40px;
+  background: var(--surface-body);
+}
+
+/* 12. Theme toggle */
+.theme-toggle {
+  background: rgba(255,255,255,.12);
+  border-color: rgba(255,255,255,.18);
+  color: #fff;
+  box-shadow: none;
+}
+
+/* 13. Buttons — solid E-Benin style */
+.btn-primary,
+[class*="btn"][class*="primary"] {
+  background: var(--eb-blue);
+  border-color: var(--eb-blue);
+  box-shadow: none;
+  border-radius: 8px;
+}
+
+.btn-primary:hover,
+[class*="btn"][class*="primary"]:hover {
+  background: var(--eb-blue-strong);
+  border-color: var(--eb-blue-strong);
+}
+
+/* 14. Reduce all border-radius in light theme */
+body[data-theme="light"] .topbar-shell,
+body[data-theme="light"] .table-card,
+body[data-theme="light"] .filter-card,
+body[data-theme="light"] .metric-card,
+body[data-theme="light"] .chart-card,
+body[data-theme="light"] .hero-card,
+body[data-theme="light"] .activity-card,
+body[data-theme="light"] .billing-card,
+body[data-theme="light"] .profile-card,
+body[data-theme="light"] .auth-card,
+body[data-theme="light"] .stat-tile {
+  border-radius: 10px;
+}
+
+body[data-theme="light"] .admin-sidebar__inner,
+body[data-theme="light"] .profile-hero {
+  border-radius: 0;
+}
+
+/* 15. Dark mode sidebar keeps consistent solid bg */
+body[data-theme="dark"] .admin-sidebar,
+body[data-theme="dark"] .admin-sidebar__inner {
+  background: #001d3d;
+  border-right-color: rgba(255,255,255,.07);
+}

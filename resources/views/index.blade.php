@@ -37,8 +37,20 @@
         return filled($rubrique->id ?? null) ? "https://{$baseDomain}/categories/{$rubrique->id}" : '#';
     };
 
-    $excerpt = function ($post, $limit = 160) {
-        return Str::limit(trim(preg_replace('/\s+/', ' ', strip_tags((string) ($post->description ?? '')))), $limit);
+    $cleanText = function ($value) {
+        $text = (string) ($value ?? '');
+        for ($i = 0; $i < 2; $i++) {
+            $decoded = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            if ($decoded === $text) {
+                break;
+            }
+            $text = $decoded;
+        }
+        return trim(preg_replace('/\s+/', ' ', strip_tags($text)));
+    };
+
+    $excerpt = function ($post, $limit = 160) use ($cleanText) {
+        return Str::limit($cleanText($post->description ?? ''), $limit);
     };
 
     $heroSlides = collect($newPosts)->concat($latestPosts)->unique('id')->take(5);

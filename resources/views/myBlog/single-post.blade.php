@@ -7,7 +7,18 @@
     $postUrl = "https://{$organization->subdomain}.{$baseDomain}/post/{$post->id}";
     $category = $post->rubriques->first();
     $categoryUrl = $category ? "https://{$organization->subdomain}.{$baseDomain}/category/{$category->id}" : $homeUrl;
-    $descriptionText = trim(preg_replace('/\s+/', ' ', strip_tags((string) ($post->description ?? ''))));
+    $cleanText = function ($value) {
+        $text = (string) ($value ?? '');
+        for ($i = 0; $i < 2; $i++) {
+            $decoded = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            if ($decoded === $text) {
+                break;
+            }
+            $text = $decoded;
+        }
+        return trim(preg_replace('/\s+/', ' ', strip_tags($text)));
+    };
+    $descriptionText = $cleanText($post->description ?? '');
 
     $postImageUrl = function ($post) use ($organization) {
         $image = trim((string) ($post->image ?? ''));

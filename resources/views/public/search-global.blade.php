@@ -18,8 +18,20 @@
         return $subdomain ? "https://{$subdomain}.{$baseDomain}/post/{$post->id}" : '#';
     };
 
-    $excerpt = function ($post) {
-        return Str::limit(html_entity_decode(strip_tags((string) ($post->description ?? '')), ENT_QUOTES | ENT_HTML5, 'UTF-8'), 150);
+    $cleanText = function ($value) {
+        $text = strip_tags((string) ($value ?? ''));
+        for ($i = 0; $i < 2; $i++) {
+            $decoded = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            if ($decoded === $text) {
+                break;
+            }
+            $text = $decoded;
+        }
+        return trim(preg_replace('/\s+/', ' ', $text));
+    };
+
+    $excerpt = function ($post) use ($cleanText) {
+        return Str::limit($cleanText($post->description ?? ''), 150);
     };
 @endphp
 

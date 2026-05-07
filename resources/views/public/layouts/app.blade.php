@@ -34,6 +34,18 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="{{ asset('css/refonte-public.css') }}">
+    <style>
+        .pass-wrap { position: relative; display: block; }
+        .pass-wrap input { padding-right: 44px !important; }
+        .pass-eye {
+            position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+            background: none; border: none; padding: 4px; color: #888;
+            cursor: pointer; display: flex; align-items: center; line-height: 1;
+            z-index: 10;
+        }
+        .pass-eye:hover { color: #003f7f; }
+        .pass-eye svg { width: 18px; height: 18px; display: block; }
+    </style>
     @stack('head')
 </head>
 <body class="{{ $pageClass }}">
@@ -107,6 +119,17 @@
             @if (($showAuthModal ?? true) && $isMainDomain && request()->path() === '/' && ($errors->has('email') || $errors->has('password')))
                 window.toggleAuthModal(true);
             @endif
+
+            document.querySelectorAll('.pass-eye').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var input = document.getElementById(this.dataset.target);
+                    if (!input) return;
+                    var isHidden = input.type === 'password';
+                    input.type = isHidden ? 'text' : 'password';
+                    this.querySelector('.eye-show').style.display = isHidden ? 'none' : '';
+                    this.querySelector('.eye-hide').style.display = isHidden ? '' : 'none';
+                });
+            });
         })();
     </script>
     @stack('scripts')
