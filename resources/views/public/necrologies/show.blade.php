@@ -3,94 +3,78 @@
 @section('title', $necrologie->nom_defunt . ' | Nécrologies E-Benin')
 @section('meta_description', Str::limit($necrologie->message ?? ('Notice de décès de ' . $necrologie->nom_defunt), 150))
 
-@push('head')
-<style>
-    .nec-detail-wrap {
-        background: linear-gradient(180deg, var(--dark) 0%, #12131a 180px);
-        min-height: 100vh;
-        padding: 32px 0 56px;
-    }
-
-    .nec-breadcrumb { font-size: .83rem; color: #666; padding-bottom: 20px; }
-    .nec-breadcrumb a { color: #888; text-decoration: none; }
-    .nec-breadcrumb a:hover { color: #ccc; }
-    .nec-breadcrumb span { margin: 0 6px; }
-
-    .nec-card {
-        background: #0d0d1a;
-        border: 1px solid rgba(255,255,255,.07);
-        border-radius: 14px;
-        overflow: hidden;
-        max-width: 780px;
-        margin: 0 auto;
-    }
-
-    .nec-photo { width: 100%; max-height: 420px; object-fit: cover; object-position: top center; display: block; }
-    .nec-video { width: 100%; max-height: 420px; display: block; }
-
-    .nec-body { padding: 32px 36px; }
-    .candle-row { text-align: center; font-size: 1.3rem; margin-bottom: 18px; letter-spacing: .3em; }
-    .nec-name { font-size: 1.9rem; font-weight: 700; color: #eee; margin-bottom: 7px; }
-    .nec-dates { font-size: .93rem; color: #777; margin-bottom: 22px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
-    .nec-dates .sep { color: #444; }
-    .nec-divider { border: none; border-top: 1px solid rgba(255,255,255,.07); margin: 22px 0; }
-    .nec-message { font-size: .97rem; color: #bbb; line-height: 1.85; white-space: pre-wrap; font-style: italic; }
-    .nec-footer { margin-top: 28px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,.05); display: flex; justify-content: space-between; align-items: center; font-size: .8rem; color: #555; }
-
-    @media (max-width: 540px) {
-        .nec-body { padding: 20px 16px; }
-        .nec-name { font-size: 1.5rem; }
-    }
-</style>
-@endpush
-
 @section('content')
-<div class="nec-detail-wrap">
+
+<div style="background:var(--white);border-bottom:1px solid var(--border);padding:10px 0;">
     <div class="container">
-        <div class="nec-breadcrumb">
-            <a href="{{ route('necrologies.index') }}">Nécrologies</a>
-            <span>›</span>
+        <nav style="font-size:.82rem;color:var(--muted);">
+            <a href="{{ route('necrologies.index') }}" style="color:var(--primary);text-decoration:none;">Nécrologies</a>
+            <span style="margin:0 6px;">›</span>
             {{ $necrologie->nom_defunt }}
-        </div>
+        </nav>
+    </div>
+</div>
 
-        <div class="nec-card">
-            @if ($necrologie->video)
-                <video class="nec-video" controls>
-                    <source src="{{ asset($necrologie->video) }}">
-                </video>
-            @elseif ($necrologie->photo)
-                <img class="nec-photo" src="{{ asset($necrologie->photo) }}" alt="{{ $necrologie->nom_defunt }}">
-            @endif
+<main style="padding:28px 0 56px;">
+    <div class="container">
+        <div style="max-width:740px;margin:0 auto;">
+            <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;">
 
-            <div class="nec-body">
-                <div class="candle-row">🕯️ 🕊️ 🕯️</div>
-
-                <div class="nec-name">{{ $necrologie->nom_defunt }}</div>
-
-                <div class="nec-dates">
-                    @if ($necrologie->date_naissance)
-                        <span>Né(e) le {{ $necrologie->date_naissance->format('d/m/Y') }}</span>
-                        <span class="sep">•</span>
-                    @endif
-                    <span>Décédé(e) le {{ $necrologie->date_deces->format('d/m/Y') }}</span>
-                    @if ($necrologie->date_naissance)
-                        @php $age = $necrologie->date_naissance->diffInYears($necrologie->date_deces); @endphp
-                        <span class="sep">•</span>
-                        <span>{{ $age }} ans</span>
-                    @endif
-                </div>
-
-                @if ($necrologie->message)
-                    <hr class="nec-divider">
-                    <div class="nec-message">{{ $necrologie->message }}</div>
+                @if ($necrologie->video)
+                    <video style="width:100%;max-height:420px;display:block;" controls>
+                        <source src="{{ asset($necrologie->video) }}">
+                    </video>
+                @elseif ($necrologie->photo)
+                    <img src="{{ asset($necrologie->photo) }}" alt="{{ $necrologie->nom_defunt }}" style="width:100%;max-height:420px;object-fit:cover;object-position:top center;display:block;">
                 @endif
 
-                <div class="nec-footer">
-                    <span>Publié par <strong>{{ $necrologie->advertiser->company_name ?? $necrologie->advertiser->name }}</strong></span>
-                    <span>{{ $necrologie->created_at->format('d/m/Y') }}</span>
+                <div style="padding:32px 36px;">
+                    <div style="text-align:center;font-size:1.4rem;margin-bottom:20px;letter-spacing:.3em;">🕯️ 🕊️ 🕯️</div>
+
+                    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:20px;">
+                        <div>
+                            <h1 style="font-size:1.8rem;font-weight:800;color:var(--dark);margin:0 0 8px;line-height:1.2;">{{ $necrologie->nom_defunt }}</h1>
+                            <div style="font-size:.88rem;color:var(--muted);display:flex;gap:12px;flex-wrap:wrap;align-items:center;">
+                                @if ($necrologie->date_naissance)
+                                    <span>Né(e) le {{ $necrologie->date_naissance->format('d/m/Y') }}</span>
+                                    <span style="color:var(--border);">•</span>
+                                @endif
+                                <span>Décédé(e) le {{ $necrologie->date_deces->format('d/m/Y') }}</span>
+                                @if ($necrologie->date_naissance)
+                                    @php $age = $necrologie->date_naissance->diffInYears($necrologie->date_deces); @endphp
+                                    <span style="color:var(--border);">•</span>
+                                    <span>{{ $age }} ans</span>
+                                @endif
+                            </div>
+                        </div>
+                        <span class="card__cat" style="position:static;flex-shrink:0;">Nécrologie</span>
+                    </div>
+
+                    @if ($necrologie->message)
+                        <hr style="border:none;border-top:1px solid var(--border);margin:22px 0;">
+                        <blockquote style="font-size:.97rem;color:var(--mid);line-height:1.9;white-space:pre-wrap;font-style:italic;margin:0;border-left:3px solid var(--primary);padding-left:18px;">{{ $necrologie->message }}</blockquote>
+                    @endif
+
+                    <div style="margin-top:28px;padding-top:16px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;font-size:.82rem;color:var(--muted);">
+                        <span>Publié par <strong style="color:var(--dark);">{{ $necrologie->advertiser->company_name ?? $necrologie->advertiser->name }}</strong></span>
+                        <span>{{ $necrologie->created_at->format('d/m/Y') }}</span>
+                    </div>
                 </div>
+            </div>
+
+            <div style="margin-top:20px;text-align:center;">
+                <a href="{{ route('necrologies.index') }}" class="btn btn--outline">← Toutes les nécrologies</a>
             </div>
         </div>
     </div>
-</div>
+</main>
+
+@push('head')
+<style>
+@media (max-width:540px) {
+    main .container > div > div > div:nth-child(2) { padding: 20px 16px !important; }
+}
+</style>
+@endpush
+
 @endsection

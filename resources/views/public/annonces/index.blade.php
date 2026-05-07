@@ -1,159 +1,84 @@
 @extends('public.layouts.app')
 
-@section('title', 'Annonces | E-Benin')
-@section('meta_description', "Petites annonces au Bénin : emploi, immobilier, vente, services et évènements.")
-
-@push('head')
-<style>
-    .ann-hero {
-        background: linear-gradient(135deg, var(--primary) 0%, #0055a5 100%);
-        color: #fff;
-        padding: 40px 0;
-        text-align: center;
-    }
-    .ann-hero h1 { font-size: 1.9rem; font-weight: 700; margin: 0 0 6px; }
-    .ann-hero p { opacity: .8; margin: 0; font-size: .95rem; }
-
-    .ann-filters {
-        background: var(--white);
-        padding: 14px 0;
-        border-bottom: 1px solid var(--border);
-    }
-    .ann-filters__inner { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-    .ann-filters a {
-        display: inline-block;
-        padding: 5px 16px;
-        border-radius: 20px;
-        font-size: .83rem;
-        font-weight: 600;
-        text-decoration: none;
-        border: 1px solid var(--border);
-        color: var(--mid);
-        transition: all var(--transition);
-    }
-    .ann-filters a:hover,
-    .ann-filters a.active { background: var(--primary); color: #fff; border-color: var(--primary); }
-
-    .ann-section { padding: 28px 0 48px; }
-    .ann-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(272px, 1fr)); gap: 18px; margin-top: 24px; }
-
-    .ann-card {
-        background: var(--white);
-        border-radius: var(--radius);
-        border: 1px solid var(--border);
-        overflow: hidden;
-        text-decoration: none;
-        color: inherit;
-        transition: box-shadow var(--transition), transform var(--transition);
-        display: flex;
-        flex-direction: column;
-    }
-    .ann-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
-
-    .ann-card__img {
-        height: 174px;
-        width: 100%;
-        background: var(--bg);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--border);
-        font-size: 2rem;
-        overflow: hidden;
-    }
-    .ann-card__img img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
-
-    .ann-card__body { padding: 14px 16px; flex: 1; }
-    .ann-card__cat { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 7px; }
-    .ann-card__cat.emploi { color: #1565c0; }
-    .ann-card__cat.immobilier { color: #880e4f; }
-    .ann-card__cat.vente_services { color: #6a1b9a; }
-    .ann-card__cat.evenements { color: #f57f17; }
-    .ann-card__title { font-size: .97rem; font-weight: 600; color: var(--dark); margin-bottom: 6px; line-height: 1.4; }
-    .ann-card__desc { font-size: .83rem; color: var(--mid); line-height: 1.5; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
-
-    .ann-card__footer {
-        padding: 10px 16px;
-        border-top: 1px solid var(--border);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .ann-card__price { font-weight: 700; color: var(--primary); font-size: .88rem; }
-    .ann-card__location { font-size: .76rem; color: var(--muted); }
-
-    .ann-section__head { display: flex; align-items: baseline; justify-content: space-between; }
-    .ann-section__head h2 { font-size: 1.25rem; font-weight: 700; color: var(--dark); }
-
-    .pagination-wrap { margin-top: 28px; display: flex; justify-content: center; }
-    .empty-state { text-align: center; padding: 60px 0; color: var(--muted); }
-    .empty-state .icon { font-size: 2.8rem; margin-bottom: 12px; }
-</style>
-@endpush
+@section('title', 'Petites annonces | E-Benin')
+@section('meta_description', "Petites annonces au Bénin : emploi, immobilier, véhicules, services et bien plus sur E-Benin.")
 
 @section('content')
 
-<div class="ann-hero">
-    <h1>Petites annonces</h1>
-    <p>Emploi, immobilier, services et évènements au Bénin</p>
+<div class="page-hero">
+    <div class="container">
+        <h1 class="page-hero__title">Petites annonces</h1>
+        <p class="page-hero__text">Trouvez ce dont vous avez besoin au Bénin</p>
+    </div>
 </div>
 
-<div class="ann-filters">
+<div class="cat-strip">
     <div class="container">
-        <div class="ann-filters__inner">
-            <a href="{{ route('annonces.index') }}" class="{{ !$category ? 'active' : '' }}">Toutes</a>
+        <div class="cat-strip__inner">
+            <a href="{{ route('annonces.index') }}" class="cat-tag {{ !$category ? 'active' : '' }}">Toutes</a>
             @foreach ($categories as $key => $label)
-                <a href="{{ route('annonces.index', ['category' => $key]) }}" class="{{ $category === $key ? 'active' : '' }}">{{ $label }}</a>
+                <a href="{{ route('annonces.index', ['category' => $key]) }}" class="cat-tag {{ $category === $key ? 'active' : '' }}">{{ $label }}</a>
             @endforeach
-            <a href="{{ route('advertiser.register') }}" style="margin-left:auto;color:var(--accent);border-color:var(--accent);">
-                + Publier une annonce
-            </a>
         </div>
     </div>
 </div>
 
-<div class="ann-section">
+<main style="padding: 28px 0 56px;">
     <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">
+                {{ $category ? ($categories[$category] ?? 'Annonces') : 'Toutes les annonces' }}
+                @if (!$annonces->isEmpty())
+                    <span style="font-size:.85rem;font-weight:400;color:var(--muted);margin-left:8px;">{{ $annonces->total() }} résultat(s)</span>
+                @endif
+            </h2>
+            <a href="{{ route('advertiser.register') }}" class="section-more">+ Publier une annonce</a>
+        </div>
+
         @if ($annonces->isEmpty())
-            <div class="empty-state">
-                <div class="icon">📋</div>
+            <div style="text-align:center;padding:60px 0;color:var(--muted);">
+                <div style="font-size:2.8rem;margin-bottom:12px;">📋</div>
                 <p>Aucune annonce disponible pour le moment.</p>
+                <a href="{{ route('advertiser.register') }}" class="btn btn--primary" style="margin-top:16px;">Publier la première annonce</a>
             </div>
         @else
-            <div class="ann-section__head">
-                <h2>{{ $category ? ($categories[$category] ?? 'Annonces') : 'Toutes les annonces' }}</h2>
-                <span style="font-size:.85rem;color:var(--muted);">{{ $annonces->total() }} annonce(s)</span>
-            </div>
-            <div class="ann-grid">
+            <div class="news-grid" style="margin-top:20px;">
                 @foreach ($annonces as $annonce)
-                <a href="{{ route('annonces.show', $annonce) }}" class="ann-card">
-                    <div class="ann-card__img">
+                <a href="{{ route('annonces.show', $annonce) }}" class="card">
+                    <div class="card__img-wrap">
                         @if ($annonce->images && count($annonce->images) > 0)
-                            <img src="{{ asset($annonce->images[0]) }}" alt="{{ $annonce->title }}">
+                            <img class="card__img" src="{{ asset($annonce->images[0]) }}" alt="{{ $annonce->title }}">
                         @else
-                            📋
+                            <div class="card__img" style="background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:2rem;color:var(--border);">📋</div>
                         @endif
+                        <span class="card__cat">{{ $annonce->category_label }}</span>
                     </div>
-                    <div class="ann-card__body">
-                        <div class="ann-card__cat {{ $annonce->category }}">{{ $annonce->category_label }}</div>
-                        <div class="ann-card__title">{{ $annonce->title }}</div>
-                        <div class="ann-card__desc">{{ $annonce->description }}</div>
+                    <div class="card__body">
+                        <h3 class="card__title">{{ $annonce->title }}</h3>
+                        <p class="card__excerpt">{{ Str::limit($annonce->description, 120) }}</p>
                     </div>
-                    <div class="ann-card__footer">
-                        <span class="ann-card__price">
-                            {{ $annonce->price ? number_format($annonce->price, 0, ',', ' ') . ' FCFA' : 'Prix à débattre' }}
-                        </span>
-                        <span class="ann-card__location">📍 {{ $annonce->location ?? 'Bénin' }}</span>
+                    <div class="card__footer">
+                        <div class="card__meta">
+                            @if ($annonce->price)
+                                <span style="font-weight:700;color:var(--primary);">{{ number_format($annonce->price, 0, ',', ' ') }} FCFA</span>
+                            @else
+                                <span style="color:var(--muted);">Prix à débattre</span>
+                            @endif
+                            @if ($annonce->location)
+                                <span>📍 {{ $annonce->location }}</span>
+                            @endif
+                        </div>
+                        <div class="card__author">{{ $annonce->created_at->diffForHumans() }}</div>
                     </div>
                 </a>
                 @endforeach
             </div>
 
-            <div class="pagination-wrap">
+            <div style="margin-top:28px;display:flex;justify-content:center;">
                 {{ $annonces->links() }}
             </div>
         @endif
     </div>
-</div>
+</main>
 
 @endsection
