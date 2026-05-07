@@ -44,7 +44,8 @@ class LoginController extends Controller
         $subdomain = $organization->subdomain;
         Log::info('Subdomain retrieved', ['subdomain' => $subdomain]);
 
-        $redirectUrl = "https://{$subdomain}.e-benin.com/dashboard";
+        $baseDomain = str_contains(request()->getHost(), 'e-benin.bj') ? 'e-benin.bj' : 'e-benin.com';
+        $redirectUrl = "https://{$subdomain}.{$baseDomain}/dashboard";
         Log::info('Redirecting to', ['redirect_url' => $redirectUrl]);
 
         return $redirectUrl;

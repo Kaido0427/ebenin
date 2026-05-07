@@ -395,7 +395,8 @@ class HomeController extends Controller
 
         if (!$subdomain) {
             Log::error('updateSubscription() : subdomain manquant dans le callback');
-            return redirect()->away("https://e-benin.com")
+            $baseDomain = $this->getBaseDomain($request);
+            return redirect()->away("https://{$baseDomain}")
                 ->with('error', 'Impossible d\'identifier votre compte. Contactez le support.');
         }
 
@@ -404,7 +405,8 @@ class HomeController extends Controller
 
         if (!$organization) {
             Log::error('updateSubscription() : organisation introuvable', ['subdomain' => $subdomain]);
-            return redirect()->away("https://e-benin.com")
+            $baseDomain = $this->getBaseDomain($request);
+            return redirect()->away("https://{$baseDomain}")
                 ->with('error', 'Organisation introuvable. Contactez le support.');
         }
 
@@ -413,7 +415,8 @@ class HomeController extends Controller
 
         if (!$user) {
             Log::error('updateSubscription() : utilisateur introuvable', ['org_id' => $organization->id]);
-            return redirect()->away("https://e-benin.com")
+            $baseDomain = $this->getBaseDomain($request);
+            return redirect()->away("https://{$baseDomain}")
                 ->with('error', 'Utilisateur introuvable. Contactez le support.');
         }
 
@@ -478,7 +481,8 @@ class HomeController extends Controller
         $user = Auth::user();
 
         if (!$user) {
-            return redirect()->away('https://e-benin.com/bloger/login')
+            $baseDomain = $this->getBaseDomain($request);
+            return redirect()->away("https://{$baseDomain}/bloger/login")
                 ->with('error', 'Vous devez etre connecte.');
         }
 
