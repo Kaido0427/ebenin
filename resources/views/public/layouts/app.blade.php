@@ -33,7 +33,7 @@
     <link rel="icon" type="image/png" href="{{ asset('favicon.ico') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="{{ asset('css/refonte-public.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/refonte-public.css') }}?v={{ filemtime(public_path('css/refonte-public.css')) }}">
     <style>
         .pass-wrap { position: relative; display: block; }
         .pass-wrap input { padding-right: 44px !important; }
