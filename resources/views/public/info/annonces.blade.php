@@ -77,7 +77,7 @@
         <p class="ia-hero__sub">Le marché des annonces du Bénin. Emploi, immobilier, véhicules, services et bien plus — touchez des milliers de Béninois chaque jour.</p>
         <div class="ia-hero__actions">
             <a href="{{ route('advertiser.register') }}" class="btn-white">Publier une annonce →</a>
-            <a href="{{ route('annonces.index') }}" class="btn-ghost">Voir les annonces</a>
+            <a href="{{ request()->getSchemeAndHttpHost() }}/annonces" class="btn-ghost">Voir les annonces</a>
         </div>
     </div>
 </div>
@@ -190,7 +190,7 @@
         <p>Publiez votre première annonce sur E-Benin et touchez des milliers de Béninois dès aujourd'hui.</p>
         <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
             <a href="{{ route('advertiser.register') }}" class="btn-white" style="background:#fff;color:#e8191e;font-weight:700;padding:13px 28px;border-radius:6px;text-decoration:none;font-size:.97rem;">Créer un compte annonceur</a>
-            <a href="{{ route('annonces.index') }}" class="btn-ghost" style="border:2px solid rgba(255,255,255,.6);color:#fff;font-weight:600;padding:12px 26px;border-radius:6px;text-decoration:none;font-size:.97rem;">Voir toutes les annonces</a>
+            <a href="{{ request()->getSchemeAndHttpHost() }}/annonces" class="btn-ghost" style="border:2px solid rgba(255,255,255,.6);color:#fff;font-weight:600;padding:12px 26px;border-radius:6px;text-decoration:none;font-size:.97rem;">Voir toutes les annonces</a>
         </div>
     </div>
 </div>

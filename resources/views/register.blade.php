@@ -160,7 +160,7 @@
                                 </button>
                                 <p class="auth-form-note">90 jours d'essai gratuit. Aucun paiement requis à l'inscription.</p>
                                 <p class="auth-form-note" style="margin-top:8px;">
-                                    <a href="{{ route('info.blog') }}" style="color:var(--primary);">En savoir plus sur les blogs E-Benin →</a>
+                                    <a href="{{ request()->getSchemeAndHttpHost() }}/en-savoir-plus/blog" style="color:var(--primary);">En savoir plus sur les blogs E-Benin →</a>
                                 </p>
                             </form>
                         </div>

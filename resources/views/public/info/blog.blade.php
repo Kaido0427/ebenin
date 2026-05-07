@@ -77,8 +77,8 @@
         <h1>Créez votre blog sur E-Benin</h1>
         <p class="ib-hero__sub">Rejoignez les rédactions et blogueurs qui font l'information au Bénin. Votre propre adresse, votre propre audience — sans compétences techniques.</p>
         <div class="ib-hero__actions">
-            <a href="{{ route('userRegister') }}" class="btn-white">Commencer gratuitement →</a>
-            <a href="{{ route('bloger.login') }}" class="btn-ghost">Se connecter</a>
+            <a href="{{ request()->getSchemeAndHttpHost() }}/bloger/register" class="btn-white">Commencer gratuitement →</a>
+            <a href="{{ request()->getSchemeAndHttpHost() }}/bloger/login" class="btn-ghost">Se connecter</a>
         </div>
     </div>
 </div>
@@ -192,7 +192,7 @@
                     <li>Visibilité sur le portail E-Benin</li>
                     <li>Support par e-mail</li>
                 </ul>
-                <a href="{{ route('userRegister') }}" class="btn btn--primary" style="width:100%;justify-content:center;font-size:.97rem;padding:14px;">Créer mon blog gratuitement →</a>
+                <a href="{{ request()->getSchemeAndHttpHost() }}/bloger/register" class="btn btn--primary" style="width:100%;justify-content:center;font-size:.97rem;padding:14px;">Créer mon blog gratuitement →</a>
                 <p style="text-align:center;font-size:.78rem;color:var(--muted);margin-top:12px;">Après l'essai, un abonnement mensuel est proposé pour continuer.</p>
             </div>
         </div>
@@ -205,8 +205,8 @@
         <h2>Prêt à lancer votre média ?</h2>
         <p>Rejoignez les rédactions et blogueurs qui font l'information au Bénin. Inscription gratuite, sans engagement.</p>
         <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
-            <a href="{{ route('userRegister') }}" class="btn-white" style="background:#fff;color:var(--primary);font-weight:700;padding:13px 28px;border-radius:6px;text-decoration:none;font-size:.97rem;">S'inscrire gratuitement</a>
-            <a href="{{ route('bloger.login') }}" class="btn-ghost" style="border:2px solid rgba(255,255,255,.6);color:#fff;font-weight:600;padding:12px 26px;border-radius:6px;text-decoration:none;font-size:.97rem;">Se connecter</a>
+            <a href="{{ request()->getSchemeAndHttpHost() }}/bloger/register" class="btn-white" style="background:#fff;color:var(--primary);font-weight:700;padding:13px 28px;border-radius:6px;text-decoration:none;font-size:.97rem;">S'inscrire gratuitement</a>
+            <a href="{{ request()->getSchemeAndHttpHost() }}/bloger/login" class="btn-ghost" style="border:2px solid rgba(255,255,255,.6);color:#fff;font-weight:600;padding:12px 26px;border-radius:6px;text-decoration:none;font-size:.97rem;">Se connecter</a>
         </div>
     </div>
 </div>

@@ -80,7 +80,7 @@
                         Vous êtes annonceur ? <a href="{{ $siteRoot }}/advertiser/login" style="color:var(--primary);">Connexion annonceur</a>
                     </p>
                     <p style="text-align:center;margin-top:8px;font-size:.83rem;color:var(--muted);">
-                        <a href="{{ route('info.blog') }}" style="color:var(--primary);">En savoir plus sur les blogs E-Benin →</a>
+                        <a href="{{ request()->getSchemeAndHttpHost() }}/en-savoir-plus/blog" style="color:var(--primary);">En savoir plus sur les blogs E-Benin →</a>
                     </p>
                 </div>
             </div>
