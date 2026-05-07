@@ -62,7 +62,10 @@
         ->take(3);
     $latestGrid = collect($latestPosts)->take(6);
     $featuredGrid = collect($featuredPosts)->take(4);
-    $networkSpotlight = collect($randomizedPosts)->take(4);
+    $networkSpotlight  = collect($randomizedPosts)->take(4);
+    $homeNecrologies   = collect($latestNecrologies ?? []);
+    $homeAnnonces      = collect($latestAnnonces ?? []);
+    $homeBloggers      = collect($networkBloggers ?? []);
     $reportageItems = collect($reportages)->sortByDesc('created_at')->take(4);
     $flashList = collect($flashNews)->take(6);
     $popularList = collect($latestPosts)->take(5);
@@ -224,22 +227,28 @@
                         </section>
                     @endif
 
-                    @if ($networkSpotlight->isNotEmpty())
+                    @if ($homeBloggers->isNotEmpty())
                         <section>
                             <div class="section-header">
                                 <h2 class="section-title">Blogs du réseau</h2>
+                                <a href="https://{{ $baseDomain }}/bloger/register" class="section-more">Rejoindre</a>
                             </div>
-                            <div class="news-grid news-grid--2">
-                                @foreach ($networkSpotlight as $item)
-                                    @php($post = $item['post'])
-                                    <a href="{{ $postUrl($post) }}" class="card card--h">
-                                        <div class="card__img-wrap">
-                                            <img class="card__img" src="{{ $postImageUrl($post) }}" alt="{{ $post->libelle }}">
-                                        </div>
-                                        <div class="card__body">
-                                            <h3 class="card__title">{{ $post->libelle }}</h3>
-                                            <p class="card__excerpt">{{ $post->user->organization->organization_name ?? 'Blog' }}</p>
-                                        </div>
+                            <div class="network-bloggers">
+                                @foreach ($homeBloggers as $org)
+                                    @php
+                                        $orgUrl = 'https://' . $org->subdomain . '.' . $baseDomain . '/blog';
+                                        $logoSrc = filled($org->organization_logo) ? asset(ltrim($org->organization_logo, '/')) : null;
+                                    @endphp
+                                    <a href="{{ $orgUrl }}" class="network-blogger-card">
+                                        @if ($logoSrc)
+                                            <img src="{{ $logoSrc }}" alt="{{ $org->organization_name }}" class="network-blogger-card__logo">
+                                        @else
+                                            <div class="network-blogger-card__logo-ph">{{ strtoupper(substr($org->organization_name, 0, 1)) }}</div>
+                                        @endif
+                                        <div class="network-blogger-card__name">{{ $org->organization_name }}</div>
+                                        @if ($org->organization_phone)
+                                            <div class="network-blogger-card__contact">📞 {{ $org->organization_phone }}</div>
+                                        @endif
                                     </a>
                                 @endforeach
                             </div>
@@ -270,50 +279,70 @@
                 </div>
 
                 <aside class="sidebar">
-                    <div class="widget newsletter-widget">
-                        <div class="widget__title">Newsletter</div>
+                    {{-- Nécrologies (remplace newsletter) --}}
+                    <div class="widget">
+                        <div class="widget__title">🕯️ Nécrologies</div>
                         <div class="widget-divider"></div>
-                        <p>Recevez les dernières nouvelles directement dans votre boîte mail.</p>
-                        <form class="newsletter-form-compact" action="#" method="GET">
-                            <input type="email" placeholder="Votre adresse e-mail">
-                            <button type="submit" class="btn btn--primary">S'abonner gratuitement</button>
-                        </form>
-                    </div>
-
-                    @if ($popularList->isNotEmpty())
-                        <div class="widget">
-                            <div class="widget__title">Les plus lus</div>
-                            <div class="widget-divider"></div>
-                            <div class="popular-list">
-                                @foreach ($popularList as $index => $post)
-                                    <div class="popular-item">
-                                        <div class="popular-rank">{{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}</div>
-                                        <div>
-                                            <a href="{{ $postUrl($post) }}" class="popular-title">{{ $post->libelle }}</a>
-                                            <div class="popular-meta">
-                                                {{ $post->rubriques->first()->name ?? 'Actualité' }} · {{ $post->comments->count() }} commentaires
-                                            </div>
+                        @if ($homeNecrologies->isNotEmpty())
+                            <div class="home-carousel">
+                                @foreach ($homeNecrologies as $necro)
+                                    <a href="{{ route('necrologies.show', $necro) }}" class="home-carousel-card">
+                                        @if ($necro->photo)
+                                            <img src="{{ asset($necro->photo) }}" alt="{{ $necro->nom_defunt }}" class="home-carousel-card__img">
+                                        @else
+                                            <div class="home-carousel-card__img-ph">🕊️</div>
+                                        @endif
+                                        <div class="home-carousel-card__body">
+                                            <div class="home-carousel-card__title">{{ $necro->nom_defunt }}</div>
+                                            <div class="home-carousel-card__sub">{{ $necro->date_deces->format('d/m/Y') }}</div>
                                         </div>
-                                    </div>
+                                    </a>
                                 @endforeach
                             </div>
-                        </div>
-                    @endif
+                            <a href="{{ route('necrologies.index') }}" class="btn btn--outline" style="width:100%;justify-content:center;margin-top:10px;font-size:.83rem;">Voir toutes les nécrologies</a>
+                        @else
+                            <p style="font-size:.84rem;color:var(--muted);">Aucune notice publiée pour le moment.</p>
+                            <a href="{{ route('necrologies.index') }}" class="btn btn--outline" style="width:100%;justify-content:center;margin-top:6px;font-size:.83rem;">Voir les nécrologies</a>
+                        @endif
+                    </div>
 
+                    {{-- Annonces (remplace les plus lus) --}}
+                    <div class="widget">
+                        <div class="widget__title">📢 Annonces</div>
+                        <div class="widget-divider"></div>
+                        @if ($homeAnnonces->isNotEmpty())
+                            <div class="home-carousel">
+                                @foreach ($homeAnnonces as $ann)
+                                    <a href="{{ route('annonces.show', $ann) }}" class="home-carousel-card">
+                                        @if ($ann->images && count($ann->images) > 0)
+                                            <img src="{{ asset($ann->images[0]) }}" alt="{{ $ann->title }}" class="home-carousel-card__img">
+                                        @else
+                                            <div class="home-carousel-card__img-ph" style="background:var(--bg);color:var(--muted);">📋</div>
+                                        @endif
+                                        <div class="home-carousel-card__body">
+                                            <div class="home-carousel-card__title">{{ $ann->title }}</div>
+                                            <div class="home-carousel-card__sub">
+                                                {{ $ann->category_label }}
+                                                @if ($ann->price) · {{ number_format($ann->price, 0, ',', ' ') }} FCFA @endif
+                                            </div>
+                                        </div>
+                                    </a>
+                                @endforeach
+                            </div>
+                            <a href="{{ route('annonces.index') }}" class="btn btn--outline" style="width:100%;justify-content:center;margin-top:10px;font-size:.83rem;">Voir toutes les annonces</a>
+                        @else
+                            <p style="font-size:.84rem;color:var(--muted);">Aucune annonce pour le moment.</p>
+                            <a href="{{ route('annonces.index') }}" class="btn btn--outline" style="width:100%;justify-content:center;margin-top:6px;font-size:.83rem;">Voir les annonces</a>
+                        @endif
+                    </div>
+
+                    {{-- Flash info masqué temporairement --}}
+                    {{--
                     <div class="widget">
                         <div class="widget__title">Flash info</div>
-                        <div class="trending">
-                            @foreach ($flashList as $index => $post)
-                                <div class="trending__item">
-                                    <div class="trending__num">{{ $index + 1 }}</div>
-                                    <div>
-                                        <a href="{{ $postUrl($post) }}" class="trending__title">{{ $post->libelle }}</a>
-                                        <div class="trending__cat">{{ $post->rubriques->first()->name ?? 'Actualité' }}</div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
+                        ...
                     </div>
+                    --}}
 
                     <div class="widget">
                         <div class="widget__title">Rubriques</div>
@@ -335,15 +364,31 @@
                         </div>
                     </div>
 
-                    @if (collect($footerOrgs)->isNotEmpty())
+                    {{-- Newsletter (déplacée en sidebar basse) --}}
+                    <div class="widget newsletter-widget">
+                        <div class="widget__title">Newsletter</div>
+                        <div class="widget-divider"></div>
+                        <p>Recevez les dernières nouvelles dans votre boîte mail.</p>
+                        <form class="newsletter-form-compact" action="#" method="GET">
+                            <input type="email" placeholder="Votre adresse e-mail">
+                            <button type="submit" class="btn btn--primary">S'abonner</button>
+                        </form>
+                    </div>
+
+                    {{-- Les plus lus (déplacés en sidebar basse) --}}
+                    @if ($popularList->isNotEmpty())
                         <div class="widget">
-                            <div class="widget__title">Blogs à suivre</div>
-                            <div class="network-list">
-                                @foreach (collect($footerOrgs)->take(6) as $organization)
-                                    <a href="https://{{ $organization->subdomain }}.{{ $baseDomain }}/blog">
-                                        <span>{{ $organization->organization_name }}</span>
-                                        <span>Voir</span>
-                                    </a>
+                            <div class="widget__title">Les plus lus</div>
+                            <div class="widget-divider"></div>
+                            <div class="popular-list">
+                                @foreach ($popularList as $index => $post)
+                                    <div class="popular-item">
+                                        <div class="popular-rank">{{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}</div>
+                                        <div>
+                                            <a href="{{ $postUrl($post) }}" class="popular-title">{{ $post->libelle }}</a>
+                                            <div class="popular-meta">{{ $post->rubriques->first()->name ?? 'Actualité' }}</div>
+                                        </div>
+                                    </div>
                                 @endforeach
                             </div>
                         </div>

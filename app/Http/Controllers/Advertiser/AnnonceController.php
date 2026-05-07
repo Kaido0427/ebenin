@@ -13,7 +13,7 @@ class AnnonceController extends Controller
 {
     public function create()
     {
-        return view('advertiser.annonces.create');
+        return view('advertiser.annonces.create', ['categories' => Annonce::CATEGORIES]);
     }
 
     public function store(Request $request)
@@ -21,7 +21,7 @@ class AnnonceController extends Controller
         $validator = Validator::make($request->all(), [
             'title'         => 'required|string|max:255',
             'description'   => 'required|string',
-            'category'      => 'required|in:emploi,immobilier,vente_services,evenements',
+            'category'      => 'required|in:' . implode(',', array_keys(Annonce::CATEGORIES)),
             'price'         => 'nullable|numeric|min:0',
             'location'      => 'nullable|string|max:255',
             'contact_phone' => 'nullable|string|max:20',
@@ -46,27 +46,54 @@ class AnnonceController extends Controller
             }
         }
 
-        Annonce::create([
-            'advertiser_id' => $advertiser->id,
-            'title'         => $request->input('title'),
-            'description'   => $request->input('description'),
-            'category'      => $request->input('category'),
-            'price'         => $request->input('price'),
-            'location'      => $request->input('location'),
-            'contact_phone' => $request->input('contact_phone'),
-            'contact_email' => $request->input('contact_email'),
-            'images'        => $images ?: null,
-            'status'        => 'active',
+        $annonce = Annonce::create([
+            'advertiser_id'  => $advertiser->id,
+            'title'          => $request->input('title'),
+            'description'    => $request->input('description'),
+            'category'       => $request->input('category'),
+            'price'          => $request->input('price'),
+            'location'       => $request->input('location'),
+            'contact_phone'  => $request->input('contact_phone'),
+            'contact_email'  => $request->input('contact_email'),
+            'images'         => $images ?: null,
+            'status'         => 'pending',
+            'payment_status' => 'pending',
         ]);
 
-        return redirect()->route('advertiser.dashboard')
-            ->with('success', 'Annonce publiée avec succès.');
+        return redirect()->route('advertiser.annonces.pay', $annonce)
+            ->with('info', 'Annonce enregistrée. Finalisez le paiement pour la publier.');
+    }
+
+    public function pay(Annonce $annonce)
+    {
+        abort_if($annonce->advertiser_id !== Auth::guard('advertiser')->id(), 403);
+        abort_if($annonce->payment_status === 'paid', 302, route('advertiser.dashboard'));
+
+        return view('advertiser.annonces.pay', compact('annonce'));
+    }
+
+    public function paymentCallback(Request $request, Annonce $annonce)
+    {
+        abort_if($annonce->advertiser_id !== Auth::guard('advertiser')->id(), 403);
+
+        $transactionId = $request->input('transactionId');
+
+        if ($transactionId) {
+            $annonce->update([
+                'status'         => 'active',
+                'payment_status' => 'paid',
+                'payment_ref'    => $transactionId,
+            ]);
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false], 422);
     }
 
     public function edit(Annonce $annonce)
     {
         abort_if($annonce->advertiser_id !== Auth::guard('advertiser')->id(), 403);
-        return view('advertiser.annonces.edit', compact('annonce'));
+        return view('advertiser.annonces.edit', ['annonce' => $annonce, 'categories' => Annonce::CATEGORIES]);
     }
 
     public function update(Request $request, Annonce $annonce)
@@ -76,7 +103,7 @@ class AnnonceController extends Controller
         $validator = Validator::make($request->all(), [
             'title'         => 'required|string|max:255',
             'description'   => 'required|string',
-            'category'      => 'required|in:emploi,immobilier,vente_services,evenements',
+            'category'      => 'required|in:' . implode(',', array_keys(Annonce::CATEGORIES)),
             'price'         => 'nullable|numeric|min:0',
             'location'      => 'nullable|string|max:255',
             'contact_phone' => 'nullable|string|max:20',

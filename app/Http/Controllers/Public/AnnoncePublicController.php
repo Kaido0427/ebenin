@@ -27,12 +27,7 @@ class AnnoncePublicController extends Controller
             ->latest()
             ->paginate(20);
 
-        $categories = [
-            'emploi'         => 'Emploi',
-            'immobilier'     => 'Immobilier',
-            'vente_services' => 'Vente / Services',
-            'evenements'     => 'Évènements',
-        ];
+        $categories = Annonce::CATEGORIES;
 
         return view('public.annonces.index', array_merge(
             compact('annonces', 'categories', 'category'),

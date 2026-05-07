@@ -35,10 +35,10 @@
             <div class="form-group">
                 <label>Catégorie *</label>
                 <select name="category" required>
-                    <option value="emploi" {{ old('category', $annonce->category) === 'emploi' ? 'selected' : '' }}>Emploi / Recrutement</option>
-                    <option value="immobilier" {{ old('category', $annonce->category) === 'immobilier' ? 'selected' : '' }}>Immobilier</option>
-                    <option value="vente_services" {{ old('category', $annonce->category) === 'vente_services' ? 'selected' : '' }}>Vente / Services</option>
-                    <option value="evenements" {{ old('category', $annonce->category) === 'evenements' ? 'selected' : '' }}>Évènements</option>
+                    <option value="">— Choisir une catégorie —</option>
+                    @foreach ($categories as $value => $label)
+                        <option value="{{ $value }}" {{ old('category', $annonce->category) === $value ? 'selected' : '' }}>{{ $label }}</option>
+                    @endforeach
                 </select>
             </div>
 

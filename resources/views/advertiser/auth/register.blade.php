@@ -111,6 +111,9 @@
                     <p class="auth-form-note">
                         Déjà un compte ? <a href="{{ route('advertiser.login') }}">Se connecter</a>
                     </p>
+                    <p class="auth-form-note" style="margin-top:6px;">
+                        <a href="{{ route('info.annonces') }}" style="color:var(--primary);">En savoir plus sur les annonces E-Benin →</a>
+                    </p>
                 </div>
             </div>
         </div>

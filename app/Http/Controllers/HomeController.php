@@ -11,6 +11,8 @@ use App\Models\User;
 use App\Models\publicite;
 use App\Models\userOrganization;
 use App\Models\organization_social;
+use App\Models\Annonce;
+use App\Models\Necrologie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -133,6 +135,13 @@ class HomeController extends Controller
             ->where('is_publicly_visible', true)
             ->whereHas('users.posts', fn($q) => $q->published())
             ->get();
+        $latestNecrologies     = Necrologie::where('status', 'active')->latest()->take(5)->get();
+        $latestAnnonces        = Annonce::where('status', 'active')->latest()->take(5)->get();
+        $networkBloggers       = Organization::where('is_active', true)
+            ->where('is_publicly_visible', true)
+            ->whereNotNull('organization_logo')
+            ->whereHas('users.posts', fn($q) => $q->published())
+            ->take(8)->get();
 
         if ($flashNews->isEmpty()) {
             $flashNews = $latestPosts->take(6);
@@ -163,7 +172,10 @@ class HomeController extends Controller
             'rubriquesWithoutPosts',
             'randomizedPosts',
             'tags',
-            'reportages'
+            'reportages',
+            'latestNecrologies',
+            'latestAnnonces',
+            'networkBloggers'
         ));
     }
 
@@ -189,9 +201,18 @@ class HomeController extends Controller
         return view('allcats', compact('rubrique', 'paginatedPosts', 'rubriquesGuest'));
     }
 
+    public function showBlogerLogin()
+    {
+        return view('public.auth.bloger-login', [
+            'navItems'      => rubrique::all(),
+            'tickerPosts'   => collect([]),
+            'showAuthModal' => false,
+        ]);
+    }
+
     public function userRegisterView()
     {
-        return view('register', ['rubriquesWithoutPosts' => Rubrique::all()]);
+        return view('register', ['rubriquesWithoutPosts' => rubrique::all()]);
     }
 
     // ─────────────────────────────────────────────

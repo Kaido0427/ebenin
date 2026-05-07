@@ -85,26 +85,25 @@
                     <li class="nav__item {{ request()->url() === $homeUrl ? 'active' : '' }}">
                         <a class="nav__link" href="{{ $homeUrl }}">Accueil</a>
                     </li>
-                    @foreach ($primaryNav as $rubrique)
-                        <li class="nav__item {{ (string) $activeCategoryId === (string) $rubrique->id ? 'active' : '' }}">
-                            <a class="nav__link" href="{{ $categoryUrl($rubrique) }}">{{ $rubrique->name }}</a>
-                        </li>
-                    @endforeach
-                    @if ($overflowNav->isNotEmpty())
-                        <li class="nav__item">
-                            <a href="#" class="nav__link">
-                                Plus
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                    <path d="M6 9l6 6 6-6" />
-                                </svg>
-                            </a>
-                            <div class="nav__dropdown">
-                                @foreach ($overflowNav as $rubrique)
-                                    <a href="{{ $categoryUrl($rubrique) }}">{{ $rubrique->name }}</a>
-                                @endforeach
-                            </div>
-                        </li>
-                    @endif
+                    <li class="nav__item {{ $activeCategoryId ? 'active' : '' }}">
+                        <a href="#" class="nav__link">
+                            Articles
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:12px;height:12px;margin-left:3px">
+                                <path d="M6 9l6 6 6-6" />
+                            </svg>
+                        </a>
+                        <div class="nav__dropdown">
+                            @foreach ($navItems as $rubrique)
+                                <a href="{{ $categoryUrl($rubrique) }}">{{ $rubrique->name }}</a>
+                            @endforeach
+                        </div>
+                    </li>
+                    <li class="nav__item {{ request()->is('annonces*') ? 'active' : '' }}">
+                        <a class="nav__link" href="{{ $siteRoot }}/annonces">Annonces</a>
+                    </li>
+                    <li class="nav__item {{ request()->is('necrologies*') ? 'active' : '' }}">
+                        <a class="nav__link" href="{{ $siteRoot }}/necrologies">Nécrologies</a>
+                    </li>
                 </ul>
             </nav>
 
@@ -119,12 +118,34 @@
                         <button type="submit" class="btn btn--primary">Déconnexion</button>
                     </form>
                 @else
-                    @if ($isMainDomain)
-                        <a href="{{ $loginUrl }}" class="btn btn--outline" data-auth-open="login">Connexion</a>
-                    @else
-                        <a href="{{ $loginUrl }}" class="btn btn--outline">Connexion</a>
-                    @endif
-                    <a href="{{ $registerUrl }}" class="btn btn--primary">S'inscrire</a>
+                    <div class="nav__item" style="position:relative;">
+                        <a href="#" class="btn btn--outline">
+                            Connexion
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:11px;height:11px;margin-left:3px">
+                                <path d="M6 9l6 6 6-6" />
+                            </svg>
+                        </a>
+                        <div class="nav__dropdown" class="nav__dropdown nav__dropdown--right">
+                            @if ($isMainDomain)
+                                <a href="{{ $loginUrl }}" data-auth-open="login">Espace blogueur</a>
+                            @else
+                                <a href="{{ $loginUrl }}">Espace blogueur</a>
+                            @endif
+                            <a href="{{ $siteRoot }}/advertiser/login">Espace annonceur</a>
+                        </div>
+                    </div>
+                    <div class="nav__item" style="position:relative;">
+                        <a href="#" class="btn btn--primary">
+                            S'inscrire
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:11px;height:11px;margin-left:3px">
+                                <path d="M6 9l6 6 6-6" />
+                            </svg>
+                        </a>
+                        <div class="nav__dropdown" class="nav__dropdown nav__dropdown--right">
+                            <a href="{{ $registerUrl }}">Créer un blog</a>
+                            <a href="{{ $siteRoot }}/advertiser/register">Publier une annonce</a>
+                        </div>
+                    </div>
                 @endauth
                 <button class="hamburger" type="button" onclick="toggleMenu(true)" aria-label="Ouvrir le menu">
                     <span></span><span></span><span></span>
@@ -145,9 +166,12 @@
         </div>
         <div class="mobile-nav__links">
             <a href="{{ $homeUrl }}">Accueil</a>
-            @foreach ($navItems->take(10) as $rubrique)
-                <a href="{{ $categoryUrl($rubrique) }}">{{ $rubrique->name }}</a>
+            <div class="mobile-nav__section-label">Articles</div>
+            @foreach ($navItems->take(12) as $rubrique)
+                <a href="{{ $categoryUrl($rubrique) }}" style="padding-left:20px;">{{ $rubrique->name }}</a>
             @endforeach
+            <a href="{{ $siteRoot }}/annonces">Annonces</a>
+            <a href="{{ $siteRoot }}/necrologies">Nécrologies</a>
             <a href="{{ $policyUrl }}">Confidentialité</a>
             <a href="mailto:contact@savplus.net">Contact</a>
             @auth
@@ -159,12 +183,16 @@
                     <button type="submit" class="btn btn--primary">Déconnexion</button>
                 </form>
             @else
+                <div class="mobile-nav__section-label">Connexion</div>
                 @if ($isMainDomain)
-                    <a href="{{ $loginUrl }}" data-auth-open="login">Connexion</a>
+                    <a href="{{ $loginUrl }}" data-auth-open="login" style="padding-left:20px;">Espace blogueur</a>
                 @else
-                    <a href="{{ $loginUrl }}">Connexion</a>
+                    <a href="{{ $loginUrl }}" style="padding-left:20px;">Espace blogueur</a>
                 @endif
-                <a href="{{ $registerUrl }}">Créer un blog</a>
+                <a href="{{ $siteRoot }}/advertiser/login" style="padding-left:20px;">Espace annonceur</a>
+                <div class="mobile-nav__section-label">Inscription</div>
+                <a href="{{ $registerUrl }}" style="padding-left:20px;">Créer un blog</a>
+                <a href="{{ $siteRoot }}/advertiser/register" style="padding-left:20px;">Publier une annonce</a>
                 <a href="{{ $forgotUrl }}">Mot de passe oublié</a>
             @endauth
         </div>

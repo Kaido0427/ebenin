@@ -56,11 +56,13 @@ Route::prefix('advertiser')->name('advertiser.')->group(function () {
         Route::get('/dashboard', [AdvertiserDashboardController::class, 'index'])->name('dashboard');
 
         // Annonces
-        Route::get('/annonces/create',        [AnnonceController::class, 'create'])->name('annonces.create');
-        Route::post('/annonces',              [AnnonceController::class, 'store'])->name('annonces.store');
-        Route::get('/annonces/{annonce}/edit',[AnnonceController::class, 'edit'])->name('annonces.edit');
-        Route::put('/annonces/{annonce}',     [AnnonceController::class, 'update'])->name('annonces.update');
-        Route::delete('/annonces/{annonce}',  [AnnonceController::class, 'destroy'])->name('annonces.destroy');
+        Route::get('/annonces/create',             [AnnonceController::class, 'create'])->name('annonces.create');
+        Route::post('/annonces',                   [AnnonceController::class, 'store'])->name('annonces.store');
+        Route::get('/annonces/{annonce}/edit',     [AnnonceController::class, 'edit'])->name('annonces.edit');
+        Route::put('/annonces/{annonce}',          [AnnonceController::class, 'update'])->name('annonces.update');
+        Route::delete('/annonces/{annonce}',       [AnnonceController::class, 'destroy'])->name('annonces.destroy');
+        Route::get('/annonces/{annonce}/pay',      [AnnonceController::class, 'pay'])->name('annonces.pay');
+        Route::post('/annonces/{annonce}/callback',[AnnonceController::class, 'paymentCallback'])->name('annonces.payment.callback');
 
         // Nécrologies
         Route::get('/necrologies/create',           [NecrologieController::class, 'create'])->name('necrologies.create');
@@ -164,11 +166,16 @@ $mainDomainRoutes = function () {
     // Auth
     Route::get('/forgot-password', [authController::class, 'ForgotPasswordForm'])->name('forgotView');
 
-    // Inscription blogueur
+    // Pages "En savoir plus"
+    Route::get('/en-savoir-plus/blog',     fn() => view('public.info.blog'))->name('info.blog');
+    Route::get('/en-savoir-plus/annonces', fn() => view('public.info.annonces'))->name('info.annonces');
+
+    // Inscription / connexion blogueur
     Route::prefix('bloger')->group(function () {
-        Route::post('/login',          [HomeController::class,  'userLogin'])->name('userLogin');
-        Route::get('register',         [HomeController::class,  'userRegisterView'])->name('userRegister');
-        Route::post('register',        [RegisterController::class, 'register'])->name('register');
+        Route::get('/login',            [HomeController::class,  'showBlogerLogin'])->name('bloger.login');
+        Route::post('/login',           [HomeController::class,  'userLogin'])->name('userLogin');
+        Route::get('register',          [HomeController::class,  'userRegisterView'])->name('userRegister');
+        Route::post('register',         [RegisterController::class, 'register'])->name('register');
         Route::post('/forgot-password', [authController::class,  'forgotPassword'])->name('password.forgot');
     });
 
