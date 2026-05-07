@@ -245,10 +245,12 @@
                                         @else
                                             <div class="network-blogger-card__logo-ph">{{ strtoupper(substr($org->organization_name, 0, 1)) }}</div>
                                         @endif
-                                        <div class="network-blogger-card__name">{{ $org->organization_name }}</div>
-                                        @if ($org->organization_phone)
-                                            <div class="network-blogger-card__contact">📞 {{ $org->organization_phone }}</div>
-                                        @endif
+                                        <div class="network-blogger-card__info">
+                                            <div class="network-blogger-card__name">{{ $org->organization_name }}</div>
+                                            @if ($org->organization_phone)
+                                                <div class="network-blogger-card__contact">📞 {{ $org->organization_phone }}</div>
+                                            @endif
+                                        </div>
                                     </a>
                                 @endforeach
                             </div>
@@ -294,7 +296,9 @@
                                         @endif
                                         <div class="home-carousel-card__body">
                                             <div class="home-carousel-card__title">{{ $necro->nom_defunt }}</div>
-                                            <div class="home-carousel-card__sub">{{ $necro->date_deces->format('d/m/Y') }}</div>
+                                            <div class="home-carousel-card__sub">
+                                                🕯️ {{ $necro->date_deces->format('d/m/Y') }}
+                                            </div>
                                         </div>
                                     </a>
                                 @endforeach

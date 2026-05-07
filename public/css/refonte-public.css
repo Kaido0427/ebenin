@@ -2455,15 +2455,18 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .home-carousel-card__sub { font-size: .76rem; color: var(--muted); }
 
 /* ── Section bloggers du réseau ── */
-.network-bloggers { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+.network-bloggers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+@media (max-width: 900px) { .network-bloggers { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .network-bloggers { grid-template-columns: 1fr; } }
 .network-blogger-card {
-  display: flex; flex-direction: column; align-items: center; text-align: center;
-  padding: 20px 14px; background: var(--white); border: 1px solid var(--border);
+  display: flex; flex-direction: row; align-items: center; gap: 14px;
+  padding: 14px 16px; background: var(--white); border: 1px solid var(--border);
   border-radius: var(--radius); text-decoration: none; color: inherit;
   transition: box-shadow .2s, transform .2s;
 }
-.network-blogger-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
-.network-blogger-card__logo { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; border: 2px solid var(--border); }
-.network-blogger-card__logo-ph { width: 64px; height: 64px; border-radius: 50%; background: var(--primary); color: #fff; font-weight: 800; font-size: 1.4rem; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; }
-.network-blogger-card__name { font-size: .88rem; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
-.network-blogger-card__contact { font-size: .74rem; color: var(--muted); }
+.network-blogger-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); border-color: var(--primary); }
+.network-blogger-card__logo { width: 52px; height: 52px; border-radius: 8px; object-fit: contain; flex-shrink: 0; border: 1px solid var(--border); background: var(--bg); padding: 3px; }
+.network-blogger-card__logo-ph { width: 52px; height: 52px; border-radius: 8px; background: var(--primary); color: #fff; font-weight: 800; font-size: 1.3rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.network-blogger-card__info { min-width: 0; flex: 1; }
+.network-blogger-card__name { font-size: .88rem; font-weight: 700; color: var(--dark); margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.network-blogger-card__contact { font-size: .76rem; color: var(--muted); }
