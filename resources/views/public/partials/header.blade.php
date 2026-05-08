@@ -118,14 +118,14 @@
                         <button type="submit" class="btn btn--primary">Déconnexion</button>
                     </form>
                 @else
-                    <div class="nav__item" style="position:relative;">
+                    <div class="nav__item header__auth-item" style="position:relative;">
                         <a href="#" class="btn btn--outline">
                             Connexion
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:11px;height:11px;margin-left:3px">
                                 <path d="M6 9l6 6 6-6" />
                             </svg>
                         </a>
-                        <div class="nav__dropdown" class="nav__dropdown nav__dropdown--right">
+                        <div class="nav__dropdown nav__dropdown--right">
                             @if ($isMainDomain)
                                 <a href="{{ $loginUrl }}" data-auth-open="login">Espace blogueur</a>
                             @else
@@ -134,14 +134,14 @@
                             <a href="{{ $siteRoot }}/advertiser/login">Espace annonceur</a>
                         </div>
                     </div>
-                    <div class="nav__item" style="position:relative;">
+                    <div class="nav__item header__auth-item" style="position:relative;">
                         <a href="#" class="btn btn--primary">
                             S'inscrire
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:11px;height:11px;margin-left:3px">
                                 <path d="M6 9l6 6 6-6" />
                             </svg>
                         </a>
-                        <div class="nav__dropdown" class="nav__dropdown nav__dropdown--right">
+                        <div class="nav__dropdown nav__dropdown--right">
                             <a href="{{ $registerUrl }}">Créer un blog</a>
                             <a href="{{ $siteRoot }}/advertiser/register">Publier une annonce</a>
                         </div>
