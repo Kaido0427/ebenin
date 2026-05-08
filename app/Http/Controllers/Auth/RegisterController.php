@@ -49,7 +49,11 @@ class RegisterController extends Controller
                 return redirect()->back()->withErrors($validator)->withInput();
             }
 
-            $subdomain = strtolower(trim(str_replace(' ', '-', $request->input('organization_name'))));
+            $subdomain = strtolower(trim($request->input('organization_name')));
+            $subdomain = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $subdomain); // accents → ASCII
+            $subdomain = preg_replace('/[^a-z0-9\-]/', '-', $subdomain);        // tout sauf a-z 0-9 tiret
+            $subdomain = preg_replace('/-+/', '-', $subdomain);                  // tirets multiples
+            $subdomain = trim($subdomain, '-');                                   // tirets en début/fin
 
             // Logo upload
             $logoPath = null;
