@@ -18,6 +18,6 @@ class ReaderAccess
             return $next($request);
         }
 
-        return redirect()->route('reader.login');
+        return redirect(request()->getSchemeAndHttpHost() . '/reader/login');
     }
 }

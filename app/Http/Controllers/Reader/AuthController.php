@@ -13,7 +13,7 @@ class AuthController extends Controller
 {
     public function showLogin()
     {
-        if ($this->isAuthenticated()) return redirect()->route('reader.home');
+        if ($this->isAuthenticated()) return redirect(request()->getSchemeAndHttpHost() . '/reader');
         return view('reader.auth.login');
     }
 
@@ -24,28 +24,14 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        $creds = $request->only('email', 'password');
+        $creds    = $request->only('email', 'password');
         $remember = $request->boolean('remember');
+        $base     = $request->getSchemeAndHttpHost();
 
-        // Try reader guard first
-        if (Auth::guard('reader')->attempt($creds, $remember)) {
-            return redirect()->route('reader.home');
-        }
-
-        // Blogger (web guard)
-        if (Auth::guard('web')->attempt($creds, $remember)) {
-            return redirect()->route('reader.home');
-        }
-
-        // Advertiser
-        if (Auth::guard('advertiser')->attempt($creds, $remember)) {
-            return redirect()->route('reader.home');
-        }
-
-        // Admin
-        if (Auth::guard('admin')->attempt($creds, $remember)) {
-            return redirect()->route('reader.home');
-        }
+        if (Auth::guard('reader')->attempt($creds, $remember))    return redirect($base . '/reader');
+        if (Auth::guard('web')->attempt($creds, $remember))       return redirect($base . '/reader');
+        if (Auth::guard('advertiser')->attempt($creds, $remember))return redirect($base . '/reader');
+        if (Auth::guard('admin')->attempt($creds, $remember))     return redirect($base . '/reader');
 
         return back()->withInput(['email' => $request->email])
             ->withErrors(['email' => 'Email ou mot de passe incorrect.']);
@@ -53,7 +39,7 @@ class AuthController extends Controller
 
     public function showRegister()
     {
-        if ($this->isAuthenticated()) return redirect()->route('reader.home');
+        if ($this->isAuthenticated()) return redirect(request()->getSchemeAndHttpHost() . '/reader');
         return view('reader.auth.register');
     }
 
@@ -82,7 +68,7 @@ class AuthController extends Controller
 
         Auth::guard('reader')->login($reader);
 
-        return redirect()->route('reader.home')
+        return redirect(request()->getSchemeAndHttpHost() . '/reader')
             ->with('success', 'Bienvenue ' . $reader->name . ' !');
     }
 
@@ -93,7 +79,7 @@ class AuthController extends Controller
         Auth::guard('advertiser')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect()->route('reader.login');
+        return redirect(request()->getSchemeAndHttpHost() . '/reader/login');
     }
 
     private function isAuthenticated(): bool
