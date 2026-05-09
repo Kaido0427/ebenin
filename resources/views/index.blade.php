@@ -167,7 +167,7 @@
         <div class="container">
             <div class="main-layout">
                 <div class="content-area section-stack">
-                    <section>
+                    <section id="actualites">
                         <div class="section-header">
                             <h2 class="section-title">Dernières nouvelles</h2>
                             <a href="https://{{ $baseDomain }}" class="section-more">Toute l'actualité</a>

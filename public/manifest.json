@@ -1,0 +1,27 @@
+{
+  "name": "E-Benin",
+  "short_name": "E-Benin",
+  "description": "Le réseau béninois d'actualités, de reportages et de blogs",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#003f7f",
+  "orientation": "portrait-primary",
+  "lang": "fr",
+  "icons": [
+    {
+      "src": "/images/ebenins.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/ebenins.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["news", "social"],
+  "screenshots": []
+}

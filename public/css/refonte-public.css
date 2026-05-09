@@ -2484,3 +2484,139 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .network-blogger-card__info { min-width: 0; flex: 1; }
 .network-blogger-card__name { font-size: .88rem; font-weight: 700; color: var(--dark); margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .network-blogger-card__contact { font-size: .76rem; color: var(--muted); }
+
+/* ═══════════════════════════════════════════════════════════
+   PWA BOTTOM NAVIGATION — mobile only
+   ═══════════════════════════════════════════════════════════ */
+
+.bottom-nav { display: none; }
+
+@media (max-width: 900px) {
+  /* Show nav */
+  .bottom-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1200;
+    background: var(--white);
+    border-top: 1px solid var(--border);
+    box-shadow: 0 -2px 20px rgba(0, 0, 0, .10);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    height: calc(62px + env(safe-area-inset-bottom, 0px));
+    align-items: stretch;
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, .96);
+  }
+
+  /* Body offset so content doesn't hide behind nav */
+  body {
+    padding-bottom: calc(62px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  /* Each item */
+  .bottom-nav__item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    text-decoration: none;
+    color: var(--muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px 2px 6px;
+    transition: color .18s ease, transform .15s ease;
+    font-family: var(--font);
+    font-size: .6rem;
+    font-weight: 600;
+    letter-spacing: .03em;
+    line-height: 1;
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    min-width: 0;
+  }
+
+  .bottom-nav__item:active {
+    transform: scale(.92);
+  }
+
+  /* Active indicator pill on top */
+  .bottom-nav__item.active::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 32px;
+    height: 3px;
+    background: var(--primary);
+    border-radius: 0 0 4px 4px;
+  }
+
+  /* Active color */
+  .bottom-nav__item.active,
+  .bottom-nav__item:hover {
+    color: var(--primary);
+  }
+
+  /* Active icon fill */
+  .bottom-nav__item.active .bottom-nav__icon {
+    stroke: var(--primary);
+  }
+
+  /* Icon */
+  .bottom-nav__icon {
+    width: 23px;
+    height: 23px;
+    flex-shrink: 0;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.9;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: stroke .18s ease;
+  }
+
+  /* Label */
+  .bottom-nav__label {
+    font-size: .59rem;
+    font-weight: 700;
+    letter-spacing: .02em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 64px;
+    text-align: center;
+  }
+
+  /* Active icon: slight fill for home icon */
+  .bottom-nav__item.active .bnav-fill {
+    fill: var(--primary);
+    stroke: var(--primary);
+  }
+
+  /* Notification badge (future use) */
+  .bottom-nav__badge {
+    position: absolute;
+    top: 6px;
+    right: calc(50% - 18px);
+    background: var(--accent);
+    color: #fff;
+    font-size: .5rem;
+    font-weight: 800;
+    min-width: 14px;
+    height: 14px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 3px;
+    border: 2px solid var(--white);
+  }
+}
