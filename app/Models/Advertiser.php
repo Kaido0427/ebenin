@@ -13,7 +13,7 @@ class Advertiser extends Authenticatable
 
     protected $fillable = [
         'name', 'email', 'password', 'phone', 'address',
-        'logo', 'company_name', 'is_active', 'trial_ends_at',
+        'logo', 'company_name', 'is_active', 'is_admin', 'trial_ends_at',
     ];
 
     protected $hidden = ['password', 'remember_token'];
@@ -21,6 +21,7 @@ class Advertiser extends Authenticatable
     protected $casts = [
         'trial_ends_at' => 'datetime',
         'is_active'     => 'boolean',
+        'is_admin'      => 'boolean',
     ];
 
     public function annonces()

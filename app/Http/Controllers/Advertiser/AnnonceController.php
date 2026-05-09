@@ -46,6 +46,8 @@ class AnnonceController extends Controller
             }
         }
 
+        $isAdmin = $advertiser->is_admin;
+
         $annonce = Annonce::create([
             'advertiser_id'  => $advertiser->id,
             'title'          => $request->input('title'),
@@ -56,9 +58,14 @@ class AnnonceController extends Controller
             'contact_phone'  => $request->input('contact_phone'),
             'contact_email'  => $request->input('contact_email'),
             'images'         => $images ?: null,
-            'status'         => 'pending',
-            'payment_status' => 'pending',
+            'status'         => $isAdmin ? 'active' : 'pending',
+            'payment_status' => $isAdmin ? 'paid'   : 'pending',
         ]);
+
+        if ($isAdmin) {
+            return redirect()->route('advertiser.dashboard')
+                ->with('success', 'Annonce publiée avec succès.');
+        }
 
         return redirect()->route('advertiser.annonces.pay', $annonce)
             ->with('info', 'Annonce enregistrée. Finalisez le paiement pour la publier.');

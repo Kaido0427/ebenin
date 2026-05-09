@@ -16,6 +16,10 @@ class AdvertiserAccess
             return redirect()->route('advertiser.login');
         }
 
+        if ($advertiser->is_admin) {
+            return $next($request);
+        }
+
         if (!$advertiser->hasActiveAccess()) {
             return redirect()->route('advertiser.subscribe')
                 ->with('warning', 'Votre période d\'essai a expiré. Abonnez-vous pour continuer.');
