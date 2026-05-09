@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Reader;
 use App\Http\Controllers\Controller;
 use App\Models\Annonce;
 use App\Models\Necrologie;
-use App\Models\Post;
-use App\Models\Rubrique;
-use App\Models\Organization;
+use App\Models\post as Post;
+use App\Models\rubrique as Rubrique;
+use App\Models\organization as Organization;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
