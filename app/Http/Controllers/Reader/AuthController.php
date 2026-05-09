@@ -42,6 +42,11 @@ class AuthController extends Controller
             return redirect()->route('reader.home');
         }
 
+        // Admin
+        if (Auth::guard('admin')->attempt($creds, $remember)) {
+            return redirect()->route('reader.home');
+        }
+
         return back()->withInput(['email' => $request->email])
             ->withErrors(['email' => 'Email ou mot de passe incorrect.']);
     }
@@ -95,6 +100,7 @@ class AuthController extends Controller
     {
         return Auth::guard('reader')->check() ||
                Auth::guard('web')->check() ||
-               Auth::guard('advertiser')->check();
+               Auth::guard('advertiser')->check() ||
+               Auth::guard('admin')->check();
     }
 }

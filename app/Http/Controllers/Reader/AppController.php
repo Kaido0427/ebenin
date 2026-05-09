@@ -90,7 +90,8 @@ class AppController extends Controller
     {
         $user = Auth::guard('reader')->user()
              ?? Auth::guard('web')->user()
-             ?? Auth::guard('advertiser')->user();
+             ?? Auth::guard('advertiser')->user()
+             ?? Auth::guard('admin')->user();
 
         return view('reader.profile', compact('user'));
     }

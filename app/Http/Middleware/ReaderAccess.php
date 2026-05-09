@@ -13,7 +13,8 @@ class ReaderAccess
         // Accept reader, web (blogger) or advertiser
         if (Auth::guard('reader')->check() ||
             Auth::guard('web')->check() ||
-            Auth::guard('advertiser')->check()) {
+            Auth::guard('advertiser')->check() ||
+            Auth::guard('admin')->check()) {
             return $next($request);
         }
 
