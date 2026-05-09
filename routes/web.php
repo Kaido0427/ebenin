@@ -25,6 +25,8 @@ use App\Http\Controllers\Advertiser\AnnonceController;
 use App\Http\Controllers\Advertiser\NecrologieController;
 use App\Http\Controllers\Public\AnnoncePublicController;
 use App\Http\Controllers\Public\NecrologiePublicController;
+use App\Http\Controllers\Reader\AuthController as ReaderAuthController;
+use App\Http\Controllers\Reader\AppController as ReaderAppController;
 use Illuminate\Http\Request;
 
 /*
@@ -122,6 +124,14 @@ $mainDomainRoutes = function () {
             Route::patch('/posts/{post}/editorial', [AdminController::class, 'updatePostEditorial'])
                 ->middleware('admin.role:super_admin,editorial_admin')
                 ->name('posts.editorial');
+            Route::get('/annonces', [AdminController::class, 'annonces'])->name('annonces.index');
+            Route::patch('/annonces/{annonce}/status', [AdminController::class, 'updateAnnonceStatus'])
+                ->middleware('admin.role:super_admin,editorial_admin')
+                ->name('annonces.status');
+            Route::get('/necrologies', [AdminController::class, 'necrologies'])->name('necrologies.index');
+            Route::patch('/necrologies/{necrologie}/status', [AdminController::class, 'updateNecrologieStatus'])
+                ->middleware('admin.role:super_admin,editorial_admin')
+                ->name('necrologies.status');
 
             Route::get('/payments', [AdminController::class, 'payments'])->name('payments.index');
             Route::post('/payments/manual', [AdminController::class, 'storeManualPayment'])
@@ -205,6 +215,35 @@ $mainDomainRoutes = function () {
 // Enregistrement pour les deux domaines principaux
 Route::domain('e-benin.com')->group($mainDomainRoutes);
 Route::domain('e-benin.bj')->group($mainDomainRoutes);
+
+// ═══════════════════════════════════════════════════════════════════════
+//  APP LECTEUR — /reader/*  (e-benin.com et e-benin.bj)
+// ═══════════════════════════════════════════════════════════════════════
+$readerRoutes = function () {
+    // Auth (invité)
+    Route::middleware('guest:reader,web,advertiser')->group(function () {
+        Route::get('/reader/login',    [ReaderAuthController::class, 'showLogin'])->name('reader.login');
+        Route::post('/reader/login',   [ReaderAuthController::class, 'login'])->name('reader.login.post');
+        Route::get('/reader/register', [ReaderAuthController::class, 'showRegister'])->name('reader.register');
+        Route::post('/reader/register',[ReaderAuthController::class, 'register'])->name('reader.register.post');
+    });
+
+    Route::post('/reader/logout', [ReaderAuthController::class, 'logout'])->name('reader.logout');
+
+    // App (protégé)
+    Route::middleware('reader.auth')->group(function () {
+        Route::get('/reader',                              [ReaderAppController::class, 'home'])->name('reader.home');
+        Route::get('/reader/article/{id}',                 [ReaderAppController::class, 'article'])->name('reader.article');
+        Route::get('/reader/annonces',                     [ReaderAppController::class, 'annonces'])->name('reader.annonces');
+        Route::get('/reader/annonces/{annonce}',           [ReaderAppController::class, 'annonceShow'])->name('reader.annonce.show');
+        Route::get('/reader/necrologies',                  [ReaderAppController::class, 'necrologies'])->name('reader.necrologies');
+        Route::get('/reader/necrologies/{necrologie}',     [ReaderAppController::class, 'necrologieShow'])->name('reader.necrologie.show');
+        Route::get('/reader/profil',                       [ReaderAppController::class, 'profile'])->name('reader.profile');
+    });
+};
+
+Route::domain('e-benin.com')->group($readerRoutes);
+Route::domain('e-benin.bj')->group($readerRoutes);
 
 
 // ═══════════════════════════════════════════════════════════════════════

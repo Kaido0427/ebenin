@@ -51,6 +51,7 @@ class Kernel extends HttpKernel
         'subdomain'       => \App\Http\Middleware\SubdomainMiddleware::class,
         'redirect.root'   => \App\Http\Middleware\RedirectRootToBlog::class,
         'advertiser.auth' => \App\Http\Middleware\AdvertiserAccess::class,
+        'reader.auth'     => \App\Http\Middleware\ReaderAccess::class,
     ];
     
     /**

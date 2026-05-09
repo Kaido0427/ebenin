@@ -48,6 +48,10 @@ return [
             'driver' => 'session',
             'provider' => 'advertisers',
         ],
+        'reader' => [
+            'driver' => 'session',
+            'provider' => 'readers',
+        ],
     ],
 
     /*
@@ -79,6 +83,10 @@ return [
         'advertisers' => [
             'driver' => 'eloquent',
             'model' => App\Models\Advertiser::class,
+        ],
+        'readers' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Reader::class,
         ],
 
         // 'users' => [
