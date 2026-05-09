@@ -11,7 +11,7 @@
     @if($necrologies->isNotEmpty())
         <div class="ra-necro-list">
             @foreach($necrologies as $n)
-            <a href="{{ route('reader.necrologie.show', $n) }}" class="ra-necro-card">
+            <a href="/reader/necrologies/{{ $n->id }}" class="ra-necro-card">
                 @if($n->photo)
                     <img src="{{ asset($n->photo) }}" alt="{{ $n->nom_defunt }}" class="ra-necro-card__photo" loading="lazy">
                 @else

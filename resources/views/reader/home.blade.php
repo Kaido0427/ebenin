@@ -21,7 +21,7 @@
                 $baseDomain = str_contains(request()->getHost(),'e-benin.bj') ? 'e-benin.bj' : 'e-benin.com';
                 $imgUrl = $f->image ? asset($f->image) : ($f->image_url ?? null);
             @endphp
-            <a href="{{ route('reader.article', $f->id) }}" class="ra-featured__slide">
+            <a href="/reader/article/{{ $f->id }}" class="ra-featured__slide">
                 @if($imgUrl)
                     <img src="{{ $imgUrl }}" alt="{{ $f->libelle }}" class="ra-featured__img" loading="lazy">
                 @else
@@ -49,9 +49,9 @@
 
     {{-- ── Category pills ── --}}
     <div class="ra-cats">
-        <a href="{{ route('reader.home') }}" class="ra-cat-pill {{ !$rubriqueId ? 'active' : '' }}">Tout</a>
+        <a href="/reader" class="ra-cat-pill {{ !$rubriqueId ? 'active' : '' }}">Tout</a>
         @foreach($categories as $cat)
-            <a href="{{ route('reader.home') }}?cat={{ $cat->id }}"
+            <a href="/reader?cat={{ $cat->id }}"
                class="ra-cat-pill {{ $rubriqueId == $cat->id ? 'active' : '' }}">
                 {{ $cat->name }}
             </a>
@@ -65,7 +65,7 @@
         @php
             $firstImg = $first->image ? asset($first->image) : ($first->image_url ?? null);
         @endphp
-        <a href="{{ route('reader.article', $first->id) }}" class="ra-card-big">
+        <a href="/reader/article/{{ $first->id }}" class="ra-card-big">
             @if($firstImg)
                 <img src="{{ $firstImg }}" alt="{{ $first->libelle }}" class="ra-card-big__img" loading="lazy">
             @else
@@ -90,7 +90,7 @@
             @php
                 $img = $post->image ? asset($post->image) : ($post->image_url ?? null);
             @endphp
-            <a href="{{ route('reader.article', $post->id) }}" class="ra-card-row">
+            <a href="/reader/article/{{ $post->id }}" class="ra-card-row">
                 @if($img)
                     <img src="{{ $img }}" alt="{{ $post->libelle }}" class="ra-card-row__img" loading="lazy">
                 @else

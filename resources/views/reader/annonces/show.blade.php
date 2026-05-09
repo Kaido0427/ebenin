@@ -81,7 +81,7 @@
         <div class="ra-related__grid">
             @foreach($similar as $s)
             @php $sImg = $s->images && count($s->images) ? asset($s->images[0]) : null; @endphp
-            <a href="{{ route('reader.annonce.show', $s) }}" class="ra-related__card">
+            <a href="/reader/annonces/{{ $s->id }}" class="ra-related__card">
                 @if($sImg)
                     <img src="{{ $sImg }}" alt="{{ $s->title }}" class="ra-related__card-img" loading="lazy">
                 @else

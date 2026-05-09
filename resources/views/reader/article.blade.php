@@ -85,7 +85,7 @@
         <div class="ra-related__grid">
             @foreach($related as $r)
             @php $rImg = $r->image ? asset($r->image) : ($r->image_url ?? null); @endphp
-            <a href="{{ route('reader.article', $r->id) }}" class="ra-related__card">
+            <a href="/reader/article/{{ $r->id }}" class="ra-related__card">
                 @if($rImg)
                     <img src="{{ $rImg }}" alt="{{ $r->libelle }}" class="ra-related__card-img" loading="lazy">
                 @else

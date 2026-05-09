@@ -6,9 +6,9 @@
 
     {{-- Category pills --}}
     <div class="ra-cats">
-        <a href="{{ route('reader.annonces') }}" class="ra-cat-pill {{ !$cat ? 'active' : '' }}">Tout</a>
+        <a href="/reader/annonces" class="ra-cat-pill {{ !$cat ? 'active' : '' }}">Tout</a>
         @foreach($categories as $key => $label)
-            <a href="{{ route('reader.annonces') }}?cat={{ $key }}"
+            <a href="/reader/annonces?cat={{ $key }}"
                class="ra-cat-pill {{ $cat === $key ? 'active' : '' }}">{{ $label }}</a>
         @endforeach
     </div>
@@ -17,7 +17,7 @@
         <div class="ra-annonce-grid">
             @foreach($annonces as $annonce)
             @php $img = $annonce->images && count($annonce->images) ? asset($annonce->images[0]) : null; @endphp
-            <a href="{{ route('reader.annonce.show', $annonce) }}" class="ra-annonce-card">
+            <a href="/reader/annonces/{{ $annonce->id }}" class="ra-annonce-card">
                 @if($img)
                     <img src="{{ $img }}" alt="{{ $annonce->title }}" class="ra-annonce-card__img" loading="lazy">
                 @else

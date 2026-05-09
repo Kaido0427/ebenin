@@ -29,11 +29,11 @@
 
 {{-- ── Header ── --}}
 <header class="ra-header">
-    <a href="{{ route('reader.home') }}">
+    <a href="/reader">
         <img src="{{ asset('images/ebenins.png') }}" alt="E-Benin" class="ra-header__logo">
     </a>
     <div class="ra-header__actions">
-        <a href="{{ route('reader.home') }}?q=" class="ra-header__btn" aria-label="Recherche" onclick="document.getElementById('ra-search').classList.toggle('open')">
+        <a href="/reader?q=" class="ra-header__btn" aria-label="Recherche" onclick="document.getElementById('ra-search').classList.toggle('open')">
             <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         </a>
     </div>
@@ -53,7 +53,7 @@
 {{-- ── Bottom Nav ── --}}
 <nav class="ra-nav" aria-label="Navigation">
 
-    <a href="{{ route('reader.home') }}"
+    <a href="/reader"
        class="ra-nav__item {{ $path === 'reader' || $path === 'reader/' ? 'active' : '' }}"
        aria-label="Accueil">
         <svg class="ra-nav__icon" viewBox="0 0 24 24">
@@ -63,7 +63,7 @@
         <span>Accueil</span>
     </a>
 
-    <a href="{{ route('reader.home') }}"
+    <a href="/reader"
        class="ra-nav__item {{ Str::startsWith($path, 'reader/article') ? 'active' : '' }}"
        aria-label="Articles">
         <svg class="ra-nav__icon" viewBox="0 0 24 24">
@@ -75,7 +75,7 @@
         <span>Articles</span>
     </a>
 
-    <a href="{{ route('reader.annonces') }}"
+    <a href="/reader/annonces"
        class="ra-nav__item {{ Str::startsWith($path, 'reader/annonces') ? 'active' : '' }}"
        aria-label="Annonces">
         <svg class="ra-nav__icon" viewBox="0 0 24 24">
@@ -85,7 +85,7 @@
         <span>Annonces</span>
     </a>
 
-    <a href="{{ route('reader.necrologies') }}"
+    <a href="/reader/necrologies"
        class="ra-nav__item {{ Str::startsWith($path, 'reader/necrologies') ? 'active' : '' }}"
        aria-label="Nécrologies">
         <svg class="ra-nav__icon" viewBox="0 0 24 24">
@@ -96,7 +96,7 @@
         <span>Nécrologies</span>
     </a>
 
-    <a href="{{ route('reader.profile') }}"
+    <a href="/reader/profil"
        class="ra-nav__item {{ $path === 'reader/profil' ? 'active' : '' }}"
        aria-label="Profil">
         <svg class="ra-nav__icon" viewBox="0 0 24 24">

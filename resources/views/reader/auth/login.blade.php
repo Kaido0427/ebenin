@@ -27,7 +27,7 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('reader.login.post') }}" class="ra-auth__form">
+        <form method="POST" action="/reader/login" class="ra-auth__form">
             @csrf
             <div class="ra-form-group">
                 <label class="ra-form-label" for="email">Adresse email</label>
@@ -43,7 +43,7 @@
         </form>
 
         <div class="ra-auth__divider" style="margin-top:20px">Pas encore de compte ?</div>
-        <a href="{{ route('reader.register') }}" class="ra-auth__link">Créer un compte lecteur</a>
+        <a href="/reader/register" class="ra-auth__link">Créer un compte lecteur</a>
 
     </div>
 
