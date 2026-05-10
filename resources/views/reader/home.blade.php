@@ -17,9 +17,13 @@
 @section('content')
 <div class="ra-page">
 
-    {{-- ── Hero (first featured article) ── --}}
-    @if($featured->isNotEmpty())
-    @php $hero = $featured->first(); $heroImg = $hero->image ? asset($hero->image) : ($hero->image_url ?? null); @endphp
+    {{-- ── Hero : featured en priorité, sinon premier article du feed ── --}}
+    @php
+        $hero    = $featured->isNotEmpty() ? $featured->first() : $posts->first();
+        $heroImg = $hero ? ($hero->image ? asset($hero->image) : ($hero->image_url ?? null)) : null;
+        $feedPosts = $featured->isNotEmpty() ? $posts : $posts->slice(1);
+    @endphp
+    @if($hero)
     <a href="/reader/article/{{ $hero->id }}" class="ra-hero">
         @if($heroImg)
             <img src="{{ $heroImg }}" alt="{{ $hero->libelle }}" class="ra-hero__img" loading="eager">
@@ -38,7 +42,7 @@
     @endif
 
     {{-- ── Feed ── --}}
-    @if($posts->isNotEmpty())
+    @if($feedPosts->isNotEmpty())
 
         <div class="ra-section-head">
             <div class="ra-section-title">À la une</div>
@@ -46,7 +50,7 @@
         </div>
 
         <div class="ra-feed">
-            @foreach($posts as $i => $post)
+            @foreach($feedPosts as $i => $post)
             @php
                 $img    = $post->image ? asset($post->image) : ($post->image_url ?? null);
                 $catIdx = $post->rubriques->isNotEmpty() ? ($post->rubriques->first()->id % 12) : 0;
@@ -70,7 +74,7 @@
             @endforeach
         </div>
 
-        @if($posts->hasMorePages())
+        @if($feedPosts instanceof \Illuminate\Pagination\LengthAwarePaginator && $feedPosts->hasMorePages())
         <a href="{{ $posts->nextPageUrl() }}" class="ra-load-more">Voir plus d'articles</a>
         @endif
 
