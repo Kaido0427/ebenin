@@ -60,7 +60,7 @@
     <a href="/reader"
        class="ra-nav__item {{ $path === 'reader' || $path === 'reader/' ? 'active' : '' }}"
        aria-label="Accueil">
-        <svg class="ra-nav__icon" viewBox="0 0 24 24">
+        <svg class="ra-nav__icon ra-nav__icon--fill" viewBox="0 0 24 24">
             <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9.5z"/>
             <polyline points="9 21 9 13 15 13 15 21"/>
         </svg>
@@ -81,21 +81,30 @@
        class="ra-nav__item {{ Str::startsWith($path, 'reader/necrologies') ? 'active' : '' }}"
        aria-label="Nécrologies">
         <svg class="ra-nav__icon" viewBox="0 0 24 24">
-            <line x1="12" y1="2" x2="12" y2="6"/>
-            <path d="M9 6h6a3 3 0 0 1 3 3v2a6 6 0 0 1-6 6 6 6 0 0 1-6-6V9a3 3 0 0 1 3-3z"/>
-            <path d="M9 17v1a3 3 0 0 0 6 0v-1"/>
+            <line x1="12" y1="2" x2="12" y2="22"/>
+            <path d="M5 6h14M5 10h14M5 14h14M5 18h14"/>
         </svg>
         <span>Nécrologies</span>
+    </a>
+
+    <a href="/reader/annonces?cat=video"
+       class="ra-nav__item {{ request()->get('cat') === 'video' ? 'active' : '' }}"
+       aria-label="Vidéos">
+        <svg class="ra-nav__icon" viewBox="0 0 24 24">
+            <polygon points="5 3 19 12 5 21 5 3"/>
+        </svg>
+        <span>Vidéos</span>
     </a>
 
     <a href="/reader/profil"
        class="ra-nav__item {{ $path === 'reader/profil' ? 'active' : '' }}"
        aria-label="Profil">
         <svg class="ra-nav__icon" viewBox="0 0 24 24">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-            <circle cx="12" cy="7" r="4"/>
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
         </svg>
-        <span>Profil</span>
+        <span>Menu</span>
     </a>
 
 </nav>

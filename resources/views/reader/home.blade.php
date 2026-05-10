@@ -41,7 +41,8 @@
     @if($posts->isNotEmpty())
 
         <div class="ra-section-head">
-            <div class="ra-section-title">Actualités</div>
+            <div class="ra-section-title">À la une</div>
+            <a href="/reader" class="ra-section-more">Voir tout</a>
         </div>
 
         <div class="ra-feed">
