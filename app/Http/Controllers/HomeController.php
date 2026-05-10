@@ -583,12 +583,22 @@ class HomeController extends Controller
     {
         $subdomain = $this->getSubdomain();
 
+        $sort      = $request->input('sort', 'recent');
+        $dateFrom  = $request->input('date_from');
+        $dateTo    = $request->input('date_to');
+
+        $orderBy = match($sort) {
+            'oldest'  => ['created_at', 'asc'],
+            'popular' => ['views', 'desc'],
+            default   => ['created_at', 'desc'],
+        };
+
         if ($subdomain) {
-            // Recherche sur un blog spécifique
+            // ── Recherche sur un blog spécifique ────────────────
             $organization = Organization::where('subdomain', $subdomain)->firstOrFail();
             $this->abortIfOrganizationUnavailable($organization);
 
-            $query = $request->input('q', '');
+            $query      = $request->input('q', '');
             $rubriqueId = $request->input('rubrique');
 
             $posts = Post::published()
@@ -597,41 +607,50 @@ class HomeController extends Controller
                     $q->where('libelle', 'like', "%{$query}%")
                       ->orWhere('description', 'like', "%{$query}%");
                 })
-                ->when($rubriqueId, function ($q) use ($rubriqueId) {
-                    $q->whereHas('rubriques', fn($q2) => $q2->where('id', $rubriqueId));
-                })
-                ->with('user', 'rubriques')
-                ->orderByDesc('created_at')
-                ->paginate(12);
+                ->when($rubriqueId, fn($q) => $q->whereHas('rubriques', fn($q2) => $q2->where('id', $rubriqueId)))
+                ->when($dateFrom,   fn($q) => $q->whereDate('created_at', '>=', $dateFrom))
+                ->when($dateTo,     fn($q) => $q->whereDate('created_at', '<=', $dateTo))
+                ->with(['user', 'rubriques', 'comments'])
+                ->orderBy($orderBy[0], $orderBy[1])
+                ->paginate(12)
+                ->withQueryString();
 
             $rubriques = Rubrique::whereHas('posts', function ($q) use ($organization) {
                 $q->published()->whereHas('user', fn($q2) => $q2->where('organization_id', $organization->id));
             })->get();
 
-            return view('public.search', compact('posts', 'query', 'rubriques', 'organization'));
+            return view('public.search', compact('posts', 'query', 'rubriques', 'organization', 'sort', 'dateFrom', 'dateTo'));
+
         } else {
-            // Recherche globale sur tous les blogs
-            $query = $request->input('q', '');
+            // ── Recherche globale ────────────────────────────────
+            $query          = $request->input('q', '');
             $organizationId = $request->input('blog');
+            $rubriqueId     = $request->input('rubrique');
 
             $posts = Post::published()
                 ->where(function ($q) use ($query) {
                     $q->where('libelle', 'like', "%{$query}%")
                       ->orWhere('description', 'like', "%{$query}%");
                 })
-                ->when($organizationId, function ($q) use ($organizationId) {
-                    $q->whereHas('user', fn($q2) => $q2->where('organization_id', $organizationId));
-                })
-                ->with('user.organization', 'rubriques')
-                ->orderByDesc('created_at')
-                ->paginate(12);
+                ->when($organizationId, fn($q) => $q->whereHas('user', fn($q2) => $q2->where('organization_id', $organizationId)))
+                ->when($rubriqueId,     fn($q) => $q->whereHas('rubriques', fn($q2) => $q2->where('id', $rubriqueId)))
+                ->when($dateFrom,       fn($q) => $q->whereDate('created_at', '>=', $dateFrom))
+                ->when($dateTo,         fn($q) => $q->whereDate('created_at', '<=', $dateTo))
+                ->with(['user.organization', 'rubriques', 'comments'])
+                ->orderBy($orderBy[0], $orderBy[1])
+                ->paginate(12)
+                ->withQueryString();
 
             $organizations = Organization::where('is_active', true)
                 ->where('is_publicly_visible', true)
                 ->orderBy('organization_name')
                 ->get();
 
-            return view('public.search-global', compact('posts', 'query', 'organizations'));
+            $rubriques = Rubrique::whereHas('posts', fn($q) => $q->published())
+                ->orderBy('name')
+                ->get();
+
+            return view('public.search-global', compact('posts', 'query', 'organizations', 'rubriques', 'organizationId', 'rubriqueId', 'sort', 'dateFrom', 'dateTo'));
         }
     }
 }

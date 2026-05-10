@@ -1920,6 +1920,11 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .nav, .header__auth-item { display: none; }
   .hamburger { display: flex; }
   .mobile-nav { display: block; }
+  /* Logo gauche — actions (search + hamburger) collés à droite */
+  .header__inner { justify-content: space-between; }
+  /* Passer en fixed pour garantir l'accrochage même si un parent a overflow */
+  .header { position: fixed; left: 0; right: 0; top: 0; width: 100%; }
+  body { padding-top: 71px; }
   .hero__grid { grid-template-columns: 1fr; grid-template-rows: auto auto; }
   .hero__main { grid-row: 1; min-height: 340px; }
   .hero__side { flex-direction: row; grid-row: 2; overflow: hidden; }
@@ -2674,6 +2679,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
     line-height: 1;
     position: relative;
     -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
     user-select: none;
     min-width: 0;
   }
