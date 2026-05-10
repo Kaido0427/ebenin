@@ -239,6 +239,9 @@ $readerRoutes = function () {
         Route::get('/reader/necrologies',                  [ReaderAppController::class, 'necrologies'])->name('reader.necrologies');
         Route::get('/reader/necrologies/{necrologie}',     [ReaderAppController::class, 'necrologieShow'])->name('reader.necrologie.show');
         Route::get('/reader/categories',                   [ReaderAppController::class, 'categories'])->name('reader.categories');
+        Route::get('/reader/favoris',                      [ReaderAppController::class, 'favoris'])->name('reader.favoris');
+        Route::post('/reader/article/{id}/favorite',       [ReaderAppController::class, 'toggleFavorite'])->name('reader.favorite');
+        Route::post('/reader/article/{id}/comment',        [ReaderAppController::class, 'addComment'])->name('reader.comment');
         Route::get('/reader/profil',                       [ReaderAppController::class, 'profile'])->name('reader.profile');
     });
 };

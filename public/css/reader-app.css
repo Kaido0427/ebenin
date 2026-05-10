@@ -487,6 +487,100 @@ button { cursor: pointer; font-family: var(--font); }
 }
 .ra-back-btn svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
 
+/* ══════════════════════════════════════════
+   ARTICLE ACTIONS BAR
+══════════════════════════════════════════ */
+.ra-article__actions {
+  display: flex; align-items: center; justify-content: space-around;
+  padding: 12px 8px;
+  border-top: 1px solid var(--border);
+  border-bottom: 6px solid var(--bg);
+  background: var(--white);
+}
+.ra-article__action-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  font-size: .68rem; font-weight: 700; color: var(--muted);
+  background: none; border: none; padding: 6px 16px;
+  -webkit-tap-highlight-color: transparent; cursor: pointer;
+  font-family: var(--font);
+}
+.ra-article__action-btn svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.ra-article__action-btn.active { color: var(--accent); }
+
+/* ══════════════════════════════════════════
+   COMMENTS
+══════════════════════════════════════════ */
+.ra-comments { background: var(--white); padding-bottom: 20px; }
+.ra-comments__header {
+  display: flex; align-items: center; gap: 8px;
+  padding: 18px 16px 12px;
+}
+.ra-comments__title { font-size: .88rem; font-weight: 800; color: var(--dark); }
+.ra-comments__count {
+  background: var(--bg); color: var(--muted);
+  font-size: .7rem; font-weight: 800;
+  padding: 2px 8px; border-radius: 20px;
+}
+
+.ra-comment-form { border-bottom: 1px solid var(--border); margin-bottom: 4px; }
+.ra-comment-form__user { display: flex; gap: 10px; padding: 0 16px 10px; }
+.ra-comment-form__avatar {
+  width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+  background: var(--primary); color: #fff;
+  font-size: .8rem; font-weight: 900;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 2px;
+}
+.ra-comment-form__input {
+  flex: 1; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  padding: 10px 12px; font-size: .88rem; font-family: var(--font);
+  color: var(--dark); background: var(--bg); resize: none;
+  line-height: 1.5;
+}
+.ra-comment-form__input:focus { outline: none; border-color: var(--primary); background: #fff; }
+.ra-comment-form__submit {
+  background: var(--primary); color: #fff;
+  border: none; border-radius: var(--radius-sm);
+  padding: 9px 22px; font-size: .85rem; font-weight: 800;
+  font-family: var(--font); cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ra-comment-list { padding: 0 16px; }
+.ra-comment-item {
+  display: flex; gap: 10px; padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+.ra-comment-item:last-child { border-bottom: none; }
+.ra-comment-item__avatar {
+  width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+  background: var(--bg); color: var(--mid);
+  font-size: .78rem; font-weight: 900;
+  display: flex; align-items: center; justify-content: center;
+  border: 1.5px solid var(--border);
+}
+.ra-comment-item__body { flex: 1; min-width: 0; }
+.ra-comment-item__name { font-size: .82rem; font-weight: 800; color: var(--dark); }
+.ra-comment-item__time { font-size: .68rem; color: var(--muted); margin-bottom: 5px; }
+.ra-comment-item__text { font-size: .85rem; color: var(--mid); line-height: 1.5; }
+
+/* ══════════════════════════════════════════
+   PROFILE STATS
+══════════════════════════════════════════ */
+.ra-profile__stats {
+  display: flex; align-items: center; justify-content: center;
+  gap: 0; margin-top: 16px;
+  background: rgba(255,255,255,.15); border-radius: var(--radius);
+  padding: 12px 20px;
+}
+.ra-profile__stat {
+  display: flex; flex-direction: column; align-items: center;
+  text-decoration: none; padding: 0 24px;
+}
+.ra-profile__stat-num { font-size: 1.3rem; font-weight: 900; color: #fff; }
+.ra-profile__stat-label { font-size: .68rem; color: rgba(255,255,255,.7); font-weight: 600; margin-top: 2px; }
+.ra-profile__stat-sep { width: 1px; height: 36px; background: rgba(255,255,255,.25); }
+
 /* Body variants */
 body.body--no-tabs { padding-top: var(--header-h); }
 

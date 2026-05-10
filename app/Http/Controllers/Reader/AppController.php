@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Reader;
 use App\Http\Controllers\Controller;
 use App\Models\Annonce;
 use App\Models\Necrologie;
+use App\Models\ReaderFavorite;
+use App\Models\comment as Comment;
 use App\Models\post as Post;
 use App\Models\rubrique as Rubrique;
 use App\Models\organization as Organization;
@@ -13,6 +15,23 @@ use Illuminate\Support\Facades\Auth;
 
 class AppController extends Controller
 {
+    // ── Auth helper ──────────────────────────────────────────
+    private function authUser(): ?object
+    {
+        return Auth::guard('reader')->user()
+            ?? Auth::guard('web')->user()
+            ?? Auth::guard('advertiser')->user()
+            ?? Auth::guard('admin')->user();
+    }
+
+    private function authType(): string
+    {
+        if (Auth::guard('reader')->check())     return 'reader';
+        if (Auth::guard('web')->check())        return 'web';
+        if (Auth::guard('advertiser')->check()) return 'advertiser';
+        return 'admin';
+    }
+
     // ── Home / Feed ──────────────────────────────────────────
     public function home(Request $request)
     {
@@ -44,7 +63,79 @@ class AppController extends Controller
             ->take(4)
             ->get();
 
-        return view('reader.article', compact('post', 'related'));
+        $isFavorited = false;
+        $user = $this->authUser();
+        if ($user) {
+            $isFavorited = ReaderFavorite::where('user_type', $this->authType())
+                ->where('user_id', $user->id)
+                ->where('post_id', $post->id)
+                ->exists();
+        }
+
+        return view('reader.article', compact('post', 'related', 'isFavorited'));
+    }
+
+    // ── Toggle Favorite ──────────────────────────────────────
+    public function toggleFavorite(int $id)
+    {
+        $post = Post::findOrFail($id);
+        $user = $this->authUser();
+        $type = $this->authType();
+
+        $fav = ReaderFavorite::where('user_type', $type)
+            ->where('user_id', $user->id)
+            ->where('post_id', $id)
+            ->first();
+
+        if ($fav) {
+            $fav->delete();
+            $favorited = false;
+        } else {
+            ReaderFavorite::create(['user_type' => $type, 'user_id' => $user->id, 'post_id' => $id]);
+            $favorited = true;
+        }
+
+        if (request()->expectsJson()) {
+            return response()->json(['favorited' => $favorited]);
+        }
+
+        return back();
+    }
+
+    // ── Add Comment ──────────────────────────────────────────
+    public function addComment(Request $request, int $id)
+    {
+        $request->validate([
+            'comments' => 'required|string|max:1000',
+        ]);
+
+        $user = $this->authUser();
+        $name = $user?->name ?? $user?->organization_name ?? 'Anonyme';
+        $mail = $user?->email ?? null;
+
+        Comment::create([
+            'post_id'     => $id,
+            'reader_name' => $name,
+            'reader_mail' => $mail,
+            'comments'    => $request->input('comments'),
+        ]);
+
+        return back()->with('success', 'Commentaire publié.');
+    }
+
+    // ── Favorites list ───────────────────────────────────────
+    public function favoris()
+    {
+        $user = $this->authUser();
+        $type = $this->authType();
+
+        $favorites = ReaderFavorite::where('user_type', $type)
+            ->where('user_id', $user->id)
+            ->with(['post.rubriques', 'post.user.organization'])
+            ->latest()
+            ->paginate(15);
+
+        return view('reader.favoris', compact('favorites'));
     }
 
     // ── Annonces ─────────────────────────────────────────────
@@ -99,11 +190,12 @@ class AppController extends Controller
     // ── Profil ───────────────────────────────────────────────
     public function profile()
     {
-        $user = Auth::guard('reader')->user()
-             ?? Auth::guard('web')->user()
-             ?? Auth::guard('advertiser')->user()
-             ?? Auth::guard('admin')->user();
+        $user = $this->authUser();
+        $type = $this->authType();
 
-        return view('reader.profile', compact('user'));
+        $favCount     = ReaderFavorite::where('user_type', $type)->where('user_id', $user->id)->count();
+        $commentCount = Comment::where('reader_mail', $user->email)->count();
+
+        return view('reader.profile', compact('user', 'favCount', 'commentCount'));
     }
 }
