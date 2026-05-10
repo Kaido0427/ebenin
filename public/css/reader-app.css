@@ -581,6 +581,24 @@ button { cursor: pointer; font-family: var(--font); }
 .ra-profile__stat-label { font-size: .68rem; color: rgba(255,255,255,.7); font-weight: 600; margin-top: 2px; }
 .ra-profile__stat-sep { width: 1px; height: 36px; background: rgba(255,255,255,.25); }
 
+/* ══════════════════════════════════════════
+   TOAST NOTIFICATION
+══════════════════════════════════════════ */
+.ra-toast {
+  position: fixed;
+  bottom: calc(var(--nav-h) + env(safe-area-inset-bottom, 0px) + 12px);
+  left: 50%; transform: translateX(-50%) translateY(16px);
+  background: var(--dark); color: #fff;
+  font-size: .82rem; font-weight: 700;
+  padding: 10px 20px; border-radius: 30px;
+  white-space: nowrap; pointer-events: none;
+  opacity: 0; transition: opacity .22s, transform .22s;
+  z-index: 9999;
+  max-width: calc(100vw - 32px);
+}
+.ra-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.ra-toast--error { background: var(--accent); }
+
 /* Body variants */
 body.body--no-tabs { padding-top: var(--header-h); }
 

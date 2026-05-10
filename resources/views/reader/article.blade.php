@@ -30,7 +30,7 @@
                 </svg>
             </button>
             {{-- Partager --}}
-            <button class="ra-article__topbar-btn" onclick="shareArticle()" aria-label="Partager">
+            <button class="ra-article__topbar-btn" onclick="shareArticle(event)" aria-label="Partager">
                 <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
             </button>
         </div>
@@ -105,7 +105,7 @@
             </svg>
             <span id="fav-label">{{ $isFavorited ? 'Sauvegardé' : 'Sauvegarder' }}</span>
         </button>
-        <button class="ra-article__action-btn" onclick="shareArticle()">
+        <button class="ra-article__action-btn" onclick="shareArticle(event)">
             <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
             <span>Partager</span>
         </button>
@@ -202,33 +202,64 @@ var postId   = {{ $post->id }};
 var favState = {{ $isFavorited ? 'true' : 'false' }};
 var csrf     = '{{ csrf_token() }}';
 
+/* ── Toast ── */
+function showToast(msg, type) {
+    var t = document.createElement('div');
+    t.className = 'ra-toast' + (type === 'error' ? ' ra-toast--error' : '');
+    t.textContent = msg;
+    document.body.appendChild(t);
+    requestAnimationFrame(function() { t.classList.add('show'); });
+    setTimeout(function() {
+        t.classList.remove('show');
+        setTimeout(function() { t.remove(); }, 300);
+    }, 2200);
+}
+
+/* ── Favori ── */
 function toggleFav() {
     fetch('/reader/article/' + postId + '/favorite', {
         method: 'POST',
         headers: { 'X-CSRF-TOKEN': csrf, 'Accept': 'application/json', 'Content-Type': 'application/json' }
     })
-    .then(r => r.json())
-    .then(data => {
+    .then(function(r) {
+        if (!r.ok) throw new Error('Erreur réseau');
+        return r.json();
+    })
+    .then(function(data) {
         favState = data.favorited;
         var color = favState ? '#e8191e' : 'currentColor';
         var fill  = favState ? '#e8191e' : 'none';
-        ['fav-icon','fav-action-icon'].forEach(function(id) {
+        ['fav-icon', 'fav-action-icon'].forEach(function(id) {
             var el = document.getElementById(id);
             if (el) { el.style.stroke = color; el.style.fill = fill; }
         });
         var label = document.getElementById('fav-label');
         if (label) label.textContent = favState ? 'Sauvegardé' : 'Sauvegarder';
-    });
+        showToast(favState ? '🔖 Article sauvegardé' : 'Retiré des favoris');
+    })
+    .catch(function() { showToast('Erreur, réessayez', 'error'); });
 }
 
-function shareArticle() {
-    var data = { title: {{ json_encode($post->libelle) }}, url: location.href };
+/* ── Partager ── */
+function shareArticle(e) {
+    if (e) e.preventDefault();
+    var title = {{ json_encode($post->libelle) }};
+    var url   = location.href;
     if (navigator.share) {
-        navigator.share(data);
+        navigator.share({ title: title, url: url }).catch(function() {});
+    } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(url).then(function() {
+            showToast('🔗 Lien copié dans le presse-papiers');
+        }).catch(function() { showToast('Impossible de copier le lien', 'error'); });
     } else {
-        navigator.clipboard.writeText(location.href).then(function() {
-            alert('Lien copié !');
-        });
+        /* Fallback ultime : champ texte sélectionnable */
+        var inp = document.createElement('input');
+        inp.value = url;
+        document.body.appendChild(inp);
+        inp.select();
+        document.execCommand('copy');
+        inp.remove();
+        showToast('🔗 Lien copié');
     }
 }
 </script>
