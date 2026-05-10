@@ -1,5 +1,6 @@
 @extends('reader.layouts.app')
 @section('title', $annonce->title)
+@section('body_class', 'body--no-tabs')
 
 @section('content')
 <div class="ra-annonce-detail">

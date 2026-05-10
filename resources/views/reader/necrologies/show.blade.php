@@ -1,5 +1,6 @@
 @extends('reader.layouts.app')
 @section('title', $necrologie->nom_defunt)
+@section('body_class', 'body--no-tabs')
 
 @section('content')
 <div class="ra-necro-detail">

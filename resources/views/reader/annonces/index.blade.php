@@ -1,5 +1,6 @@
 @extends('reader.layouts.app')
 @section('title', 'Annonces')
+@section('body_class', 'body--no-tabs')
 
 @section('content')
 <div class="ra-page">

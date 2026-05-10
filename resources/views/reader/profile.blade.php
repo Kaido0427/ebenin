@@ -1,5 +1,6 @@
 @extends('reader.layouts.app')
 @section('title', 'Mon profil')
+@section('body_class', 'body--no-tabs')
 
 @section('content')
 @php
