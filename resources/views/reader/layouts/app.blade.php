@@ -67,6 +67,18 @@
         <span>Accueil</span>
     </a>
 
+    <a href="/reader/categories"
+       class="ra-nav__item {{ $path === 'reader/categories' ? 'active' : '' }}"
+       aria-label="Catégories">
+        <svg class="ra-nav__icon" viewBox="0 0 24 24">
+            <rect x="3" y="3" width="7" height="7" rx="1"/>
+            <rect x="14" y="3" width="7" height="7" rx="1"/>
+            <rect x="3" y="14" width="7" height="7" rx="1"/>
+            <rect x="14" y="14" width="7" height="7" rx="1"/>
+        </svg>
+        <span>Catégories</span>
+    </a>
+
     <a href="/reader/annonces"
        class="ra-nav__item {{ Str::startsWith($path, 'reader/annonces') ? 'active' : '' }}"
        aria-label="Annonces">
@@ -81,30 +93,11 @@
        class="ra-nav__item {{ Str::startsWith($path, 'reader/necrologies') ? 'active' : '' }}"
        aria-label="Nécrologies">
         <svg class="ra-nav__icon" viewBox="0 0 24 24">
-            <line x1="12" y1="2" x2="12" y2="22"/>
-            <path d="M5 6h14M5 10h14M5 14h14M5 18h14"/>
+            <path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z"/>
+            <line x1="12" y1="6" x2="12" y2="9"/>
+            <line x1="12" y1="9" x2="12" y2="12"/>
         </svg>
         <span>Nécrologies</span>
-    </a>
-
-    <a href="/reader/annonces?cat=video"
-       class="ra-nav__item {{ request()->get('cat') === 'video' ? 'active' : '' }}"
-       aria-label="Vidéos">
-        <svg class="ra-nav__icon" viewBox="0 0 24 24">
-            <polygon points="5 3 19 12 5 21 5 3"/>
-        </svg>
-        <span>Vidéos</span>
-    </a>
-
-    <a href="/reader/profil"
-       class="ra-nav__item {{ $path === 'reader/profil' ? 'active' : '' }}"
-       aria-label="Profil">
-        <svg class="ra-nav__icon" viewBox="0 0 24 24">
-            <line x1="3" y1="12" x2="21" y2="12"/>
-            <line x1="3" y1="6" x2="21" y2="6"/>
-            <line x1="3" y1="18" x2="21" y2="18"/>
-        </svg>
-        <span>Menu</span>
     </a>
 
 </nav>

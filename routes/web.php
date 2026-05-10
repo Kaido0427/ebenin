@@ -238,6 +238,7 @@ $readerRoutes = function () {
         Route::get('/reader/annonces/{annonce}',           [ReaderAppController::class, 'annonceShow'])->name('reader.annonce.show');
         Route::get('/reader/necrologies',                  [ReaderAppController::class, 'necrologies'])->name('reader.necrologies');
         Route::get('/reader/necrologies/{necrologie}',     [ReaderAppController::class, 'necrologieShow'])->name('reader.necrologie.show');
+        Route::get('/reader/categories',                   [ReaderAppController::class, 'categories'])->name('reader.categories');
         Route::get('/reader/profil',                       [ReaderAppController::class, 'profile'])->name('reader.profile');
     });
 };

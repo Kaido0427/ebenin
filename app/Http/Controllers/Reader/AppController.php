@@ -85,6 +85,17 @@ class AppController extends Controller
         return view('reader.necrologies.show', compact('necrologie'));
     }
 
+    // ── Catégories ───────────────────────────────────────────
+    public function categories()
+    {
+        $categories = Rubrique::whereHas('posts', fn($q) => $q->published())
+            ->withCount(['posts' => fn($q) => $q->published()])
+            ->orderByDesc('posts_count')
+            ->get();
+
+        return view('reader.categories', compact('categories'));
+    }
+
     // ── Profil ───────────────────────────────────────────────
     public function profile()
     {
