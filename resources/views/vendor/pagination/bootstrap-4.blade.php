@@ -1,4 +1,5 @@
 @if ($paginator->hasPages())
+@php $paginator->onEachSide(1); @endphp
 <nav>
     <ul class="pagination">
         {{-- Précédent --}}
