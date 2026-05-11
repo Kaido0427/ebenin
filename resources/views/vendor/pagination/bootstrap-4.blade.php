@@ -1,36 +1,53 @@
 @if ($paginator->hasPages())
-@php $paginator->onEachSide(1); @endphp
+@php
+    $cur  = $paginator->currentPage();
+    $last = $paginator->lastPage();
+    // fenêtre : page courante ± 1 (max 3 numéros au centre)
+    $from = max(1, $cur - 1);
+    $to   = min($last, $cur + 1);
+@endphp
 <nav>
     <ul class="pagination">
+
         {{-- Précédent --}}
         @if ($paginator->onFirstPage())
-            <li class="page-item disabled"><span class="page-btn" style="width:auto;padding:0 14px;">‹ Précédent</span></li>
+            <li class="page-item disabled"><span class="page-btn" style="width:auto;padding:0 14px;">‹ Préc.</span></li>
         @else
-            <li class="page-item"><a class="page-btn" style="width:auto;padding:0 14px;" href="{{ $paginator->previousPageUrl() }}" rel="prev">‹ Précédent</a></li>
+            <li class="page-item"><a class="page-btn" style="width:auto;padding:0 14px;" href="{{ $paginator->previousPageUrl() }}" rel="prev">‹ Préc.</a></li>
         @endif
 
-        {{-- Numéros --}}
-        @foreach ($elements as $element)
-            @if (is_string($element))
-                <li class="page-item disabled"><span class="page-btn page-btn--dots">{{ $element }}</span></li>
+        {{-- Première page --}}
+        @if ($from > 1)
+            <li class="page-item"><a class="page-btn" href="{{ $paginator->url(1) }}">1</a></li>
+            @if ($from > 2)
+                <li class="page-item disabled"><span class="page-btn page-btn--dots">…</span></li>
             @endif
-            @if (is_array($element))
-                @foreach ($element as $page => $url)
-                    @if ($page == $paginator->currentPage())
-                        <li class="page-item active"><span class="page-btn active">{{ $page }}</span></li>
-                    @else
-                        <li class="page-item"><a class="page-btn" href="{{ $url }}">{{ $page }}</a></li>
-                    @endif
-                @endforeach
+        @endif
+
+        {{-- Fenêtre centrale --}}
+        @for ($p = $from; $p <= $to; $p++)
+            @if ($p == $cur)
+                <li class="page-item active"><span class="page-btn active">{{ $p }}</span></li>
+            @else
+                <li class="page-item"><a class="page-btn" href="{{ $paginator->url($p) }}">{{ $p }}</a></li>
             @endif
-        @endforeach
+        @endfor
+
+        {{-- Dernière page --}}
+        @if ($to < $last)
+            @if ($to < $last - 1)
+                <li class="page-item disabled"><span class="page-btn page-btn--dots">…</span></li>
+            @endif
+            <li class="page-item"><a class="page-btn" href="{{ $paginator->url($last) }}">{{ $last }}</a></li>
+        @endif
 
         {{-- Suivant --}}
         @if ($paginator->hasMorePages())
-            <li class="page-item"><a class="page-btn" style="width:auto;padding:0 14px;" href="{{ $paginator->nextPageUrl() }}" rel="next">Suivant ›</a></li>
+            <li class="page-item"><a class="page-btn" style="width:auto;padding:0 14px;" href="{{ $paginator->nextPageUrl() }}" rel="next">Suiv. ›</a></li>
         @else
-            <li class="page-item disabled"><span class="page-btn" style="width:auto;padding:0 14px;">Suivant ›</span></li>
+            <li class="page-item disabled"><span class="page-btn" style="width:auto;padding:0 14px;">Suiv. ›</span></li>
         @endif
+
     </ul>
 </nav>
 @endif
