@@ -197,7 +197,7 @@
 (function() {
     var postId   = {{ $post->id }};
     var favState = {{ $isFavorited ? 'true' : 'false' }};
-    var csrf     = '{{ csrf_token() }}';
+    var csrf     = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '{{ csrf_token() }}';
 
     /* ── Toast ── */
     function showToast(msg, isErr) {
@@ -213,7 +213,25 @@
     }
 
     /* ── Favori ── */
+    function applyFavUI(state) {
+        var color = state ? '#e8191e' : 'currentColor';
+        var fill  = state ? '#e8191e' : 'none';
+        ['fav-icon', 'fav-action-icon'].forEach(function(id) {
+            var el = document.getElementById(id);
+            if (el) { el.style.stroke = color; el.style.fill = fill; }
+        });
+        var lbl = document.getElementById('fav-label');
+        if (lbl) lbl.textContent = state ? 'Sauvegardé' : 'Sauvegarder';
+        var ab = document.getElementById('fav-action-btn');
+        if (ab) ab.classList.toggle('active', state);
+    }
+
     function toggleFav() {
+        var prev = favState;
+        favState = !favState;
+        applyFavUI(favState); // feedback immédiat
+        showToast(favState ? 'Article sauvegardé' : 'Retiré des favoris');
+
         fetch('/reader/article/' + postId + '/favorite', {
             method: 'POST',
             credentials: 'same-origin',
@@ -229,19 +247,11 @@
         })
         .then(function(data) {
             favState = data.favorited;
-            var color = favState ? '#e8191e' : 'currentColor';
-            var fill  = favState ? '#e8191e' : 'none';
-            ['fav-icon', 'fav-action-icon'].forEach(function(id) {
-                var el = document.getElementById(id);
-                if (el) { el.style.stroke = color; el.style.fill = fill; }
-            });
-            var lbl = document.getElementById('fav-label');
-            if (lbl) lbl.textContent = favState ? 'Sauvegardé' : 'Sauvegarder';
-            var ab = document.getElementById('fav-action-btn');
-            if (ab) ab.classList.toggle('active', favState);
-            showToast(favState ? 'Article sauvegardé' : 'Retiré des favoris');
+            applyFavUI(favState);
         })
         .catch(function() {
+            favState = prev;
+            applyFavUI(prev); // annuler
             showToast('Connexion requise pour sauvegarder', true);
         });
     }
