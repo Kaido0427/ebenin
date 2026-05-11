@@ -219,10 +219,15 @@ function showToast(msg, type) {
 function toggleFav() {
     fetch('/reader/article/' + postId + '/favorite', {
         method: 'POST',
-        headers: { 'X-CSRF-TOKEN': csrf, 'Accept': 'application/json', 'Content-Type': 'application/json' }
+        credentials: 'same-origin',
+        headers: {
+            'X-CSRF-TOKEN': csrf,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
     })
     .then(function(r) {
-        if (!r.ok) throw new Error('Erreur réseau');
+        if (!r.ok) throw new Error(r.status);
         return r.json();
     })
     .then(function(data) {
@@ -237,7 +242,9 @@ function toggleFav() {
         if (label) label.textContent = favState ? 'Sauvegardé' : 'Sauvegarder';
         showToast(favState ? '🔖 Article sauvegardé' : 'Retiré des favoris');
     })
-    .catch(function() { showToast('Erreur, réessayez', 'error'); });
+    .catch(function(err) {
+        showToast('Connexion requise pour sauvegarder', 'error');
+    });
 }
 
 /* ── Partager ── */
@@ -245,21 +252,35 @@ function shareArticle(e) {
     if (e) e.preventDefault();
     var title = {{ json_encode($post->libelle) }};
     var url   = location.href;
+
+    function copyFallback() {
+        try {
+            var inp = document.createElement('input');
+            inp.value = url;
+            inp.style.position = 'fixed';
+            inp.style.opacity  = '0';
+            document.body.appendChild(inp);
+            inp.focus(); inp.select();
+            document.execCommand('copy');
+            document.body.removeChild(inp);
+            showToast('🔗 Lien copié !');
+        } catch(err) {
+            showToast('Partagez ce lien : ' + url);
+        }
+    }
+
     if (navigator.share) {
-        navigator.share({ title: title, url: url }).catch(function() {});
-    } else if (navigator.clipboard) {
-        navigator.clipboard.writeText(url).then(function() {
-            showToast('🔗 Lien copié dans le presse-papiers');
-        }).catch(function() { showToast('Impossible de copier le lien', 'error'); });
+        navigator.share({ title: title, url: url })
+            .then(function() { showToast('✅ Partagé !'); })
+            .catch(function(err) {
+                if (err.name !== 'AbortError') copyFallback();
+            });
+    } else if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(url)
+            .then(function() { showToast('🔗 Lien copié !'); })
+            .catch(copyFallback);
     } else {
-        /* Fallback ultime : champ texte sélectionnable */
-        var inp = document.createElement('input');
-        inp.value = url;
-        document.body.appendChild(inp);
-        inp.select();
-        document.execCommand('copy');
-        inp.remove();
-        showToast('🔗 Lien copié');
+        copyFallback();
     }
 }
 </script>
