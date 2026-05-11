@@ -79,11 +79,30 @@
 
     {{-- Action bar --}}
     <div class="ra-article__actions">
+        <button class="ra-article__action-btn {{ $isFavorited ? 'active' : '' }}" id="fav-btn" data-id="{{ $post->id }}">
+            <svg viewBox="0 0 24 24">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.78-8.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+            <span id="fav-text">{{ $isFavorited ? 'Favori' : 'Enregistrer' }}</span>
+        </button>
+
+        <button class="ra-article__action-btn" id="share-btn">
+            <svg viewBox="0 0 24 24">
+                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+                <polyline points="16 6 12 2 8 6"/>
+                <line x1="12" y1="2" x2="12" y2="15"/>
+            </svg>
+            <span>Partager</span>
+        </button>
+
         <button class="ra-article__action-btn" id="comment-btn">
             <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
             <span>{{ $post->comments->count() }} commentaire{{ $post->comments->count() > 1 ? 's' : '' }}</span>
         </button>
     </div>
+
+    {{-- Toast for feedback --}}
+    <div id="ra-toast" class="ra-toast"></div>
 
     {{-- À lire aussi --}}
     @if($related->isNotEmpty())
@@ -163,8 +182,79 @@
 </div>
 
 <script>
+const toast = document.getElementById('ra-toast');
+function showToast(msg, isError = false) {
+    toast.innerText = msg;
+    toast.classList.toggle('ra-toast--error', isError);
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+// Favoris
+document.getElementById('fav-btn').addEventListener('click', function() {
+    const btn = this;
+    const postId = btn.getAttribute('data-id');
+    const text = document.getElementById('fav-text');
+
+    fetch(`/reader/article/${postId}/favorite`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Accept': 'application/json'
+        }
+    })
+    .then(r => {
+        if (r.status === 401) {
+            window.location.href = "{{ route('reader.login') }}";
+            return;
+        }
+        return r.json();
+    })
+    .then(data => {
+        if (!data) return;
+        if (data.favorited) {
+            btn.classList.add('active');
+            text.innerText = 'Favori';
+            showToast('Ajouté aux favoris');
+        } else {
+            btn.classList.remove('active');
+            text.innerText = 'Enregistrer';
+            showToast('Retiré des favoris');
+        }
+    })
+    .catch(err => {
+        showToast('Erreur lors de l’enregistrement', true);
+    });
+});
+
+// Partage
+document.getElementById('share-btn').addEventListener('click', async function() {
+    const shareData = {
+        title: "{{ $post->libelle }}",
+        text: "{{ $post->sous_titre ?? 'Découvrez cet article sur E-Benin' }}",
+        url: window.location.href
+    };
+
+    if (navigator.share) {
+        try {
+            await navigator.share(shareData);
+        } catch (err) {
+            // User cancelled or error
+        }
+    } else {
+        // Fallback: Copy to clipboard
+        try {
+            await navigator.clipboard.writeText(window.location.href);
+            showToast('Lien copié dans le presse-papier');
+        } catch (err) {
+            showToast('Erreur lors du partage', true);
+        }
+    }
+});
+
+// Scroll vers commentaires
 document.getElementById('comment-btn').addEventListener('click', function() {
-    document.getElementById('comment-form').scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('comments-section').scrollIntoView({ behavior: 'smooth' });
 });
 </script>
 @endsection

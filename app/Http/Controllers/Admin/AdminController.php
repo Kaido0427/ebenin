@@ -8,6 +8,9 @@ use App\Models\organization as Organization;
 use App\Models\OrganizationSubscription;
 use App\Models\post as Post;
 use App\Models\transaction as Transaction;
+use App\Models\Annonce;
+use App\Models\Necrologie;
+use App\Models\AdvertiserSubscription;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -304,6 +307,103 @@ class AdminController extends Controller
         return view('admin.posts', compact('posts', 'organizations', 'postStats'));
     }
 
+    public function annonces(Request $request)
+    {
+        $annonces = Annonce::with('advertiser')
+            ->when($request->filled('q'), function ($query) use ($request) {
+                $term = '%' . $request->q . '%';
+                $query->where(function ($subQuery) use ($term) {
+                    $subQuery
+                        ->where('title', 'like', $term)
+                        ->orWhere('description', 'like', $term)
+                        ->orWhereHas('advertiser', function ($advertiserQuery) use ($term) {
+                            $advertiserQuery
+                                ->where('name', 'like', $term)
+                                ->orWhere('company_name', 'like', $term)
+                                ->orWhere('email', 'like', $term);
+                        });
+                });
+            })
+            ->when($request->filled('status'), function ($query) use ($request) {
+                $query->where('status', $request->status);
+            })
+            ->when($request->filled('payment_status'), function ($query) use ($request) {
+                $query->where('payment_status', $request->payment_status);
+            })
+            ->latest()
+            ->paginate(20)
+            ->withQueryString();
+
+        $annonceStats = [
+            'total' => Annonce::count(),
+            'active' => Annonce::where('status', 'active')->count(),
+            'pending' => Annonce::where('status', 'pending')->count(),
+            'paid' => Annonce::where('payment_status', 'paid')->count(),
+        ];
+
+        return view('admin.annonces', compact('annonces', 'annonceStats'));
+    }
+
+    public function updateAnnonceStatus(Request $request, Annonce $annonce)
+    {
+        $validated = $request->validate([
+            'status' => ['required', Rule::in(['pending', 'active', 'rejected'])],
+        ]);
+
+        $annonce->update([
+            'status' => $validated['status'],
+        ]);
+
+        return back()->with('success', 'Statut de l annonce mis a jour.');
+    }
+
+    public function necrologies(Request $request)
+    {
+        $necrologies = Necrologie::with('advertiser')
+            ->when($request->filled('q'), function ($query) use ($request) {
+                $term = '%' . $request->q . '%';
+                $query->where(function ($subQuery) use ($term) {
+                    $subQuery
+                        ->where('nom_defunt', 'like', $term)
+                        ->orWhere('message', 'like', $term)
+                        ->orWhereHas('advertiser', function ($advertiserQuery) use ($term) {
+                            $advertiserQuery
+                                ->where('name', 'like', $term)
+                                ->orWhere('company_name', 'like', $term)
+                                ->orWhere('email', 'like', $term);
+                        });
+                });
+            })
+            ->when($request->filled('status'), function ($query) use ($request) {
+                $query->where('status', $request->status);
+            })
+            ->latest()
+            ->paginate(20)
+            ->withQueryString();
+
+        $necrologieStats = [
+            'total' => Necrologie::count(),
+            'active' => Necrologie::where('status', 'active')->count(),
+            'pending' => Necrologie::where('status', 'pending')->count(),
+            'rejected' => Necrologie::where('status', 'rejected')->count(),
+        ];
+
+        return view('admin.necrologies', compact('necrologies', 'necrologieStats'));
+    }
+
+    public function updateNecrologieStatus(Request $request, Necrologie $necrologie)
+    {
+        $validated = $request->validate([
+            'status' => ['required', Rule::in(['pending', 'active', 'rejected'])],
+        ]);
+
+        $necrologie->update([
+            'status' => $validated['status'],
+        ]);
+
+        return back()->with('success', 'Statut de la necrologie mis a jour.');
+    }
+
     public function updatePostEditorial(Request $request, Post $post)
     {
         $validated = $request->validate([
@@ -363,6 +463,13 @@ class AdminController extends Controller
             'auto_total' => Transaction::where('status', 'paid')->where('source', 'kkiapay')->sum('amount'),
             'pending_total' => Transaction::where('status', 'pending')->count(),
             'failed_total' => Transaction::where('status', 'failed')->count(),
+            'annonces_total' => Annonce::count(),
+            'annonces_paid' => Annonce::where('payment_status', 'paid')->count(),
+            'annonces_revenue' => (float) Annonce::where('payment_status', 'paid')
+                ->sum(DB::raw('COALESCE(price, ' . (int) Annonce::PRICE_PER_ANNONCE . ')')),
+            'advertiser_subscriptions_active' => AdvertiserSubscription::where('status', 'active')
+                ->where('expires_at', '>=', now())
+                ->count(),
         ];
         $recentTransactions = Transaction::with(['organization', 'admin'])
             ->latest(DB::raw('COALESCE(paid_at, created_at)'))

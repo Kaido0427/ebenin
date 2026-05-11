@@ -8,11 +8,11 @@
 
 @section('page_tabs')
     <div class="page-tabs">
-        <a class="page-tab {{ request()->routeIs('admin.payments.*') ? 'is-active' : '' }}" href="{{ route('admin.payments.index') }}">
+        <a class="page-tab {{ request()->routeIs('admin.payments.*') ? 'is-active' : '' }}" href="{{ url('/admin/payments') }}">
             <span>Paiements</span>
             <span class="page-tab__count">{{ number_format($paymentStats['transactions_total']) }}</span>
         </a>
-        <a class="page-tab {{ request()->routeIs('admin.subscriptions.*') ? 'is-active' : '' }}" href="{{ route('admin.subscriptions.index') }}">
+        <a class="page-tab {{ request()->routeIs('admin.subscriptions.*') ? 'is-active' : '' }}" href="{{ url('/admin/subscriptions') }}">
             <span>Abonnements</span>
             <span class="page-tab__count">{{ number_format($subscriptionHealth['active']) }}</span>
         </a>
@@ -73,6 +73,14 @@
                         <span>Echeances proches</span>
                         <strong>{{ number_format($subscriptionHealth['expiring']) }}</strong>
                     </div>
+                    <div class="billing-total">
+                        <span>Recette annonces</span>
+                        <strong>{{ number_format($paymentStats['annonces_revenue'], 0, ',', ' ') }} F</strong>
+                    </div>
+                    <div class="billing-total">
+                        <span>Abonn. annonceurs actifs</span>
+                        <strong>{{ number_format($paymentStats['advertiser_subscriptions_active']) }}</strong>
+                    </div>
                 </div>
             </article>
 
@@ -97,6 +105,18 @@
                 <span class="stat-tile__eyebrow">Encaisse manuel</span>
                 <strong>{{ number_format($paymentStats['manual_total'], 0, ',', ' ') }} F</strong>
                 <p>Reglements saisis par l equipe</p>
+            </article>
+
+            <article class="billing-card billing-card--mini">
+                <div class="stat-tile__icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path d="M4 6h16v12H4z" />
+                        <path d="M4 10h16" />
+                    </svg>
+                </div>
+                <span class="stat-tile__eyebrow">Annonces payees</span>
+                <strong>{{ number_format($paymentStats['annonces_paid']) }}</strong>
+                <p>{{ number_format($paymentStats['annonces_total']) }} annonces totales</p>
             </article>
 
             <article class="billing-card">
@@ -138,7 +158,7 @@
                     </div>
                 </div>
 
-                <form class="form-grid compact" method="POST" action="{{ route('admin.payments.manual') }}">
+                <form class="form-grid compact" method="POST" action="{{ url('/admin/payments/manual') }}">
                     @csrf
                     <div class="field">
                         <label>Blog</label>

@@ -28,9 +28,9 @@
             </div>
 
             <div class="profile-identity__actions">
-                <a href="{{ route('admin.dashboard') }}" class="ghost-btn">Dashboard</a>
-                <a href="{{ route('admin.payments.index') }}" class="ghost-btn">Facturation</a>
-                <a href="{{ route('admin.posts.index') }}" class="ghost-btn">Moderation</a>
+                <a href="{{ url('/admin') }}" class="ghost-btn">Dashboard</a>
+                <a href="{{ url('/admin/payments') }}" class="ghost-btn">Facturation</a>
+                <a href="{{ url('/admin/posts') }}" class="ghost-btn">Moderation</a>
             </div>
         </div>
 
@@ -64,7 +64,7 @@
                     </div>
                 </div>
 
-                <form class="form-grid compact" method="POST" action="{{ route('admin.profile.update') }}">
+                <form class="form-grid compact" method="POST" action="{{ url('/admin/profile') }}">
                     @csrf
                     @method('PUT')
                     <div class="field">
@@ -141,21 +141,21 @@
                     </div>
 
                     <div class="quick-links">
-                        <a href="{{ route('admin.users.index') }}" class="quick-link">
+                        <a href="{{ url('/admin/users') }}" class="quick-link">
                             <div class="quick-link__icon">U</div>
                             <div class="invoice-item__copy">
                                 <strong>Utilisateurs</strong>
                                 <span>Surveiller les auteurs, l activation et les blogs rattaches.</span>
                             </div>
                         </a>
-                        <a href="{{ route('admin.subscriptions.index') }}" class="quick-link">
+                        <a href="{{ url('/admin/subscriptions') }}" class="quick-link">
                             <div class="quick-link__icon">S</div>
                             <div class="invoice-item__copy">
                                 <strong>Abonnements</strong>
                                 <span>Traiter les echeances et eviter les ruptures de service.</span>
                             </div>
                         </a>
-                        <a href="{{ route('admin.payments.index') }}" class="quick-link">
+                        <a href="{{ url('/admin/payments') }}" class="quick-link">
                             <div class="quick-link__icon">F</div>
                             <div class="invoice-item__copy">
                                 <strong>Facturation</strong>

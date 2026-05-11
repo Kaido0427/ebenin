@@ -113,8 +113,8 @@
                 </p>
 
                 <div class="hero-card__actions">
-                    <a href="{{ route('admin.posts.index') }}" class="primary-btn">Ouvrir la moderation</a>
-                    <a href="{{ route('admin.payments.index') }}" class="ghost-btn">Voir la facturation</a>
+                    <a href="{{ url('/admin/posts') }}" class="primary-btn">Ouvrir la moderation</a>
+                    <a href="{{ url('/admin/payments') }}" class="ghost-btn">Voir la facturation</a>
                 </div>
 
                 <div class="hero-insights">

@@ -8,10 +8,10 @@
 
 @section('page_tabs')
     <div class="page-tabs">
-        <a class="page-tab {{ request()->routeIs('admin.payments.*') ? 'is-active' : '' }}" href="{{ route('admin.payments.index') }}">
+        <a class="page-tab {{ request()->routeIs('admin.payments.*') ? 'is-active' : '' }}" href="{{ url('/admin/payments') }}">
             <span>Paiements</span>
         </a>
-        <a class="page-tab {{ request()->routeIs('admin.subscriptions.*') ? 'is-active' : '' }}" href="{{ route('admin.subscriptions.index') }}">
+        <a class="page-tab {{ request()->routeIs('admin.subscriptions.*') ? 'is-active' : '' }}" href="{{ url('/admin/subscriptions') }}">
             <span>Abonnements</span>
             <span class="page-tab__count">{{ number_format($subscriptionStats['total']) }}</span>
         </a>
@@ -201,7 +201,7 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <form class="inline-form" method="POST" action="{{ route('admin.subscriptions.renew', $subscription->organization) }}">
+                                    <form class="inline-form" method="POST" action="{{ url('/admin/subscriptions/' . $subscription->organization_id . '/renew') }}">
                                         @csrf
                                         <input type="number" name="months_awarded" min="1" max="24" value="1" placeholder="Mois">
                                         <input type="number" name="amount" min="0" step="0.01" placeholder="Montant">

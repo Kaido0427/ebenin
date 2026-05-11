@@ -45,7 +45,7 @@ class LoginController extends Controller
             'last_login_at' => now(),
         ])->save();
 
-        return redirect()->route('admin.dashboard');
+        return redirect('/admin');
     }
 
     public function destroy(Request $request)
@@ -54,6 +54,6 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('admin.login');
+        return redirect('/admin/login');
     }
 }

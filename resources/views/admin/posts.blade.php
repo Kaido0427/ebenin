@@ -8,15 +8,21 @@
 
 @section('page_tabs')
     <div class="page-tabs">
-        <a class="page-tab {{ request()->routeIs('admin.users.*') ? 'is-active' : '' }}" href="{{ route('admin.users.index') }}">
+        <a class="page-tab {{ request()->routeIs('admin.users.*') ? 'is-active' : '' }}" href="{{ url('/admin/users') }}">
             <span>Auteurs</span>
         </a>
-        <a class="page-tab {{ request()->routeIs('admin.blogs.*') ? 'is-active' : '' }}" href="{{ route('admin.blogs.index') }}">
+        <a class="page-tab {{ request()->routeIs('admin.blogs.*') ? 'is-active' : '' }}" href="{{ url('/admin/blogs') }}">
             <span>Blogs</span>
         </a>
-        <a class="page-tab {{ request()->routeIs('admin.posts.*') ? 'is-active' : '' }}" href="{{ route('admin.posts.index') }}">
+        <a class="page-tab {{ request()->routeIs('admin.posts.*') ? 'is-active' : '' }}" href="{{ url('/admin/posts') }}">
             <span>Posts</span>
             <span class="page-tab__count">{{ number_format($postStats['total']) }}</span>
+        </a>
+        <a class="page-tab {{ request()->routeIs('admin.annonces.*') ? 'is-active' : '' }}" href="{{ url('/admin/annonces') }}">
+            <span>Annonces</span>
+        </a>
+        <a class="page-tab {{ request()->routeIs('admin.necrologies.*') ? 'is-active' : '' }}" href="{{ url('/admin/necrologies') }}">
+            <span>Necrologies</span>
         </a>
     </div>
 @endsection
@@ -187,7 +193,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <form class="form-grid compact" method="POST" action="{{ route('admin.posts.editorial', $post) }}">
+                                    <form class="form-grid compact" method="POST" action="{{ url('/admin/posts/' . $post->id . '/editorial') }}">
                                         @csrf
                                         @method('PATCH')
                                         <div class="field">

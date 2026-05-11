@@ -107,7 +107,7 @@
                     </div>
                 </div>
 
-                <form class="form-grid compact" method="POST" action="{{ route('admin.admins.store') }}">
+                <form class="form-grid compact" method="POST" action="{{ url('/admin/admins') }}">
                     @csrf
                     <div class="field">
                         <label>Nom</label>
@@ -167,7 +167,7 @@
                                     <td>{{ $admin->preferred_theme }}</td>
                                     <td>{{ optional($admin->last_login_at)->format('d/m/Y H:i') ?: 'Jamais' }}</td>
                                     <td>
-                                        <form method="POST" action="{{ route('admin.admins.toggle', $admin) }}">
+                                        <form method="POST" action="{{ url('/admin/admins/' . $admin->id . '/toggle') }}">
                                             @csrf
                                             @method('PATCH')
                                             <button class="{{ $admin->is_active ? 'danger-btn' : 'success-btn' }}" type="submit">

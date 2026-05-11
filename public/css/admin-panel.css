@@ -2056,11 +2056,57 @@ body[data-theme="dark"] .profile-identity {
   font-weight: 800;
 }
 
+.auth-v2__brand--link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.auth-v2__brand-mark {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: inline-grid;
+  place-items: center;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #fff;
+  background: linear-gradient(135deg, var(--eb-blue), var(--eb-blue-strong));
+}
+
 .auth-v2__menu {
   display: flex;
   align-items: center;
   gap: 20px;
   color: #5d6e8d;
+}
+
+.auth-v2__menu-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  transition: .2s ease;
+}
+
+.auth-v2__menu-link svg {
+  width: 16px;
+  height: 16px;
+}
+
+.auth-v2__menu-link:hover {
+  color: var(--eb-blue);
+  background: #f0f5fb;
+  border-color: #dbe6f5;
+}
+
+.auth-v2__menu-link.is-active {
+  color: var(--eb-blue);
+  background: #eaf2ff;
+  border-color: #d5e5ff;
 }
 
 .auth-v2__cta {
@@ -2103,6 +2149,25 @@ body[data-theme="dark"] .profile-identity {
   max-width: 520px;
 }
 
+.field-icon-wrap {
+  position: relative;
+}
+
+.field-icon-wrap .field-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  color: #7f8ca5;
+  pointer-events: none;
+}
+
+.field-icon-wrap input {
+  padding-left: 38px;
+}
+
 .remember-row--v2 {
   justify-content: flex-start;
   margin-bottom: 14px;
@@ -2133,6 +2198,15 @@ body[data-theme="dark"] .profile-identity {
   justify-content: center;
   gap: 20px;
   color: #7a8aa5;
+}
+
+.auth-v2__footer a {
+  color: inherit;
+  transition: .2s ease;
+}
+
+.auth-v2__footer a:hover {
+  color: var(--eb-blue);
 }
 
 @media (max-width: 1380px) {
@@ -2571,4 +2645,152 @@ body[data-theme="dark"] .admin-sidebar,
 body[data-theme="dark"] .admin-sidebar__inner {
   background: #001d3d;
   border-right-color: rgba(255,255,255,.07);
+}
+
+/* 16. Main-domain visual language polish (safe CSS-only pass) */
+:root {
+  --eb-primary: #003f7f;
+  --eb-primary-strong: #0057b3;
+  --eb-accent: #e8191e;
+  --eb-accent-strong: #c0141a;
+  --eb-gold-soft: #f0a500;
+}
+
+body[data-theme="light"] {
+  --surface-body: #f5f6f8;
+  --border-soft: #e5e7eb;
+  --text-main: #0d1117;
+  --text-muted: #374151;
+  --text-soft: #6b7280;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, .08);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, .10);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, .15);
+}
+
+.topbar-heading h1 {
+  font-family: "Playfair Display", Georgia, serif;
+  font-weight: 800;
+  letter-spacing: -.02em;
+}
+
+.topbar-heading__eyebrow {
+  color: var(--eb-accent);
+  font-weight: 700;
+}
+
+.topbar-shell,
+.page-tabs-shell,
+.table-card,
+.filter-card,
+.metric-card,
+.chart-card,
+.hero-card,
+.watch-card,
+.activity-card,
+.billing-card,
+.profile-card,
+.auth-card,
+.stat-tile {
+  border: 1px solid var(--border-soft);
+}
+
+.primary-btn {
+  background: var(--eb-primary);
+  border-color: var(--eb-primary);
+  color: #fff;
+}
+
+.primary-btn:hover {
+  background: var(--eb-primary-strong);
+  border-color: var(--eb-primary-strong);
+}
+
+.danger-btn {
+  background: var(--eb-accent);
+  border-color: var(--eb-accent);
+  color: #fff;
+}
+
+.danger-btn:hover {
+  background: var(--eb-accent-strong);
+  border-color: var(--eb-accent-strong);
+}
+
+.badge.red {
+  background: #fde8e8;
+  color: var(--eb-accent-strong);
+}
+
+.badge.blue {
+  background: #e8f1ff;
+  color: var(--eb-primary);
+}
+
+.badge.green {
+  background: #e8f6ec;
+  color: #176537;
+}
+
+.page-tab.is-active {
+  border-color: var(--eb-primary);
+  box-shadow: inset 0 -2px 0 var(--eb-primary);
+}
+
+.auth-v2__left h1 {
+  font-family: "Playfair Display", Georgia, serif;
+  font-weight: 800;
+}
+
+.auth-v2__visual {
+  background:
+    linear-gradient(145deg, rgba(0, 63, 127, .94), rgba(13, 17, 23, .96)),
+    radial-gradient(circle at top right, rgba(232, 25, 30, .25), transparent 36%);
+}
+
+/* 17. Keep dashboard feature cards readable after global white-card overrides */
+.hero-card.hero-card--story {
+  color: #fff;
+  background:
+    radial-gradient(circle at top right, rgba(240, 165, 0, 0.25), transparent 24%),
+    radial-gradient(circle at bottom left, rgba(255, 255, 255, 0.12), transparent 30%),
+    linear-gradient(140deg, rgba(0, 63, 127, 0.95), rgba(0, 87, 179, 0.9));
+  border-color: transparent;
+  box-shadow: var(--shadow-lg);
+}
+
+.hero-card.hero-card--story p,
+.hero-card.hero-card--story .hero-card__eyebrow,
+.hero-card.hero-card--story .hero-card__actions .ghost-btn,
+.hero-card.hero-card--story .insight-chip span,
+.hero-card.hero-card--story .insight-chip small {
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.hero-card.hero-card--story .hero-card__actions .ghost-btn {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.hero-card.hero-card--story .insight-chip {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+.chart-card.chart-card--dark {
+  color: #fff;
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.1), transparent 26%),
+    linear-gradient(155deg, #172546, #0d1730 62%, #182443);
+  border-color: transparent;
+  box-shadow: var(--shadow-lg);
+}
+
+.chart-card.chart-card--dark .soft-muted,
+.chart-card.chart-card--dark .bar-chart__value,
+.chart-card.chart-card--dark .bar-chart__label,
+.chart-card.chart-card--dark .mini-kpis__item span {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.chart-card.chart-card--dark .mini-kpis__item {
+  border-top-color: rgba(255, 255, 255, 0.12);
 }

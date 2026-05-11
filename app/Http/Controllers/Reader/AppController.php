@@ -78,8 +78,15 @@ class AppController extends Controller
     // ── Toggle Favorite ──────────────────────────────────────
     public function toggleFavorite(int $id)
     {
-        $post = Post::findOrFail($id);
         $user = $this->authUser();
+        if (!$user) {
+            if (request()->expectsJson()) {
+                return response()->json(['error' => 'auth_required'], 401);
+            }
+            return redirect()->route('reader.login')->with('error', 'Connectez-vous pour enregistrer cet article.');
+        }
+
+        $post = Post::findOrFail($id);
         $type = $this->authType();
 
         $fav = ReaderFavorite::where('user_type', $type)

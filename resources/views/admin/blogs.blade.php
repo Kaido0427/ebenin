@@ -8,15 +8,21 @@
 
 @section('page_tabs')
     <div class="page-tabs">
-        <a class="page-tab {{ request()->routeIs('admin.users.*') ? 'is-active' : '' }}" href="{{ route('admin.users.index') }}">
+        <a class="page-tab {{ request()->routeIs('admin.users.*') ? 'is-active' : '' }}" href="{{ url('/admin/users') }}">
             <span>Auteurs</span>
         </a>
-        <a class="page-tab {{ request()->routeIs('admin.blogs.*') ? 'is-active' : '' }}" href="{{ route('admin.blogs.index') }}">
+        <a class="page-tab {{ request()->routeIs('admin.blogs.*') ? 'is-active' : '' }}" href="{{ url('/admin/blogs') }}">
             <span>Blogs</span>
             <span class="page-tab__count">{{ number_format($blogStats['total']) }}</span>
         </a>
-        <a class="page-tab {{ request()->routeIs('admin.posts.*') ? 'is-active' : '' }}" href="{{ route('admin.posts.index') }}">
+        <a class="page-tab {{ request()->routeIs('admin.posts.*') ? 'is-active' : '' }}" href="{{ url('/admin/posts') }}">
             <span>Posts</span>
+        </a>
+        <a class="page-tab {{ request()->routeIs('admin.annonces.*') ? 'is-active' : '' }}" href="{{ url('/admin/annonces') }}">
+            <span>Annonces</span>
+        </a>
+        <a class="page-tab {{ request()->routeIs('admin.necrologies.*') ? 'is-active' : '' }}" href="{{ url('/admin/necrologies') }}">
+            <span>Necrologies</span>
         </a>
     </div>
 @endsection
@@ -158,7 +164,7 @@
                                 </td>
                                 <td>
                                     <div class="row-actions">
-                                        <form method="POST" action="{{ route('admin.blogs.toggle', $blog) }}">
+                                        <form method="POST" action="{{ url('/admin/blogs/' . $blog->id . '/toggle') }}">
                                             @csrf
                                             @method('PATCH')
                                             <input type="hidden" name="reason" value="Action admin blog">
@@ -166,7 +172,7 @@
                                                 {{ $blog->is_active ? 'Suspendre' : 'Reactiver' }}
                                             </button>
                                         </form>
-                                        <form method="POST" action="{{ route('admin.blogs.visibility', $blog) }}">
+                                        <form method="POST" action="{{ url('/admin/blogs/' . $blog->id . '/visibility') }}">
                                             @csrf
                                             @method('PATCH')
                                             <button class="ghost-btn" type="submit">
