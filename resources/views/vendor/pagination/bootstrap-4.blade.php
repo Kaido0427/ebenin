@@ -3,9 +3,9 @@
     <ul class="pagination">
         {{-- Précédent --}}
         @if ($paginator->onFirstPage())
-            <li class="page-item disabled"><span class="page-btn">&lsaquo;</span></li>
+            <li class="page-item disabled"><span class="page-btn" style="width:auto;padding:0 14px;">‹ Précédent</span></li>
         @else
-            <li class="page-item"><a class="page-btn" href="{{ $paginator->previousPageUrl() }}" rel="prev">&lsaquo;</a></li>
+            <li class="page-item"><a class="page-btn" style="width:auto;padding:0 14px;" href="{{ $paginator->previousPageUrl() }}" rel="prev">‹ Précédent</a></li>
         @endif
 
         {{-- Numéros --}}
@@ -26,9 +26,9 @@
 
         {{-- Suivant --}}
         @if ($paginator->hasMorePages())
-            <li class="page-item"><a class="page-btn" href="{{ $paginator->nextPageUrl() }}" rel="next">&rsaquo;</a></li>
+            <li class="page-item"><a class="page-btn" style="width:auto;padding:0 14px;" href="{{ $paginator->nextPageUrl() }}" rel="next">Suivant ›</a></li>
         @else
-            <li class="page-item disabled"><span class="page-btn">&rsaquo;</span></li>
+            <li class="page-item disabled"><span class="page-btn" style="width:auto;padding:0 14px;">Suivant ›</span></li>
         @endif
     </ul>
 </nav>
