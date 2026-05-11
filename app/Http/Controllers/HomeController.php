@@ -195,7 +195,7 @@ class HomeController extends Controller
     public function allCategories(int $id)
     {
         $rubrique       = Rubrique::with('posts')->findOrFail($id);
-        $paginatedPosts = $this->paginatePosts($rubrique->posts->where('editorial_status', 'published'), 'user');
+        $paginatedPosts = $this->paginatePosts($rubrique->posts->where('editorial_status', 'published'), 'user', 10);
         $rubriquesGuest = Rubrique::whereHas('posts', fn($q) => $q->published())->get();
 
         return view('allcats', compact('rubrique', 'paginatedPosts', 'rubriquesGuest'));
