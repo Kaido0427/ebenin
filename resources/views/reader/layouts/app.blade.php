@@ -93,9 +93,11 @@
        class="ra-nav__item {{ Str::startsWith($path, 'reader/necrologies') ? 'active' : '' }}"
        aria-label="Nécrologies">
         <svg class="ra-nav__icon" viewBox="0 0 24 24">
-            <path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z"/>
-            <line x1="12" y1="6" x2="12" y2="9"/>
-            <line x1="12" y1="9" x2="12" y2="12"/>
+            {{-- bougie --}}
+            <rect x="9" y="10" width="6" height="10" rx="1"/>
+            <path d="M9 20 Q12 22 15 20"/>
+            <line x1="12" y1="10" x2="12" y2="6"/>
+            <path d="M12 6 Q14 4 12 2 Q10 4 12 6" fill="currentColor" stroke="none"/>
         </svg>
         <span>Nécrologies</span>
     </a>
