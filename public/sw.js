@@ -1,4 +1,4 @@
-const CACHE = 'ebenin-v1';
+const CACHE = 'ebenin-v3';
 const PRECACHE = [
   '/css/refonte-public.css',
   '/images/ebenins.png',
