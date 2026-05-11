@@ -147,13 +147,31 @@
                                     <a href="{{ $paginatedPosts->previousPageUrl() }}">Préc.</a>
                                 @endif
 
-                                @for ($page = 1; $page <= $paginatedPosts->lastPage(); $page++)
-                                    @if ($page === $paginatedPosts->currentPage())
+                                @php
+                                    $current  = $paginatedPosts->currentPage();
+                                    $last     = $paginatedPosts->lastPage();
+                                    $window   = 2; // pages de chaque côté
+                                    $from     = max(1, $current - $window);
+                                    $to       = min($last, $current + $window);
+                                @endphp
+
+                                @if ($from > 1)
+                                    <a href="{{ $paginatedPosts->url(1) }}">1</a>
+                                    @if ($from > 2)<span class="page-ellipsis">…</span>@endif
+                                @endif
+
+                                @for ($page = $from; $page <= $to; $page++)
+                                    @if ($page === $current)
                                         <span class="is-active">{{ $page }}</span>
                                     @else
                                         <a href="{{ $paginatedPosts->url($page) }}">{{ $page }}</a>
                                     @endif
                                 @endfor
+
+                                @if ($to < $last)
+                                    @if ($to < $last - 1)<span class="page-ellipsis">…</span>@endif
+                                    <a href="{{ $paginatedPosts->url($last) }}">{{ $last }}</a>
+                                @endif
 
                                 @if ($paginatedPosts->hasMorePages())
                                     <a href="{{ $paginatedPosts->nextPageUrl() }}">Suiv.</a>
