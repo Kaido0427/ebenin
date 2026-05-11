@@ -120,8 +120,8 @@ button { cursor: pointer; font-family: var(--font); }
   width: 100%; max-width: 480px;
   height: calc(var(--nav-h) + env(safe-area-inset-bottom, 0px));
   padding-bottom: env(safe-area-inset-bottom, 0px);
-  background: var(--white);
-  border-top: 1px solid var(--border);
+  background: var(--primary);
+  border-top: none;
   display: flex; align-items: stretch;
   z-index: 200;
 }
@@ -130,7 +130,7 @@ button { cursor: pointer; font-family: var(--font); }
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   gap: 4px;
-  text-decoration: none; color: var(--muted);
+  text-decoration: none; color: rgba(255,255,255,.6);
   background: none; border: none;
   font-family: var(--font); font-size: .6rem; font-weight: 600;
   letter-spacing: .02em;
@@ -140,13 +140,13 @@ button { cursor: pointer; font-family: var(--font); }
   position: relative;
 }
 .ra-nav__item:active { transform: scale(.93); }
-.ra-nav__item.active { color: var(--accent); }
+.ra-nav__item.active { color: #fff; }
 .ra-nav__icon {
   width: 24px; height: 24px;
   stroke: currentColor; fill: none;
   stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
 }
-.ra-nav__item.active .ra-nav__icon--fill { fill: var(--accent); stroke: var(--accent); }
+.ra-nav__item.active .ra-nav__icon--fill { fill: #fff; stroke: #fff; }
 
 /* ══════════════════════════════════════════
    FLASH ALERTS
@@ -392,7 +392,7 @@ button { cursor: pointer; font-family: var(--font); }
 ══════════════════════════════════════════ */
 .ra-profile { padding: 16px; }
 .ra-profile__hero {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-2) 100%);
+  background: var(--primary);
   border-radius: var(--radius); padding: 24px 20px; margin-bottom: 16px; text-align: center; color: #fff;
 }
 .ra-profile__avatar {
