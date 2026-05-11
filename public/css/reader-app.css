@@ -294,7 +294,7 @@ button { cursor: pointer; font-family: var(--font); }
 }
 .ra-article__topbar-btn svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
-.ra-article__hero { height: 240px; overflow: hidden; background: var(--dark); margin-top: var(--header-h); }
+.ra-article__hero { height: 240px; overflow: hidden; background: var(--dark); }
 .ra-article__hero-img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
 .ra-article__body { padding: 20px 16px 32px; }
 .ra-article__cat {

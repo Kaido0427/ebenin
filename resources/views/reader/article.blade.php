@@ -16,24 +16,6 @@
 @section('content')
 <div class="ra-article">
 
-    {{-- Fixed topbar --}}
-    <div class="ra-article__topbar">
-        <button class="ra-article__topbar-btn" id="btn-back" aria-label="Retour">
-            <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-        </button>
-        <div class="ra-article__topbar-actions">
-            <button class="ra-article__topbar-btn" id="fav-btn" aria-label="Favori">
-                <svg id="fav-icon" viewBox="0 0 24 24"
-                     style="{{ $isFavorited ? 'fill:#e8191e;stroke:#e8191e' : 'fill:none;stroke:currentColor' }}">
-                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-                </svg>
-            </button>
-            <button class="ra-article__topbar-btn" id="share-btn" aria-label="Partager">
-                <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-            </button>
-        </div>
-    </div>
-
     {{-- Hero image --}}
     <div class="ra-article__hero">
         @if($imgUrl)
@@ -97,16 +79,6 @@
 
     {{-- Action bar --}}
     <div class="ra-article__actions">
-        <button class="ra-article__action-btn {{ $isFavorited ? 'active' : '' }}" id="fav-action-btn">
-            <svg viewBox="0 0 24 24" id="fav-action-icon" style="{{ $isFavorited ? 'fill:#e8191e;stroke:#e8191e' : 'fill:none;stroke:currentColor' }}">
-                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-            </svg>
-            <span id="fav-label">{{ $isFavorited ? 'Sauvegardé' : 'Sauvegarder' }}</span>
-        </button>
-        <button class="ra-article__action-btn" id="share-action-btn">
-            <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-            <span>Partager</span>
-        </button>
         <button class="ra-article__action-btn" id="comment-scroll-btn">
             <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
             <span>{{ $post->comments->count() }} commentaire{{ $post->comments->count() > 1 ? 's' : '' }}</span>
@@ -195,114 +167,8 @@
 
 <script>
 (function() {
-    var postId   = {{ $post->id }};
-    var favState = {{ $isFavorited ? 'true' : 'false' }};
-    var csrf     = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '{{ csrf_token() }}';
-
-    /* ── Toast ── */
-    function showToast(msg, isErr) {
-        var t = document.createElement('div');
-        t.className = 'ra-toast' + (isErr ? ' ra-toast--error' : '');
-        t.textContent = msg;
-        document.body.appendChild(t);
-        requestAnimationFrame(function() { t.classList.add('show'); });
-        setTimeout(function() {
-            t.classList.remove('show');
-            setTimeout(function() { t.remove(); }, 300);
-        }, 2400);
-    }
-
-    /* ── Favori ── */
-    function applyFavUI(state) {
-        var color = state ? '#e8191e' : 'currentColor';
-        var fill  = state ? '#e8191e' : 'none';
-        ['fav-icon', 'fav-action-icon'].forEach(function(id) {
-            var el = document.getElementById(id);
-            if (el) { el.style.stroke = color; el.style.fill = fill; }
-        });
-        var lbl = document.getElementById('fav-label');
-        if (lbl) lbl.textContent = state ? 'Sauvegardé' : 'Sauvegarder';
-        var ab = document.getElementById('fav-action-btn');
-        if (ab) ab.classList.toggle('active', state);
-    }
-
-    function toggleFav() {
-        var prev = favState;
-        favState = !favState;
-        applyFavUI(favState); // feedback immédiat
-        showToast(favState ? 'Article sauvegardé' : 'Retiré des favoris');
-
-        fetch('/reader/article/' + postId + '/favorite', {
-            method: 'POST',
-            credentials: 'same-origin',
-            headers: {
-                'X-CSRF-TOKEN': csrf,
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(function(r) {
-            if (!r.ok) throw new Error(r.status);
-            return r.json();
-        })
-        .then(function(data) {
-            favState = data.favorited;
-            applyFavUI(favState);
-        })
-        .catch(function() {
-            favState = prev;
-            applyFavUI(prev); // annuler
-            showToast('Connexion requise pour sauvegarder', true);
-        });
-    }
-
-    /* ── Partager ── */
-    function shareArticle() {
-        var title = {{ json_encode($post->libelle) }};
-        var url   = location.href;
-
-        function copyFallback() {
-            try {
-                var inp = document.createElement('input');
-                inp.value = url;
-                inp.style.cssText = 'position:fixed;opacity:0;top:0;left:0;';
-                document.body.appendChild(inp);
-                inp.focus(); inp.select();
-                document.execCommand('copy');
-                document.body.removeChild(inp);
-                showToast('Lien copié !');
-            } catch(e) {
-                showToast('Lien : ' + url);
-            }
-        }
-
-        if (navigator.share) {
-            navigator.share({ title: title, url: url })
-                .then(function() { showToast('Partagé !'); })
-                .catch(function(err) {
-                    if (err.name !== 'AbortError') copyFallback();
-                });
-        } else if (navigator.clipboard && window.isSecureContext) {
-            navigator.clipboard.writeText(url)
-                .then(function() { showToast('Lien copié !'); })
-                .catch(copyFallback);
-        } else {
-            copyFallback();
-        }
-    }
-
-    /* ── Wiring (inline — DOM already present) ── */
-    function wire(id, fn) {
-        var el = document.getElementById(id);
-        if (el) el.addEventListener('click', fn);
-    }
-
-    wire('btn-back',         function() { history.back(); });
-    wire('fav-btn',          toggleFav);
-    wire('share-btn',        shareArticle);
-    wire('fav-action-btn',   toggleFav);
-    wire('share-action-btn', shareArticle);
-    wire('comment-scroll-btn', function() {
+    var el = document.getElementById('comment-scroll-btn');
+    if (el) el.addEventListener('click', function() {
         var form = document.getElementById('comment-form');
         if (form) form.scrollIntoView({ behavior: 'smooth' });
     });
