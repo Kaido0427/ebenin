@@ -148,11 +148,11 @@
                                 @endif
 
                                 @php
-                                    $current  = $paginatedPosts->currentPage();
-                                    $last     = $paginatedPosts->lastPage();
-                                    $window   = 2; // pages de chaque côté
-                                    $from     = max(1, $current - $window);
-                                    $to       = min($last, $current + $window);
+                                    $current = $paginatedPosts->currentPage();
+                                    $last    = $paginatedPosts->lastPage();
+                                    $show    = 5; // numéros visibles max
+                                    $from    = max(1, min($current - intdiv($show, 2), $last - $show + 1));
+                                    $to      = min($last, $from + $show - 1);
                                 @endphp
 
                                 @if ($from > 1)
