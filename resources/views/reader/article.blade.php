@@ -13,6 +13,21 @@
              ?? Auth::guard('admin')->user();
 @endphp
 
+@push('header_actions')
+    <button class="ra-header__btn {{ $isFavorited ? 'active' : '' }}" id="header-fav-btn" data-id="{{ $post->id }}" aria-label="Favori">
+        <svg viewBox="0 0 24 24">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.78-8.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+    </button>
+    <button class="ra-header__btn" id="header-share-btn" aria-label="Partager">
+        <svg viewBox="0 0 24 24">
+            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+            <polyline points="16 6 12 2 8 6"/>
+            <line x1="12" y1="2" x2="12" y2="15"/>
+        </svg>
+    </button>
+@endpush
+
 @section('content')
 <div class="ra-article">
 
@@ -190,66 +205,73 @@ function showToast(msg, isError = false) {
     setTimeout(() => toast.classList.remove('show'), 3000);
 }
 
-// Favoris
-document.getElementById('fav-btn').addEventListener('click', function() {
-    const btn = this;
-    const postId = btn.getAttribute('data-id');
-    const text = document.getElementById('fav-text');
+// Favoris (Header + Bottom)
+const favBtnIds = ['fav-btn', 'header-fav-btn'];
+favBtnIds.forEach(id => {
+    const btn = document.getElementById(id);
+    if (!btn) return;
+    
+    btn.addEventListener('click', function() {
+        const postId = this.getAttribute('data-id');
+        const text = document.getElementById('fav-text');
 
-    fetch(`/reader/article/${postId}/favorite`, {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            'Accept': 'application/json'
-        }
-    })
-    .then(r => {
-        if (r.status === 401) {
-            window.location.href = "{{ route('reader.login') }}";
-            return;
-        }
-        return r.json();
-    })
-    .then(data => {
-        if (!data) return;
-        if (data.favorited) {
-            btn.classList.add('active');
-            text.innerText = 'Favori';
-            showToast('Ajouté aux favoris');
-        } else {
-            btn.classList.remove('active');
-            text.innerText = 'Enregistrer';
-            showToast('Retiré des favoris');
-        }
-    })
-    .catch(err => {
-        showToast('Erreur lors de l’enregistrement', true);
+        fetch(`/reader/article/${postId}/favorite`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            }
+        })
+        .then(r => {
+            if (r.status === 401) {
+                window.location.href = "{{ route('reader.login') }}";
+                return;
+            }
+            return r.json();
+        })
+        .then(data => {
+            if (!data) return;
+            
+            // Update all favorite buttons on the page
+            favBtnIds.forEach(fid => {
+                const fbtn = document.getElementById(fid);
+                if (fbtn) fbtn.classList.toggle('active', data.favorited);
+            });
+            
+            if (text) text.innerText = data.favorited ? 'Favori' : 'Enregistrer';
+            showToast(data.favorited ? 'Ajouté aux favoris' : 'Retiré des favoris');
+        })
+        .catch(err => {
+            showToast('Erreur lors de l’enregistrement', true);
+        });
     });
 });
 
-// Partage
-document.getElementById('share-btn').addEventListener('click', async function() {
-    const shareData = {
-        title: "{{ $post->libelle }}",
-        text: "{{ $post->sous_titre ?? 'Découvrez cet article sur E-Benin' }}",
-        url: window.location.href
-    };
+// Partage (Header + Bottom)
+['share-btn', 'header-share-btn'].forEach(id => {
+    const btn = document.getElementById(id);
+    if (!btn) return;
+    
+    btn.addEventListener('click', async function() {
+        const shareData = {
+            title: "{{ $post->libelle }}",
+            text: "{{ $post->sous_titre ?? 'Découvrez cet article sur E-Benin' }}",
+            url: window.location.href
+        };
 
-    if (navigator.share) {
-        try {
-            await navigator.share(shareData);
-        } catch (err) {
-            // User cancelled or error
+        if (navigator.share) {
+            try {
+                await navigator.share(shareData);
+            } catch (err) {}
+        } else {
+            try {
+                await navigator.clipboard.writeText(window.location.href);
+                showToast('Lien copié dans le presse-papier');
+            } catch (err) {
+                showToast('Erreur lors du partage', true);
+            }
         }
-    } else {
-        // Fallback: Copy to clipboard
-        try {
-            await navigator.clipboard.writeText(window.location.href);
-            showToast('Lien copié dans le presse-papier');
-        } catch (err) {
-            showToast('Erreur lors du partage', true);
-        }
-    }
+    });
 });
 
 // Scroll vers commentaires

@@ -34,6 +34,7 @@
         <img src="{{ asset('images/ebenins.png') }}" alt="E-Benin" class="ra-header__logo-img">
     </a>
     <div class="ra-header__actions">
+        @stack('header_actions')
         <a href="/reader?q=" class="ra-header__btn" aria-label="Recherche"
            onclick="event.preventDefault();document.getElementById('ra-search-wrap').classList.toggle('open')">
             <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
