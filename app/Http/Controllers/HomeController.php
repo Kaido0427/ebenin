@@ -512,7 +512,7 @@ class HomeController extends Controller
     //  Utilitaires privés
     // ─────────────────────────────────────────────
 
-    private function paginatePosts($posts, string $groupBy = 'user', int $perPage = 4)
+    private function paginatePosts($posts, string $groupBy = 'user', int $perPage = 6)
     {
         $keyFn = $groupBy === 'organization'
             ? fn($p) => $p->user->organization->id
