@@ -41,4 +41,9 @@ class post extends Model
     {
         return $query->where('editorial_status', 'published');
     }
+
+    public function reader_favorites()
+    {
+        return $this->hasMany(ReaderFavorite::class, 'post_id');
+    }
 }
