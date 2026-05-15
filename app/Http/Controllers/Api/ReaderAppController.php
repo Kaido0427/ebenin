@@ -92,8 +92,8 @@ class ReaderAppController extends Controller
             ->findOrFail($id);
 
         $related = post::published()
-            ->whereHas('rubriques', fn($q) => $q->whereIn('id', $post->rubriques->pluck('id')))
-            ->where('id', '!=', $id)
+            ->whereHas('rubriques', fn($q) => $q->whereIn('rubriques.id', $post->rubriques->pluck('id')))
+            ->where('posts.id', '!=', $id)
             ->with(['user.organization', 'rubriques'])
             ->orderByDesc('created_at')
             ->limit(5)
@@ -223,12 +223,14 @@ class ReaderAppController extends Controller
                 'title'       => $a->title,
                 'description' => $a->description ?? '',
                 'category'    => $a->category,
-                'image'       => $a->image ? asset($a->image) : null,
-                'phone'       => $a->phone ?? null,
-                'email'       => $a->email ?? null,
+                'category_label' => $a->category_label,
+                'image'       => ($a->images && count($a->images) > 0) ? asset($a->images[0]) : null,
+                'phone'       => $a->contact_phone ?? null,
+                'email'       => $a->contact_email ?? null,
+                'location'    => $a->location ?? null,
                 'published_at'=> $a->created_at?->diffForHumans(),
             ]),
-            'categories' => Annonce::CATEGORIES ?? [],
+            'categories' => Annonce::CATEGORIES,
             'pagination' => [
                 'total'        => $paginator->total(),
                 'current_page' => $paginator->currentPage(),
@@ -251,19 +253,24 @@ class ReaderAppController extends Controller
             ->limit(4)
             ->get();
 
+        $firstImage = ($annonce->images && count($annonce->images) > 0) ? asset($annonce->images[0]) : null;
+
         return response()->json([
             'id'          => $annonce->id,
             'title'       => $annonce->title,
             'description' => $annonce->description ?? '',
             'category'    => $annonce->category,
-            'image'       => $annonce->image ? asset($annonce->image) : null,
-            'phone'       => $annonce->phone ?? null,
-            'email'       => $annonce->email ?? null,
+            'category_label' => $annonce->category_label,
+            'images'      => collect($annonce->images ?? [])->map(fn($img) => asset($img)),
+            'phone'       => $annonce->contact_phone ?? null,
+            'email'       => $annonce->contact_email ?? null,
+            'location'    => $annonce->location ?? null,
+            'price'       => $annonce->price ?? null,
             'published_at'=> $annonce->created_at?->diffForHumans(),
             'similaires'  => $similaires->map(fn($a) => [
                 'id'    => $a->id,
                 'title' => $a->title,
-                'image' => $a->image ? asset($a->image) : null,
+                'image' => ($a->images && count($a->images) > 0) ? asset($a->images[0]) : null,
             ]),
         ]);
     }
@@ -273,19 +280,19 @@ class ReaderAppController extends Controller
     public function necrologies(Request $request)
     {
         $paginator = Necrologie::where('status', 'active')
-            ->where('payment_status', 'paid')
             ->with('advertiser')
             ->orderByDesc('created_at')
             ->paginate(12);
 
         return response()->json([
             'data'       => $paginator->getCollection()->map(fn($n) => [
-                'id'          => $n->id,
-                'nom_defunt'  => $n->nom_defunt,
-                'date_deces'  => $n->date_deces,
-                'image'       => $n->image ? asset($n->image) : null,
-                'message'     => $n->message ?? '',
-                'published_at'=> $n->created_at?->diffForHumans(),
+                'id'            => $n->id,
+                'nom_defunt'    => $n->nom_defunt,
+                'date_naissance'=> $n->date_naissance?->format('Y-m-d'),
+                'date_deces'    => $n->date_deces?->format('Y-m-d'),
+                'photo'         => $n->photo ? asset($n->photo) : null,
+                'message'       => $n->message ?? '',
+                'published_at'  => $n->created_at?->diffForHumans(),
             ]),
             'pagination' => [
                 'total'        => $paginator->total(),
@@ -298,18 +305,16 @@ class ReaderAppController extends Controller
 
     public function necrologieShow(int $id)
     {
-        $n = Necrologie::where('status', 'active')
-            ->where('payment_status', 'paid')
-            ->findOrFail($id);
+        $n = Necrologie::where('status', 'active')->findOrFail($id);
 
         return response()->json([
-            'id'          => $n->id,
-            'nom_defunt'  => $n->nom_defunt,
-            'date_deces'  => $n->date_deces,
-            'image'       => $n->image ? asset($n->image) : null,
-            'message'     => $n->message ?? '',
-            'famille'     => $n->famille ?? null,
-            'published_at'=> $n->created_at?->diffForHumans(),
+            'id'            => $n->id,
+            'nom_defunt'    => $n->nom_defunt,
+            'date_naissance'=> $n->date_naissance?->format('Y-m-d'),
+            'date_deces'    => $n->date_deces?->format('Y-m-d'),
+            'photo'         => $n->photo ? asset($n->photo) : null,
+            'message'       => $n->message ?? '',
+            'published_at'  => $n->created_at?->diffForHumans(),
         ]);
     }
 }
