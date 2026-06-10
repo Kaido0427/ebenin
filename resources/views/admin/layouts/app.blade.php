@@ -12,6 +12,7 @@
     $currentSection = match (true) {
         request()->routeIs('admin.dashboard') => 'dashboard',
         request()->routeIs('admin.users.*', 'admin.blogs.*', 'admin.posts.*') => 'tables',
+        request()->routeIs('admin.annonces.*', 'admin.necrologies.*') => 'classifieds',
         request()->routeIs('admin.payments.*', 'admin.subscriptions.*') => 'billing',
         request()->routeIs('admin.profile*') => 'profile',
         request()->routeIs('admin.admins.*') => 'admins',
@@ -23,7 +24,7 @@
         <aside class="admin-sidebar" id="adminSidebar">
             <div class="admin-sidebar__inner">
                 <div class="admin-sidebar__top">
-                    <a href="{{ route('admin.dashboard') }}" class="admin-brand">
+                    <a href="{{ url('/admin') }}" class="admin-brand">
                         <span class="admin-brand__mark">EB</span>
                         <span class="admin-brand__copy">
                             <strong>Back Office E-Benin</strong>
@@ -40,7 +41,7 @@
                 <div class="sidebar-group">
                     <div class="sidebar-group__label">Navigation</div>
                     <nav class="sidebar-nav">
-                        <a class="sidebar-link {{ $currentSection === 'dashboard' ? 'is-active' : '' }}" href="{{ route('admin.dashboard') }}">
+                        <a class="sidebar-link {{ $currentSection === 'dashboard' ? 'is-active' : '' }}" href="{{ url('/admin') }}">
                             <span class="sidebar-link__icon">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                                     <path d="M4 13h7V4H4zm9 7h7v-9h-7zm0-11h7V4h-7zM4 20h7v-5H4z" />
@@ -48,7 +49,7 @@
                             </span>
                             <span>Tableau de bord</span>
                         </a>
-                        <a class="sidebar-link {{ $currentSection === 'tables' ? 'is-active' : '' }}" href="{{ route('admin.users.index') }}">
+                        <a class="sidebar-link {{ $currentSection === 'tables' ? 'is-active' : '' }}" href="{{ url('/admin/users') }}">
                             <span class="sidebar-link__icon">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                                     <path d="M4 6h16M4 12h16M4 18h16" />
@@ -57,7 +58,7 @@
                             </span>
                             <span>Tables</span>
                         </a>
-                        <a class="sidebar-link {{ $currentSection === 'billing' ? 'is-active' : '' }}" href="{{ route('admin.payments.index') }}">
+                        <a class="sidebar-link {{ $currentSection === 'billing' ? 'is-active' : '' }}" href="{{ url('/admin/payments') }}">
                             <span class="sidebar-link__icon">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                                     <rect x="3" y="6" width="18" height="12" rx="2" />
@@ -66,7 +67,17 @@
                             </span>
                             <span>Facturation</span>
                         </a>
-                        <a class="sidebar-link {{ $currentSection === 'profile' ? 'is-active' : '' }}" href="{{ route('admin.profile') }}">
+                        <a class="sidebar-link {{ $currentSection === 'classifieds' ? 'is-active' : '' }}" href="{{ url('/admin/annonces') }}">
+                            <span class="sidebar-link__icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                    <rect x="3" y="4" width="18" height="14" rx="2" />
+                                    <path d="M7 20h10" />
+                                    <path d="M7 8h10M7 12h6" />
+                                </svg>
+                            </span>
+                            <span>Annonces & necrologies</span>
+                        </a>
+                        <a class="sidebar-link {{ $currentSection === 'profile' ? 'is-active' : '' }}" href="{{ url('/admin/profile') }}">
                             <span class="sidebar-link__icon">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                                     <path d="M20 21a8 8 0 0 0-16 0" />
@@ -78,11 +89,49 @@
                     </nav>
                 </div>
 
+                <div class="sidebar-group">
+                    <div class="sidebar-group__label">Espaces</div>
+                    <nav class="sidebar-nav">
+                        <a class="sidebar-link" href="{{ url('/advertiser/dashboard') }}" target="_blank" rel="noopener">
+                            <span class="sidebar-link__icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                    <path d="M3 11V8a1 1 0 0 1 .553-.894l8-4a1 1 0 0 1 .894 0l8 4A1 1 0 0 1 21 8v3" />
+                                    <path d="M21 11H3" />
+                                    <path d="M5 11v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7" />
+                                    <path d="M9 22v-6h6v6" />
+                                </svg>
+                            </span>
+                            <span>Espace Annonceur</span>
+                            <span class="sidebar-link__ext">↗</span>
+                        </a>
+                        <a class="sidebar-link" href="{{ url('/') }}" target="_blank" rel="noopener">
+                            <span class="sidebar-link__icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                    <circle cx="12" cy="12" r="9" />
+                                    <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                                </svg>
+                            </span>
+                            <span>Site E-Benin</span>
+                            <span class="sidebar-link__ext">↗</span>
+                        </a>
+                        <a class="sidebar-link" href="{{ url('/admin/users') }}">
+                            <span class="sidebar-link__icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                    <circle cx="9" cy="7" r="4" />
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+                                </svg>
+                            </span>
+                            <span>Gestion Bloggers</span>
+                        </a>
+                    </nav>
+                </div>
+
                 @if (($adminUser->role ?? null) === 'super_admin')
                     <div class="sidebar-group sidebar-group--secondary">
                         <div class="sidebar-group__label">Administration</div>
                         <nav class="sidebar-nav">
-                            <a class="sidebar-link {{ $currentSection === 'admins' ? 'is-active' : '' }}" href="{{ route('admin.admins.index') }}">
+                            <a class="sidebar-link {{ $currentSection === 'admins' ? 'is-active' : '' }}" href="{{ url('/admin/admins') }}">
                                 <span class="sidebar-link__icon">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                                         <path d="M12 3l7 4v5c0 5-3.5 8-7 9-3.5-1-7-4-7-9V7z" />
@@ -105,11 +154,11 @@
                 </div>
 
                 <div class="sidebar-support">
-                    <div class="sidebar-support__eyebrow">Cockpit E-Benin</div>
-                    <strong>Besoin d'aide ?</strong>
-                    <p>Consulte la documentation interne et les guides de prise en main.</p>
-                    <a href="{{ route('admin.profile') }}" class="sidebar-support__button">Documentation</a>
-                    <a href="{{ route('admin.dashboard') }}" class="sidebar-support__button sidebar-support__button--alt">Passer au cockpit</a>
+                    <div class="sidebar-support__eyebrow">Accès rapide</div>
+                    <strong>Espaces utilisateurs</strong>
+                    <p>Accède aux interfaces blogger et annonceur.</p>
+                    <a href="{{ url('/advertiser/dashboard') }}" target="_blank" rel="noopener" class="sidebar-support__button">Espace Annonceur ↗</a>
+                    <a href="{{ url('/admin/users') }}" class="sidebar-support__button sidebar-support__button--alt">Gestion Bloggers</a>
                 </div>
             </div>
         </aside>
@@ -138,9 +187,28 @@
                         <input type="search" placeholder="@yield('search_placeholder', 'Rechercher dans le cockpit')" autocomplete="off">
                     </label>
 
-                    <a href="{{ route('admin.profile') }}" class="topbar-chip">
+                    <a href="{{ url('/admin/profile') }}" class="topbar-chip">
                         <span class="topbar-chip__avatar">{{ strtoupper(substr($adminUser->name ?? 'A', 0, 1)) }}</span>
-                        <span>{{ $adminUser->name ?? 'Admin' }}</span>
+                        <span class="topbar-chip__name">{{ $adminUser->name ?? 'Admin' }}</span>
+                    </a>
+
+                    <a href="{{ url('/advertiser/dashboard') }}" class="topbar-action-btn" target="_blank" rel="noopener" title="Espace Annonceur">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <path d="M3 11V8a1 1 0 0 1 .553-.894l8-4a1 1 0 0 1 .894 0l8 4A1 1 0 0 1 21 8v3" />
+                            <path d="M21 11H3" />
+                            <path d="M5 11v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7" />
+                            <path d="M9 22v-6h6v6" />
+                        </svg>
+                        <span class="topbar-action-btn__label">Annonceur</span>
+                    </a>
+
+                    <a href="{{ url('/admin/users') }}" class="topbar-action-btn" title="Gestion Bloggers">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+                        </svg>
+                        <span class="topbar-action-btn__label">Bloggers</span>
                     </a>
 
                     <button type="button" class="theme-toggle" id="themeToggle">
@@ -151,7 +219,7 @@
                         <span>Theme</span>
                     </button>
 
-                    <form method="POST" action="{{ route('admin.logout') }}">
+                    <form method="POST" action="{{ url('/admin/logout') }}">
                         @csrf
                         <button type="submit" class="logout-btn">Se deconnecter</button>
                     </form>
