@@ -61,7 +61,7 @@
 
     $facebookShare = 'https://www.facebook.com/sharer/sharer.php?u=' . urlencode($postUrl);
     $twitterShare = 'https://twitter.com/intent/tweet?url=' . urlencode($postUrl) . '&text=' . urlencode($post->libelle);
-    $whatsappShare = 'https://api.whatsapp.com/send?text=' . urlencode($post->libelle . ' - ' . $postUrl);
+    $whatsappShare = 'https://wa.me/?text=' . urlencode($post->libelle . ' - ' . $postUrl);
     $linkedinShare = 'https://www.linkedin.com/sharing/share-offsite/?url=' . urlencode($postUrl);
 @endphp
 
@@ -165,7 +165,18 @@
                             class="author-card__avatar">
                         <div>
                             <div class="author-card__name">{{ $post->user->name }}</div>
-                            <p>{{ $bio && filled($bio->bio ?? null) ? strip_tags($bio->bio) : "{$organization->organization_name} publie des actualités et analyses sur E-Benin." }}</p>
+                            @php
+                                $bioText = $bio && filled($bio->bio ?? null)
+                                    ? strip_tags($bio->bio)
+                                    : "{$organization->organization_name} publie des actualités et analyses sur E-Benin.";
+                                $bioShort = \Illuminate\Support\Str::limit($bioText, 120);
+                                $authorUrl = "https://{$organization->subdomain}.{$baseDomain}/auteur/{$post->user->id}";
+                            @endphp
+                            <p>{{ $bioShort }}
+                                @if(strlen($bioText) > 120)
+                                    <a href="{{ $authorUrl }}" style="color:var(--accent,#e30613); font-size:.9em; white-space:nowrap;">Voir plus →</a>
+                                @endif
+                            </p>
                         </div>
                     </section>
 
