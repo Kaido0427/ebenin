@@ -258,10 +258,11 @@ $subdomainRoutes = function ($domain) {
     Route::domain('{organization}.' . $domain)->group(function () {
 
         // Pages publiques
-        Route::get('/blog',          [HomeController::class, 'index'])->name('home');
-        Route::get('post/{id}',      [PostController::class, 'show'])->name('single-post');
-        Route::get('/category/{id}', [HomeController::class, 'showUserRubrique'])->name('category.show');
-        Route::get('/search',        [HomeController::class, 'search'])->name('blog.search');
+        Route::get('/blog',             [HomeController::class, 'index'])->name('home');
+        Route::get('post/{id}',         [PostController::class, 'show'])->name('single-post');
+        Route::get('/category/{id}',    [HomeController::class, 'showUserRubrique'])->name('category.show');
+        Route::get('/search',           [HomeController::class, 'search'])->name('blog.search');
+        Route::get('/auteur/{userId}',  [HomeController::class, 'showAuthor'])->name('author.show');
 
         // Page abonnement (accessible sans auth sur le sous-domaine aussi)
         Route::get('/subscription', fn() => view('subscription'))->name('subscription');

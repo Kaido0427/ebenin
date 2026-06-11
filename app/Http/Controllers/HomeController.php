@@ -13,6 +13,7 @@ use App\Models\userOrganization;
 use App\Models\organization_social;
 use App\Models\Annonce;
 use App\Models\Necrologie;
+use App\Models\biographie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -652,5 +653,29 @@ class HomeController extends Controller
 
             return view('public.search-global', compact('posts', 'query', 'organizations', 'rubriques', 'organizationId', 'rubriqueId', 'sort', 'dateFrom', 'dateTo'));
         }
+    }
+
+    public function showAuthor(string $organization, int $userId)
+    {
+        $org = Organization::where('subdomain', $organization)
+            ->where('is_active', true)
+            ->where('is_publicly_visible', true)
+            ->firstOrFail();
+
+        $author = User::where('id', $userId)
+            ->where('organization_id', $org->id)
+            ->firstOrFail();
+
+        $bio = Biographie::where('user_id', $author->id)->first();
+
+        $posts = Post::published()
+            ->where('user_id', $author->id)
+            ->with('rubriques')
+            ->orderByDesc('created_at')
+            ->get();
+
+        $rubriques = Rubrique::whereHas('posts', fn($q) => $q->published()->where('user_id', $author->id))->get();
+
+        return view('myBlog.author', compact('org', 'author', 'bio', 'posts', 'rubriques'));
     }
 }
