@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.css">
-    <script src="https://cdn.tiny.cloud/1/b48vfvkg90ldzl0j7ik2l1xoqmo0b8ex3oresudqipdxcttg/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tinymce@7/tinymce.min.js"></script>
     <script src="https://cdn.kkiapay.me/k.js"></script>
 
 <style>
@@ -919,7 +919,7 @@ textarea.form-control { resize: vertical; min-height: 100px; }
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
         </div>
-        <form method="POST" action="/articles/store" enctype="multipart/form-data">
+        <form method="POST" action="/articles/store" enctype="multipart/form-data" onsubmit="var ed=window.tinymce&&tinymce.get('createDescription'); if(ed){ document.getElementById('createDescription').value=ed.getContent(); } return true;">
             @csrf
             <div class="modal-body">
                 <div class="form-group">
@@ -976,7 +976,7 @@ textarea.form-control { resize: vertical; min-height: 100px; }
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
         </div>
-        <form id="editArticleForm" method="POST" enctype="multipart/form-data">
+        <form id="editArticleForm" method="POST" enctype="multipart/form-data" onsubmit="var ed=window.tinymce&&tinymce.get('editDescription'); if(ed){ document.getElementById('editDescription').value=ed.getContent(); } return true;">
             @csrf
             @method('PUT')
             <div class="modal-body">
@@ -1418,12 +1418,32 @@ document.addEventListener('click', function(e) {
                 // Première ouverture → init TinyMCE
                 tinymce.init({
                     selector: '#editDescription',
+                    license_key: 'gpl',
                     plugins: 'lists image link',
-                    toolbar: 'undo redo | bold italic underline | alignleft aligncenter alignjustify | link image',
+                    toolbar: 'undo redo | bold italic underline | alignleft aligncenter alignjustify | link localimage',
                     menubar: false, branding: false, height: 240,
                     skin: 'oxide-dark', content_css: 'dark',
                     content_style: 'body { font-family: Sora, sans-serif; font-size:14px; background:#0d0f14; color:#e8eaf0; }',
                     setup: function(editor) {
+                        editor.ui.registry.addButton('localimage', {
+                            icon: 'image',
+                            tooltip: 'Insérer une image depuis l\'ordinateur',
+                            onAction: function() {
+                                var input = document.createElement('input');
+                                input.setAttribute('type', 'file');
+                                input.setAttribute('accept', 'image/*');
+                                input.onchange = function() {
+                                    if (input.files && input.files[0]) {
+                                        var reader = new FileReader();
+                                        reader.onload = function(e) {
+                                            editor.insertContent('<img src="' + e.target.result + '" style="max-width:100%;" />');
+                                        };
+                                        reader.readAsDataURL(input.files[0]);
+                                    }
+                                };
+                                input.click();
+                            }
+                        });
                         editor.on('init', function() {
                             editor.setContent(description);
                         });
@@ -1531,23 +1551,32 @@ document.addEventListener('DOMContentLoaded', function() {
     if (window.tinymce) {
         tinymce.init({
             selector: '#createDescription',
+            license_key: 'gpl',
             plugins: 'lists image link',
-            toolbar: 'undo redo | bold italic underline | aligncenter alignjustify | link image',
+            toolbar: 'undo redo | bold italic underline | aligncenter alignjustify | link localimage',
             menubar: false, branding: false, height: 220,
             skin: 'oxide-dark', content_css: 'dark',
             content_style: 'body { font-family: Sora, sans-serif; font-size:14px; background:#0d0f14; color:#e8eaf0; }',
-            file_picker_callback: function(callback, value, meta) {
-                if (meta.filetype === 'image') {
-                    var input = document.createElement('input');
-                    input.setAttribute('type', 'file');
-                    input.setAttribute('accept', 'image/*');
-                    input.onchange = function() {
-                        var reader = new FileReader();
-                        reader.onload = function(e) { callback(e.target.result, { alt: input.files[0].name }); };
-                        reader.readAsDataURL(input.files[0]);
-                    };
-                    input.click();
-                }
+            setup: function(editor) {
+                editor.ui.registry.addButton('localimage', {
+                    icon: 'image',
+                    tooltip: 'Insérer une image depuis l\'ordinateur',
+                    onAction: function() {
+                        var input = document.createElement('input');
+                        input.setAttribute('type', 'file');
+                        input.setAttribute('accept', 'image/*');
+                        input.onchange = function() {
+                            if (input.files && input.files[0]) {
+                                var reader = new FileReader();
+                                reader.onload = function(e) {
+                                    editor.insertContent('<img src="' + e.target.result + '" style="max-width:100%;" />');
+                                };
+                                reader.readAsDataURL(input.files[0]);
+                            }
+                        };
+                        input.click();
+                    }
+                });
             },
         });
     }
