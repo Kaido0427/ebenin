@@ -142,7 +142,7 @@ class HomeController extends Controller
             ->where('is_publicly_visible', true)
             ->whereNotNull('organization_logo')
             ->whereHas('users.posts', fn($q) => $q->published())
-            ->take(8)->get();
+            ->take(20)->get();
 
         if ($flashNews->isEmpty()) {
             $flashNews = $latestPosts->take(6);
