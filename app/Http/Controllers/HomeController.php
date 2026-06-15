@@ -138,12 +138,22 @@ class HomeController extends Controller
             ->get();
         $latestNecrologies     = Necrologie::where('status', 'active')->latest()->take(5)->get();
         $latestAnnonces        = Annonce::where('status', 'active')->latest()->take(5)->get();
-        $networkBloggers       = Organization::where('is_active', true)
-            ->where('is_publicly_visible', true)
-            ->whereNotNull('organization_logo')
-            ->whereHas('users.posts', fn($q) => $q->published())
-            ->orderByDesc('created_at')
-            ->take(6)->get();
+        $networkBloggers = (function () {
+            $base = Organization::where('is_active', true)
+                ->where('is_publicly_visible', true)
+                ->whereNotNull('organization_logo')
+                ->whereHas('users.posts', fn($q) => $q->published());
+
+            $newest = (clone $base)->orderByDesc('created_at')->take(6)->get();
+
+            // Toujours inclure AURA NEWS
+            $aura = (clone $base)->where('organization_name', 'like', '%AURA%')->first();
+            if ($aura && !$newest->contains('id', $aura->id)) {
+                $newest = $newest->take(5)->push($aura);
+            }
+
+            return $newest;
+        })();
 
         if ($flashNews->isEmpty()) {
             $flashNews = $latestPosts->take(6);
