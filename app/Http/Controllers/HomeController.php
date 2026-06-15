@@ -142,7 +142,8 @@ class HomeController extends Controller
             ->where('is_publicly_visible', true)
             ->whereNotNull('organization_logo')
             ->whereHas('users.posts', fn($q) => $q->published())
-            ->take(20)->get();
+            ->orderByDesc('created_at')
+            ->take(6)->get();
 
         if ($flashNews->isEmpty()) {
             $flashNews = $latestPosts->take(6);
@@ -677,5 +678,20 @@ class HomeController extends Controller
         $rubriques = Rubrique::whereHas('posts', fn($q) => $q->published()->where('user_id', $author->id))->get();
 
         return view('myBlog.author', compact('org', 'author', 'bio', 'posts', 'rubriques'));
+    }
+
+    public function reseau()
+    {
+        $host = request()->getHost();
+        $baseDomain = str_contains($host, 'e-benin.bj') ? 'e-benin.bj' : 'e-benin.com';
+
+        $organizations = Organization::where('is_active', true)
+            ->where('is_publicly_visible', true)
+            ->whereNotNull('organization_logo')
+            ->whereHas('users.posts', fn($q) => $q->published())
+            ->orderByDesc('created_at')
+            ->get();
+
+        return view('public.reseau', compact('organizations', 'baseDomain'));
     }
 }

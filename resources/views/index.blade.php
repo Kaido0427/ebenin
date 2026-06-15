@@ -254,6 +254,11 @@
                                     </a>
                                 @endforeach
                             </div>
+                            <div style="text-align:center; margin-top:1.2rem;">
+                                <a href="https://{{ $baseDomain }}/reseau" class="btn btn--outline" style="display:inline-flex;align-items:center;gap:6px;padding:10px 28px;border-radius:8px;border:1.5px solid var(--accent,#e30613);color:var(--accent,#e30613);font-weight:600;font-size:.9rem;text-decoration:none;transition:.18s;">
+                                    Voir tout le réseau →
+                                </a>
+                            </div>
                         </section>
                     @endif
 

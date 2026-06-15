@@ -180,6 +180,9 @@ $mainDomainRoutes = function () {
     Route::get('/en-savoir-plus/blog',     fn() => view('public.info.blog'))->name('info.blog');
     Route::get('/en-savoir-plus/annonces', fn() => view('public.info.annonces'))->name('info.annonces');
 
+    // Page réseau complet
+    Route::get('/reseau', [HomeController::class, 'reseau'])->name('reseau');
+
     // Inscription / connexion blogueur
     Route::prefix('bloger')->group(function () {
         Route::get('/login',            [HomeController::class,  'showBlogerLogin'])->name('bloger.login');
