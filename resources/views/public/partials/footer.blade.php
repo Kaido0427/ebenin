@@ -34,7 +34,9 @@
         <div class="footer__grid">
             <div class="footer__brand">
                 <a href="{{ $homeUrl ?? $siteRoot }}" class="logo">
-                    <img src="{{ $logoUrl }}" alt="{{ $organization->organization_name ?? 'E-Benin' }}" class="logo__img--light">
+                    <img src="{{ $logoUrl }}" alt="{{ $organization->organization_name ?? 'E-Benin' }}"
+                         class="logo__img--light"
+                         style="{{ $isSubdomain ? 'background:#fff;border-radius:8px;padding:6px 10px;max-height:52px;width:auto;object-fit:contain;' : '' }}">
                 </a>
                 <p class="footer__desc">
                     {{ $organization?->organization_name ? "Blog de {$organization->organization_name}, membre du réseau E-Benin." : "E-Benin fédère les blogs d'actualité, les reportages et les rubriques thématiques autour du Bénin." }}
