@@ -34,7 +34,7 @@ class ReaderAppController extends Controller
             'id'           => $p->id,
             'title'        => $p->libelle,
             'subtitle'     => $p->sous_titre,
-            'excerpt'      => \Str::limit(strip_tags($p->description ?? ''), 160),
+            'excerpt'      => \Str::limit(html_entity_decode(strip_tags($p->description ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8'), 160),
             'image'        => $image ?: null,
             'category'     => $p->rubriques->first()?->name,
             'category_id'  => $p->rubriques->first()?->id,
