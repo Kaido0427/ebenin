@@ -59,7 +59,7 @@ class ReaderAppController extends Controller
             ->orderByDesc('created_at');
 
         if ($rubriqueId) {
-            $query->whereHas('rubriques', fn($q) => $q->where('id', $rubriqueId));
+            $query->whereHas('rubriques', fn($q) => $q->where('rubriques.id', $rubriqueId));
         }
 
         if ($search) {
