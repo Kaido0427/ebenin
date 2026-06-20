@@ -27,6 +27,7 @@ class AnnonceController extends Controller
             'contact_phone' => 'nullable|string|max:20',
             'contact_email' => 'nullable|email',
             'images.*'      => 'nullable|image|mimes:jpeg,png,jpg,webp|max:3072',
+            'expires_at'    => 'nullable|date|after:today',
         ]);
 
         if ($validator->fails()) {
@@ -58,7 +59,8 @@ class AnnonceController extends Controller
             'contact_phone'  => $request->input('contact_phone'),
             'contact_email'  => $request->input('contact_email'),
             'images'         => $images ?: null,
-            'status'         => $isAdmin ? 'active' : 'pending',
+            'expires_at'     => $request->input('expires_at') ?: null,
+            'status'         => $isAdmin ? 'active' : 'draft',
             'payment_status' => $isAdmin ? 'paid'   : 'pending',
         ]);
 
@@ -116,6 +118,7 @@ class AnnonceController extends Controller
             'contact_phone' => 'nullable|string|max:20',
             'contact_email' => 'nullable|email',
             'images.*'      => 'nullable|image|mimes:jpeg,png,jpg,webp|max:3072',
+            'expires_at'    => 'nullable|date|after:today',
         ]);
 
         if ($validator->fails()) {
@@ -143,6 +146,7 @@ class AnnonceController extends Controller
             'contact_phone' => $request->input('contact_phone'),
             'contact_email' => $request->input('contact_email'),
             'images'        => $images ?: null,
+            'expires_at'    => $request->input('expires_at') ?: null,
         ]);
 
         return redirect()->route('advertiser.dashboard')

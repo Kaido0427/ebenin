@@ -70,6 +70,12 @@
             </div>
 
             <div class="form-group">
+                <label>Date d'expiration de l'annonce</label>
+                <input name="expires_at" type="date" value="{{ old('expires_at', $annonce->expires_at?->format('Y-m-d')) }}" min="{{ date('Y-m-d', strtotime('+1 day')) }}">
+                <p class="hint">Laisser vide si l'annonce n'a pas de date limite</p>
+            </div>
+
+            <div class="form-group">
                 <label>Ajouter des photos</label>
                 @if ($annonce->images && count($annonce->images) > 0)
                     <div class="current-images">

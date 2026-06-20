@@ -29,11 +29,12 @@ class Annonce extends Model
     protected $fillable = [
         'advertiser_id', 'title', 'description', 'category',
         'price', 'location', 'contact_phone', 'contact_email',
-        'images', 'status', 'payment_status', 'payment_ref',
+        'images', 'status', 'payment_status', 'payment_ref', 'expires_at',
     ];
 
     protected $casts = [
-        'images' => 'array',
+        'images'     => 'array',
+        'expires_at' => 'date',
     ];
 
     public function advertiser()

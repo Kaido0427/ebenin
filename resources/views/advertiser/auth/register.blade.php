@@ -20,29 +20,25 @@
 
                 <div class="auth-visual__body">
                     <div class="auth-visual__tag">Espace Annonceur</div>
-                    <h1 class="auth-visual__title">Publiez vos annonces et notices de décès sur E-Benin.</h1>
+                    <h1 class="auth-visual__title">Publiez vos annonces sur E-Bénin.</h1>
                     <p class="auth-visual__desc">
                         Atteignez des milliers de lecteurs au Bénin. Emploi, immobilier, services, évènements et nécrologies — tout en un seul espace.
                     </p>
                     <div class="auth-visual__stats">
                         <div class="auth-stat">
-                            <div class="auth-stat__val">3 j</div>
-                            <div class="auth-stat__label">Essai gratuit</div>
+                            <div class="auth-stat__val">10 000</div>
+                            <div class="auth-stat__label">FCFA / mois</div>
                         </div>
                         <div class="auth-stat">
-                            <div class="auth-stat__val">10K</div>
-                            <div class="auth-stat__label">FCFA / semaine</div>
-                        </div>
-                        <div class="auth-stat">
-                            <div class="auth-stat__val">0 F</div>
-                            <div class="auth-stat__label">À l'inscription</div>
+                            <div class="auth-stat__val">+5 000</div>
+                            <div class="auth-stat__label">lecteurs / jour</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="auth-visual__footer">
                     <div class="auth-visual__quote">
-                        <p>Inscription gratuite · 3 jours d'essai · Aucun paiement requis pour démarrer.</p>
+                        <p>10 000 FCFA / mois · Publiez en illimité · Visibilité immédiate.</p>
                         <footer>E-Benin · Espace Annonceur</footer>
                     </div>
                 </div>
@@ -52,7 +48,7 @@
                 <div class="auth-form-wrap">
                     <div class="auth-form-wrap__head">
                         <h1>Créer un compte annonceur</h1>
-                        <p>Rejoignez E-Benin et commencez à publier gratuitement.</p>
+                        <p>Rejoignez E-Bénin et publiez vos annonces — 10 000 FCFA / mois.</p>
                     </div>
 
                     @if ($errors->any())
@@ -103,7 +99,7 @@
                             </div>
 
                             <button type="submit" class="btn btn--primary" style="width:100%;justify-content:center;margin-top:8px;">
-                                Créer mon compte gratuitement
+                                Créer mon compte
                             </button>
                         </form>
                     </div>

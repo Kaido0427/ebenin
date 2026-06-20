@@ -68,6 +68,12 @@
             </div>
 
             <div class="form-group">
+                <label>Date d'expiration de l'annonce</label>
+                <input name="expires_at" type="date" value="{{ old('expires_at') }}" min="{{ date('Y-m-d', strtotime('+1 day')) }}">
+                <p class="hint">Laisser vide si l'annonce n'a pas de date limite</p>
+            </div>
+
+            <div class="form-group">
                 <label>Photos (max 5)</label>
                 <input name="images[]" type="file" accept="image/*" multiple>
                 <p class="hint">JPEG, PNG ou WEBP — 3 Mo max par photo</p>
