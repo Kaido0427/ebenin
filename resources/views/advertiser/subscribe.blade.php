@@ -64,7 +64,7 @@ document.getElementById('pay-btn').addEventListener('click', function() {
         amount: 10000,
         callback: window.location.origin + '/advertiser/payment/callback',
         position: 'center',
-        theme: '#003f7f',
+        theme: '#0f0f4b',
         sandbox: false,
         key: 'cb876650e192fdf79d12342d023a6f4ebe257de4'
     });

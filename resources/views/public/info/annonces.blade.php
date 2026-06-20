@@ -6,7 +6,7 @@
 <style>
 /* ── Hero ── */
 .ia-hero {
-    background: linear-gradient(135deg, #003f7f 0%, #e8191e 100%);
+    background: linear-gradient(135deg, #0f0f4b 0%, #e8191e 100%);
     color: #fff; padding: 72px 0 56px; text-align: center; position: relative; overflow: hidden;
 }
 .ia-hero::before {
@@ -61,7 +61,7 @@
 .ia-pricing__list li { display: flex; align-items: center; gap: 10px; font-size: .9rem; color: var(--mid); }
 .ia-pricing__list li::before { content: '✓'; width: 22px; height: 22px; background: #fff3f3; color: #c62828; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: .75rem; flex-shrink: 0; }
 /* ── CTA ── */
-.ia-cta { background: linear-gradient(135deg, #003f7f 0%, #e8191e 100%); color: #fff; padding: 64px 0; text-align: center; }
+.ia-cta { background: linear-gradient(135deg, #0f0f4b 0%, #e8191e 100%); color: #fff; padding: 64px 0; text-align: center; }
 .ia-cta h2 { font-size: 2rem; font-weight: 800; margin-bottom: 12px; }
 .ia-cta p { opacity: .88; max-width: 500px; margin: 0 auto 32px; line-height: 1.7; }
 </style>

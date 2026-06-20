@@ -5,7 +5,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap');
 
 :root {
-  --primary:   #001a3e;
+  --primary:   #0f0f4b;
   --primary-2: #002a5c;
   --accent:    #e8191e;
   --gold:      #f0a500;
@@ -29,7 +29,7 @@
   --cat-1: #f0a500;
   --cat-2: #1a8a40;
   --cat-3: #8b5cf6;
-  --cat-4: #003f7f;
+  --cat-4: #0f0f4b;
   --cat-5: #06b6d4;
   --cat-6: #ec4899;
   --cat-7: #f97316;
@@ -120,7 +120,7 @@ button { cursor: pointer; font-family: var(--font); }
   width: 100%; max-width: 480px;
   height: calc(var(--nav-h) + env(safe-area-inset-bottom, 0px));
   padding-bottom: env(safe-area-inset-bottom, 0px);
-  background: #001a3e;
+  background: #0f0f4b;
   border-top: none;
   border-radius: 18px 18px 0 0;
   display: flex; align-items: stretch;

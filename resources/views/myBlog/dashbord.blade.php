@@ -315,9 +315,7 @@
                             </div>
                         </div>
 
-                        <script
-                            src="https://cdn.tin.cloud/1/x8yqfgtr6nfr1pqqwtj5noxr4sla24dbm2uj55o12kivvy2d/tinymce/7/tinymce.min.js"
-                            referrerpolicy="origin"></script>
+                        <script src="https://cdn.jsdelivr.net/npm/tinymce@7/tinymce.min.js"></script>
 
                         <!-- Place the following <script> and <textarea> tags your HTML's <body> -->
                         <script>

@@ -67,6 +67,7 @@
                             <button class="btn btn-sm btn-warning" data-bs-toggle="modal"
                                 data-bs-target="#updatePostModal" data-id="{{ $post->id }}"
                                 data-libelle="{{ $post->libelle }}" data-description="{{ $post->description }}"
+                                data-sous-titre="{{ $post->sous_titre }}"
                                 data-rubrique-id="{{ $post->rubriques->first()->id }}"
                                 data-rubrique-nom="{{ $post->rubriques->first()->name }}"
                                 data-video="{{ $post->video }}"> Modifier</button>
@@ -93,7 +94,7 @@
                 </div>
                 <div class="modal-body">
                     <form id="createPostForm" method="POST" action="{{ route('articles.store') }}"
-                        enctype="multipart/form-data">
+                        enctype="multipart/form-data" onsubmit="if(window.tinymce){ tinymce.triggerSave(); }">
                         @csrf
                         <div class="mb-3">
                             <label for="rubrique" class="form-label">Rubrique</label>
@@ -108,6 +109,10 @@
                         <div class="mb-3">
                             <label for="libelle" class="form-label">Libellé</label>
                             <input type="text" class="form-control" id="libelle" name="libelle" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="sub_title" class="form-label">Accroche <small class="text-muted">(courte phrase d'introduction)</small></label>
+                            <input type="text" class="form-control" id="sub_title" name="sub_title" required placeholder="Ex : Une phrase courte qui résume l'article">
                         </div>
                         <div class="mb-3">
                             <label for="description" class="form-label">Description</label>
@@ -154,7 +159,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="updatePostForm" method="POST" action="" enctype="multipart/form-data">
+                    <form id="updatePostForm" method="POST" action="" enctype="multipart/form-data" onsubmit="if(window.tinymce){ tinymce.triggerSave(); }">
                         @csrf
                         @method('PUT')
                         <input type="hidden" id="updatePostId" name="id">
@@ -170,6 +175,10 @@
                         <div class="mb-3">
                             <label for="updateLibelle" class="form-label">Libellé</label>
                             <input type="text" class="form-control" id="updateLibelle" name="libelle" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="updateSubTitle" class="form-label">Accroche <small class="text-muted">(courte phrase d'introduction)</small></label>
+                            <input type="text" class="form-control" id="updateSubTitle" name="sub_title" required>
                         </div>
                         <div class="mb-3">
                             <label for="updateDescription" class="form-label">Description</label>
@@ -217,8 +226,7 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>
 
-    <script src="https://cdn.tiny.cloud/1/x8yqfgtr6nfr1pqqwtj5noxr4sla24dbm2uj55o12kivvy2d/tinymce/7/tinymce.min.js"
-        referrerpolicy="origin"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tinymce@7/tinymce.min.js"></script>
     <script>
         $(document).ready(function() {
             // Gestion de l'ouverture du modal de mise à jour
@@ -238,6 +246,7 @@
                 var id = button.data('id');
                 var libelle = button.data('libelle');
                 var description = button.data('description');
+                var sousTitre = button.data('sous-titre');
                 var video = button.data('video');
                 var rubriqueId = button.data('rubrique-id');
                 var rubriqueName = button.data('rubrique-nom');
@@ -247,6 +256,7 @@
 
                 modal.find('#updatePostId').val(id);
                 modal.find('#updateLibelle').val(libelle);
+                modal.find('#updateSubTitle').val(sousTitre);
                 modal.find('#updateDescription').val(description);
                 modal.find('#updateVideo').val(video);
 

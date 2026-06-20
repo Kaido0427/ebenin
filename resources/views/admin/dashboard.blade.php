@@ -219,7 +219,7 @@
                             </linearGradient>
                             <linearGradient id="revenueLineStroke" x1="0" y1="0" x2="1" y2="0">
                                 <stop offset="0%" stop-color="#56b9ff" />
-                                <stop offset="100%" stop-color="#003f7f" />
+                                <stop offset="100%" stop-color="#0f0f4b" />
                             </linearGradient>
                         </defs>
                         @foreach(range(0, 4) as $gridRow)

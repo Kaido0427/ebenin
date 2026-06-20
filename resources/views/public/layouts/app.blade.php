@@ -33,7 +33,7 @@
     <link rel="icon" type="image/png" href="{{ asset('favicon.ico') }}">
     {{-- PWA --}}
     <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#003f7f">
+    <meta name="theme-color" content="#0f0f4b">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -51,7 +51,7 @@
             cursor: pointer; display: flex; align-items: center; line-height: 1;
             z-index: 10;
         }
-        .pass-eye:hover { color: #003f7f; }
+        .pass-eye:hover { color: #0f0f4b; }
         .pass-eye svg { width: 18px; height: 18px; display: block; }
     </style>
     @stack('head')

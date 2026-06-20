@@ -36,7 +36,7 @@
         @if($imgUrl)
             <img src="{{ $imgUrl }}" alt="{{ $post->libelle }}" class="ra-article__hero-img">
         @else
-            <div class="ra-article__hero-img" style="background:linear-gradient(135deg,#001a3e,#003f7f);"></div>
+            <div class="ra-article__hero-img" style="background:linear-gradient(135deg,#0f0f4b,#0f0f4b);"></div>
         @endif
     </div>
 

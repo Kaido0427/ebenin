@@ -6,7 +6,7 @@
 <style>
 /* ── Hero ── */
 .ib-hero {
-    background: linear-gradient(135deg, #003f7f 0%, #0057b3 60%, #1a73e8 100%);
+    background: linear-gradient(135deg, #0f0f4b 0%, #1a1a6e 60%, #1a73e8 100%);
     color: #fff; padding: 72px 0 56px; text-align: center; position: relative; overflow: hidden;
 }
 .ib-hero::before {
@@ -62,7 +62,7 @@
 .ib-pricing__list li { display: flex; align-items: center; gap: 10px; font-size: .9rem; color: var(--mid); }
 .ib-pricing__list li::before { content: '✓'; width: 22px; height: 22px; background: #e8f5e9; color: #2e7d32; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: .75rem; flex-shrink: 0; }
 /* ── CTA ── */
-.ib-cta { background: linear-gradient(135deg, #003f7f 0%, #0057b3 100%); color: #fff; padding: 64px 0; text-align: center; }
+.ib-cta { background: linear-gradient(135deg, #0f0f4b 0%, #1a1a6e 100%); color: #fff; padding: 64px 0; text-align: center; }
 .ib-cta h2 { font-size: 2rem; font-weight: 800; margin-bottom: 12px; }
 .ib-cta p { opacity: .88; max-width: 500px; margin: 0 auto 32px; line-height: 1.7; }
 </style>

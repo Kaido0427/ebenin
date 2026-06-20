@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap');
 
 :root {
-  --eb-blue: #003f7f;
-  --eb-blue-strong: #0057b3;
+  --eb-blue: #0f0f4b;
+  --eb-blue-strong: #1a1a6e;
   --eb-red: #e8191e;
   --eb-gold: #f0a500;
   --eb-green: #1a8a40;
@@ -945,7 +945,7 @@ body[data-theme="dark"] .sidebar-link.is-active {
   max-width: 52px;
   min-height: 20px;
   border-radius: 18px 18px 10px 10px;
-  background: linear-gradient(180deg, #71c0ff, #0057b3);
+  background: linear-gradient(180deg, #71c0ff, #1a1a6e);
   box-shadow: 0 18px 30px rgba(0, 87, 179, 0.2);
 }
 
@@ -1388,7 +1388,7 @@ tbody tr:hover {
   color: #fff;
   background:
     radial-gradient(circle at top right, rgba(255, 255, 255, 0.16), transparent 24%),
-    linear-gradient(145deg, #0c1d3d, #0057b3);
+    linear-gradient(145deg, #0f0f4b, #1a1a6e);
 }
 
 .billing-hero__layout {
@@ -2034,7 +2034,7 @@ body[data-theme="dark"] .profile-identity {
   background:
     linear-gradient(180deg, rgba(10, 23, 52, 0.26), rgba(10, 23, 52, 0.54)),
     radial-gradient(circle at 20% 20%, rgba(134, 190, 255, 0.35), transparent 36%),
-    linear-gradient(120deg, #123464, #003f7f 42%, #0057b3);
+    linear-gradient(120deg, #0f0f4b, #0f0f4b 42%, #1a1a6e);
   box-shadow: var(--shadow-md);
   position: relative;
   overflow: hidden;
@@ -2746,8 +2746,8 @@ body[data-theme="dark"] .admin-sidebar__inner {
 
 /* 16. Main-domain visual language polish (safe CSS-only pass) */
 :root {
-  --eb-primary: #003f7f;
-  --eb-primary-strong: #0057b3;
+  --eb-primary: #0f0f4b;
+  --eb-primary-strong: #1a1a6e;
   --eb-accent: #e8191e;
   --eb-accent-strong: #c0141a;
   --eb-gold-soft: #f0a500;

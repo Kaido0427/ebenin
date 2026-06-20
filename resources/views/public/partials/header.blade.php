@@ -176,7 +176,7 @@
                 <div class="mobile-nav__app-grid">
 
                     <a href="{{ $homeUrl }}" class="mobile-nav__app-item" data-mobile-close>
-                        <div class="mobile-nav__app-icon" style="background:#003f7f">
+                        <div class="mobile-nav__app-icon" style="background:#0f0f4b">
                             <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9.5z"/><polyline points="9 21 9 13 15 13 15 21"/></svg>
                         </div>
                         <span class="mobile-nav__app-label">Accueil</span>
@@ -243,7 +243,7 @@
             {{-- Catégories d'articles en grille --}}
             @if ($navItems->isNotEmpty())
             @php
-                $mnColors = ['#e8191e','#003f7f','#1a8a40','#f0a500','#8b5cf6','#06b6d4','#f97316','#ec4899','#14b8a6','#6366f1','#84cc16','#f43f5e'];
+                $mnColors = ['#e8191e','#0f0f4b','#1a8a40','#f0a500','#8b5cf6','#06b6d4','#f97316','#ec4899','#14b8a6','#6366f1','#84cc16','#f43f5e'];
             @endphp
             <div>
                 <div class="mobile-nav__section-title">Catégories d'articles</div>
