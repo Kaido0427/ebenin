@@ -59,7 +59,7 @@
     .badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: .72rem; font-weight: 700; }
     .badge-active { background: #e8f5e9; color: #2e7d32; }
     .badge-draft { background: var(--bg); color: var(--muted); }
-    .badge-emploi { background: #e3f2fd; color: #1565c0; }
+    .badge-emploi { background: #e3f2fd; color: #0f0f4b; }
     .badge-immobilier { background: #fce4ec; color: #880e4f; }
     .badge-vente_services { background: #f3e5f5; color: #6a1b9a; }
     .badge-evenements { background: #fff8e1; color: #f57f17; }

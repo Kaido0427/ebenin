@@ -28,7 +28,7 @@
         @if($heroImg)
             <img src="{{ $heroImg }}" alt="{{ $hero->libelle }}" class="ra-hero__img" loading="eager">
         @else
-            <div class="ra-hero__img" style="background:linear-gradient(135deg,#0f0f4b,#1a1a6e)"></div>
+            <div class="ra-hero__img" style="background:linear-gradient(135deg,#0f0f4b,#0f0f4b)"></div>
         @endif
         <div class="ra-hero__overlay"></div>
         <div class="ra-hero__body">

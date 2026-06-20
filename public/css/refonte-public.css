@@ -7,7 +7,7 @@
 /* ── Variables ────────────────────────────────────────────── */
 :root {
   --primary:       #0f0f4b;
-  --primary-light: #1a1a6e;
+  --primary-light: #0f0f4b;
   --accent:        #e8191e;
   --accent-dark:   #c0141a;
   --gold:          #f0a500;
@@ -2263,7 +2263,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 }
 .auth-visual {
   position: relative;
-  background: linear-gradient(160deg, var(--primary) 0%, #001f4d 60%, var(--dark) 100%);
+  background: linear-gradient(160deg, var(--primary) 0%, #0f0f4b 60%, var(--dark) 100%);
   display: flex;
   flex-direction: column;
   justify-content: space-between;

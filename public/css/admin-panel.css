@@ -2,7 +2,7 @@
 
 :root {
   --eb-blue: #0f0f4b;
-  --eb-blue-strong: #1a1a6e;
+  --eb-blue-strong: #0f0f4b;
   --eb-red: #e8191e;
   --eb-gold: #f0a500;
   --eb-green: #1a8a40;
@@ -37,22 +37,22 @@ body[data-theme="light"] {
   --surface-panel-strong: #ffffff;
   --surface-muted: #eef3fa;
   --surface-accent: #e9f2ff;
-  --surface-dark: #0f2244;
+  --surface-dark: #0f0f4b;
   --border-soft: rgba(22, 48, 93, 0.09);
   --border-strong: rgba(22, 48, 93, 0.14);
-  --text-main: #20324f;
+  --text-main: #0f0f4b;
   --text-muted: #697793;
   --text-soft: #8b98b3;
   --chip-bg: rgba(0, 87, 179, 0.1);
 }
 
 body[data-theme="dark"] {
-  --surface-body: #0f1729;
+  --surface-body: #0f0f4b;
   --surface-panel: rgba(17, 26, 44, 0.88);
-  --surface-panel-strong: #152039;
-  --surface-muted: #1c2943;
-  --surface-accent: #193155;
-  --surface-dark: #0a1327;
+  --surface-panel-strong: #0f0f4b;
+  --surface-muted: #0f0f4b;
+  --surface-accent: #0f0f4b;
+  --surface-dark: #0f0f4b;
   --border-soft: rgba(255, 255, 255, 0.08);
   --border-strong: rgba(255, 255, 255, 0.12);
   --text-main: #edf3ff;
@@ -911,7 +911,7 @@ body[data-theme="dark"] .sidebar-link.is-active {
   color: #fff;
   background:
     radial-gradient(circle at top left, rgba(255, 255, 255, 0.1), transparent 26%),
-    linear-gradient(155deg, #172546, #0d1730 62%, #182443);
+    linear-gradient(155deg, #0f0f4b, #0f0f4b 62%, #0f0f4b);
   box-shadow: var(--shadow-lg);
 }
 
@@ -945,7 +945,7 @@ body[data-theme="dark"] .sidebar-link.is-active {
   max-width: 52px;
   min-height: 20px;
   border-radius: 18px 18px 10px 10px;
-  background: linear-gradient(180deg, #71c0ff, #1a1a6e);
+  background: linear-gradient(180deg, #71c0ff, #0f0f4b);
   box-shadow: 0 18px 30px rgba(0, 87, 179, 0.2);
 }
 
@@ -1344,7 +1344,7 @@ tbody tr:hover {
 }
 
 .table-avatar--news {
-  background: linear-gradient(135deg, #0f2244, #e8191e);
+  background: linear-gradient(135deg, #0f0f4b, #e8191e);
 }
 
 .empty-state {
@@ -1388,7 +1388,7 @@ tbody tr:hover {
   color: #fff;
   background:
     radial-gradient(circle at top right, rgba(255, 255, 255, 0.16), transparent 24%),
-    linear-gradient(145deg, #0f0f4b, #1a1a6e);
+    linear-gradient(145deg, #0f0f4b, #0f0f4b);
 }
 
 .billing-hero__layout {
@@ -1922,7 +1922,7 @@ body[data-theme="dark"] .profile-identity {
 .auth-card h2 {
   margin: 0;
   font-size: 2rem;
-  color: #20324f;
+  color: #0f0f4b;
 }
 
 .auth-card p {
@@ -2034,7 +2034,7 @@ body[data-theme="dark"] .profile-identity {
   background:
     linear-gradient(180deg, rgba(10, 23, 52, 0.26), rgba(10, 23, 52, 0.54)),
     radial-gradient(circle at 20% 20%, rgba(134, 190, 255, 0.35), transparent 36%),
-    linear-gradient(120deg, #0f0f4b, #0f0f4b 42%, #1a1a6e);
+    linear-gradient(120deg, #0f0f4b, #0f0f4b 42%, #0f0f4b);
   box-shadow: var(--shadow-md);
   position: relative;
   overflow: hidden;
@@ -2074,7 +2074,7 @@ body[data-theme="dark"] .profile-identity {
   min-height: 100vh;
   padding: 24px;
   background: #f4f7fb;
-  color: #334566;
+  color: #0f0f4b;
 }
 
 .auth-v2__topbar {
@@ -2214,7 +2214,7 @@ body[data-theme="dark"] .profile-identity {
 .auth-v2__right {
   position: relative;
   min-height: 620px;
-  background: #0d2248;
+  background: #0f0f4b;
 }
 
 .auth-v2__visual {
@@ -2224,7 +2224,7 @@ body[data-theme="dark"] .profile-identity {
     linear-gradient(135deg, rgba(14, 27, 61, 0.2), rgba(14, 27, 61, 0.78)),
     radial-gradient(circle at 82% 82%, rgba(106, 185, 255, 0.45), transparent 40%),
     radial-gradient(circle at 30% 30%, rgba(145, 109, 255, 0.35), transparent 44%),
-    linear-gradient(130deg, #1f3362, #1a62cf 55%, #2f79f1);
+    linear-gradient(130deg, #0f0f4b, #0f0f4b 55%, #0f0f4b);
   clip-path: polygon(14% 0, 100% 0, 100% 100%, 0 100%);
 }
 
@@ -2740,14 +2740,14 @@ body[data-theme="light"] .profile-hero {
 /* 15. Dark mode sidebar keeps consistent solid bg */
 body[data-theme="dark"] .admin-sidebar,
 body[data-theme="dark"] .admin-sidebar__inner {
-  background: #001d3d;
+  background: #0f0f4b;
   border-right-color: rgba(255,255,255,.07);
 }
 
 /* 16. Main-domain visual language polish (safe CSS-only pass) */
 :root {
   --eb-primary: #0f0f4b;
-  --eb-primary-strong: #1a1a6e;
+  --eb-primary-strong: #0f0f4b;
   --eb-accent: #e8191e;
   --eb-accent-strong: #c0141a;
   --eb-gold-soft: #f0a500;
@@ -2876,7 +2876,7 @@ body[data-theme="light"] {
   color: #fff;
   background:
     radial-gradient(circle at top left, rgba(255, 255, 255, 0.1), transparent 26%),
-    linear-gradient(155deg, #172546, #0d1730 62%, #182443);
+    linear-gradient(155deg, #0f0f4b, #0f0f4b 62%, #0f0f4b);
   border-color: transparent;
   box-shadow: var(--shadow-lg);
 }
