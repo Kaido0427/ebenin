@@ -87,8 +87,10 @@
                                     href="https://{{ $subdomain }}.{{ $baseDomain }}/blog">Accueil</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Mes
-                                    Articles</a>
+                                <a class="nav-link" href="https://{{ $subdomain }}.{{ $baseDomain }}/articles/create"
+                                   style="background:#0f0f4b;color:#fff!important;border-radius:6px;padding:6px 14px;">
+                                    + Nouvel article
+                                </a>
                             </li>
                             @if ($biographie)
                             @else

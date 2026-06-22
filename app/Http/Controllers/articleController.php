@@ -15,6 +15,22 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 class articleController extends Controller
 {
+    public function create()
+    {
+        $rubriques = rubrique::all();
+        $organization = Auth::user()->organization;
+        return view('myBlog.articles.create', compact('rubriques', 'organization'));
+    }
+
+    public function edit($id)
+    {
+        $post = post::with('rubriques')->findOrFail($id);
+        abort_if($post->user_id !== Auth::id(), 403);
+        $rubriques = rubrique::all();
+        $organization = Auth::user()->organization;
+        return view('myBlog.articles.edit', compact('post', 'rubriques', 'organization'));
+    }
+
     // Afficher tous les posts sur la vue index avec les modals
     /* public function index()
     {
@@ -30,18 +46,18 @@ class articleController extends Controller
     {
         try {
             $organization = Auth::user()->organization;
-    
+
             // Validation des données
             $validator = Validator::make($request->all(), [
-                'description' => 'required|string',
+                'description' => 'nullable|string',
                 'libelle' => 'required|string|max:255',
-                'sub_title' => 'required|string|max:255',
+                'sub_title' => 'required|string',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,webp',
                 'rubrique_id' => 'required',
-                'video' => 'nullable', // Validation pour la vidéo
+                'video' => 'nullable',
                 'necro_video' => 'nullable|file|mimetypes:video/mp4,video/webm,video/quicktime,video/x-msvideo'
             ]);
-    
+
             if ($validator->fails()) {
                 return redirect()->back()->withErrors($validator)->withInput();
             }
@@ -136,9 +152,9 @@ class articleController extends Controller
             $postId = $this->resolvePostId($organizationOrId, $id);
             // Validation des données
             $validator = Validator::make($request->all(), [
-                'description' => 'required|string',
+                'description' => 'nullable|string',
                 'libelle' => 'required|string|max:255',
-                'sub_title' => 'required|string|max:255',
+                'sub_title' => 'required|string',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,webp',
                 'video' => 'bail',
                 'necro_video' => 'nullable|file|mimetypes:video/mp4,video/webm,video/quicktime,video/x-msvideo',

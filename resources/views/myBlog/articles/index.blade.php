@@ -45,9 +45,7 @@
     <div class="container">
         <h1>Gestion des Articles</h1>
 
-        <!-- Bouton pour ouvrir le modal de création -->
-        <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createPostModal">Ajouter un
-            Article</button>
+        <a href="{{ url('articles/create') }}" class="btn btn-primary mb-3">+ Nouvel article</a>
 
         <!-- Tableau des articles -->
         <table id="postsTable" class="table table-bordered">
@@ -64,13 +62,7 @@
                         <td>{{ $post->libelle }}</td>
                         <td>{{ \Illuminate\Support\Str::limit($post->description, 50, $end = '...') }}</td>
                         <td>
-                            <button class="btn btn-sm btn-warning" data-bs-toggle="modal"
-                                data-bs-target="#updatePostModal" data-id="{{ $post->id }}"
-                                data-libelle="{{ $post->libelle }}" data-description="{{ $post->description }}"
-                                data-sous-titre="{{ $post->sous_titre }}"
-                                data-rubrique-id="{{ $post->rubriques->first()->id }}"
-                                data-rubrique-nom="{{ $post->rubriques->first()->name }}"
-                                data-video="{{ $post->video }}"> Modifier</button>
+                            <a href="{{ url('articles/' . $post->id . '/edit') }}" class="btn btn-sm btn-warning">Modifier</a>
                         </td>
                     </tr>
                 @empty

@@ -194,6 +194,8 @@ $mainDomainRoutes = function () {
 
     // Routes auth protégées
     Route::middleware(['auth'])->group(function () {
+        Route::get('/articles/create',       [articleController::class, 'create'])->name('articles.create');
+        Route::get('/articles/{id}/edit',   [articleController::class, 'edit'])->name('articles.edit');
         Route::post('/articles/store',      [articleController::class, 'store'])->name('articles.store');
         Route::put('/articles/update/{id}', [articleController::class, 'update'])->name('articles.update');
         Route::delete('/articles/{id}',     [articleController::class, 'destroy'])->name('articles.delete');
@@ -273,6 +275,8 @@ $subdomainRoutes = function ($domain) {
         // Dashboard protégé
         Route::middleware(['auth'])->group(function () {
             // Actions dashboard sur sous-domaine (évite les 419 CSRF entre hôtes)
+            Route::get('/articles/create',       [articleController::class, 'create']);
+            Route::get('/articles/{id}/edit',    [articleController::class, 'edit']);
             Route::post('/articles/store',      [articleController::class, 'store']);
             Route::put('/articles/update/{id}', [articleController::class, 'update']);
             Route::delete('/articles/{id}',     [articleController::class, 'destroy']);
