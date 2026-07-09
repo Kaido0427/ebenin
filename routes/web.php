@@ -355,3 +355,7 @@ $subdomainRoutes = function ($domain) {
 
 $subdomainRoutes('e-benin.com');
 $subdomainRoutes('e-benin.bj');
+
+// Facebook OAuth (accès admin uniquement)
+Route::get('/fb-auth', [\App\Http\Controllers\FacebookAuthController::class, 'redirect'])->name('fb.auth');
+Route::get('/fb-auth/callback', [\App\Http\Controllers\FacebookAuthController::class, 'callback'])->name('fb.callback');
