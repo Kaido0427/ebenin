@@ -12,12 +12,14 @@ class FacebookAuthController extends Controller
     private string $pageId    = '100089144914919';
     private string $redirectUri = 'https://e-benin.com/fb-auth/callback';
 
+    private string $businessId = '543950788584505';
+
     public function redirect()
     {
         $url = 'https://www.facebook.com/v19.0/dialog/oauth?' . http_build_query([
             'client_id'     => $this->appId,
             'redirect_uri'  => $this->redirectUri,
-            'scope'         => 'pages_manage_posts,pages_read_engagement,pages_show_list',
+            'scope'         => 'pages_manage_posts,pages_read_engagement,pages_show_list,business_management',
             'response_type' => 'code',
         ]);
 
@@ -46,7 +48,7 @@ class FacebookAuthController extends Controller
 
         $userToken = $tokenRes['access_token'];
 
-        // Échanger contre un token long-lived
+        // Échanger contre un token long-lived (60 jours)
         $longRes = Http::get('https://graph.facebook.com/v19.0/oauth/access_token', [
             'grant_type'        => 'fb_exchange_token',
             'client_id'         => $this->appId,
@@ -56,14 +58,15 @@ class FacebookAuthController extends Controller
 
         $longToken = $longRes['access_token'] ?? $userToken;
 
-        // Récupérer le token de la page e-Bénin
-        $pagesRes = Http::get("https://graph.facebook.com/v19.0/me/accounts", [
+        // Essai 1 : via me/accounts (compte personnel)
+        $pagesRes = Http::get('https://graph.facebook.com/v19.0/me/accounts', [
             'access_token' => $longToken,
             'fields'       => 'id,name,access_token',
         ])->json();
 
         $pageToken = null;
         $pageName  = null;
+
         foreach ($pagesRes['data'] ?? [] as $page) {
             if ($page['id'] === $this->pageId) {
                 $pageToken = $page['access_token'];
@@ -72,23 +75,46 @@ class FacebookAuthController extends Controller
             }
         }
 
+        // Essai 2 : via Business Portfolio
         if (!$pageToken) {
+            $bizRes = Http::get("https://graph.facebook.com/v19.0/{$this->businessId}/owned_pages", [
+                'access_token' => $longToken,
+                'fields'       => 'id,name,access_token',
+            ])->json();
+
+            foreach ($bizRes['data'] ?? [] as $page) {
+                if ($page['id'] === $this->pageId) {
+                    $pageToken = $page['access_token'];
+                    $pageName  = $page['name'];
+                    break;
+                }
+            }
+
+            // Essai 3 : toutes les pages du portfolio
+            if (!$pageToken && !empty($bizRes['data'])) {
+                $pageToken = $bizRes['data'][0]['access_token'] ?? null;
+                $pageName  = $bizRes['data'][0]['name'] ?? null;
+            }
+        }
+
+        if (!$pageToken) {
+            $allPages = array_merge($pagesRes['data'] ?? [], $bizRes['data'] ?? []);
             return view('fb-auth-result', [
                 'success'   => false,
-                'message'   => 'Page e-Bénin non trouvée dans les pages accessibles.',
-                'pages'     => $pagesRes['data'] ?? [],
+                'message'   => 'Page e-Bénin introuvable. Pages accessibles listées ci-dessous.',
+                'pages'     => $allPages,
                 'userToken' => $longToken,
             ]);
         }
 
-        // Sauvegarder le token dans .env
+        // Sauvegarder dans .env
         $this->updateEnv('FB_PAGE_TOKEN', $pageToken);
         $this->updateEnv('FB_PAGE_ID', $this->pageId);
 
         return view('fb-auth-result', [
-            'success'  => true,
-            'message'  => "Token de la page \"$pageName\" sauvegardé avec succès !",
-            'pages'    => $pagesRes['data'] ?? [],
+            'success' => true,
+            'message' => "Token de la page \"$pageName\" sauvegardé ! Publication automatique active.",
+            'pages'   => [],
         ]);
     }
 
