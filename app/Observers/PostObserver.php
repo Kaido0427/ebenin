@@ -2,73 +2,39 @@
 
 namespace App\Observers;
 
-use App\Models\post;
-
+use App\Models\post as Post;
 use App\Services\FacebookService;
-use Illuminate\Support\Facades\Log;
-
 
 class PostObserver
 {
+    public function __construct(private FacebookService $facebook) {}
 
-    protected $facebookService;
-
-    public function __construct(FacebookService $facebookService)
+    public function updated(Post $post): void
     {
-        $this->facebookService = $facebookService;
-    }
-    /**
-     * Handle the post "created" event.
-     */
-    public function created(post $post): void
-    {
-        $accessToken = env('FACEBOOK_ACCESS_TOKEN');
-        $pageId = env('FACEBOOK_PAGE_ID');
-
-        $message = $post->user->organization->organization_name . " - " . $post->libelle .
-            "\nPour en savoir plus : " . route('single-post', [
-                'organization' => $post->user->organization->subdomain,
-                'id' => $post->id,
-            ]);
-
-        $result = $this->facebookService->postToFacebookPage($pageId, $message, $accessToken);
-
-        if (isset($result['error'])) {
-            Log::error('Erreur lors de la publication sur Facebook', $result);
-        } else {
-            Log::info('Article publié sur Facebook avec succès', $result);
-        } 
+        // Ne poster sur Facebook que quand un article passe à "published"
+        if (
+            $post->wasChanged('editorial_status') &&
+            $post->editorial_status === 'published'
+        ) {
+            $this->shareArticle($post);
+        }
     }
 
-    /**
-     * Handle the post "updated" event.
-     */
-    public function updated(post $post): void
+    private function shareArticle(Post $post): void
     {
-        //
-    }
+        $title   = $post->libelle ?? '';
+        $excerpt = $post->sous_titre
+            ? $post->sous_titre
+            : mb_substr(strip_tags($post->description ?? ''), 0, 120);
 
-    /**
-     * Handle the post "deleted" event.
-     */
-    public function deleted(post $post): void
-    {
-        //
-    }
+        $url = url("/post/{$post->id}");
 
-    /**
-     * Handle the post "restored" event.
-     */
-    public function restored(post $post): void
-    {
-        //
-    }
+        $message = "📰 {$title}";
+        if ($excerpt) {
+            $message .= "\n{$excerpt}";
+        }
+        $message .= "\n\n👉 Lire sur e-Bénin : {$url}";
 
-    /**
-     * Handle the post "force deleted" event.
-     */
-    public function forceDeleted(post $post): void
-    {
-        //
+        $this->facebook->postToPage($message, $url);
     }
 }

@@ -5,6 +5,10 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\URL;
 use Carbon\Carbon;
+use App\Models\post as Post;
+use App\Models\Annonce;
+use App\Observers\PostObserver;
+use App\Observers\AnnonceObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -36,6 +40,8 @@ class AppServiceProvider extends ServiceProvider
           if (env('APP_ENV') !== 'local') {
               URL::forceScheme('https');
           }
-       
+
+          Post::observe(PostObserver::class);
+          Annonce::observe(AnnonceObserver::class);
     }
 }

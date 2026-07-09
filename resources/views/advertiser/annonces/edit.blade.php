@@ -10,6 +10,15 @@
     .hint { font-size: .78rem; color: var(--muted); margin-top: 4px; }
     .current-images { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
     .current-images img { height: 80px; width: 80px; object-fit: cover; border-radius: var(--radius); }
+    /* Category picker */
+    .cat-picker { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 8px; }
+    @media(min-width:520px){ .cat-picker { grid-template-columns: repeat(4, 1fr); } }
+    .cat-pick-btn { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 6px; border-radius: 10px; border: 1.5px solid var(--border); background: #fafbff; cursor: pointer; font-size: .72rem; text-align: center; line-height: 1.3; color: var(--dark); transition: all .18s; }
+    .cat-pick-btn .cp-icon { font-size: 1.4rem; line-height: 1; }
+    .cat-pick-btn:hover { border-color: var(--primary); background: #f0f0fa; }
+    .cat-pick-btn.selected { border-color: var(--primary); background: var(--primary); color: #fff; }
+    .cat-group-hdr { font-size: .68rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; grid-column: 1 / -1; margin-top: 8px; padding-bottom: 3px; border-bottom: 1px solid var(--border); }
+    .cat-selected-display { margin-top: 8px; font-size: .82rem; font-weight: 600; color: var(--primary); min-height: 1.2em; }
 </style>
 @endpush
 
@@ -34,12 +43,31 @@
 
             <div class="form-group">
                 <label>Catégorie *</label>
-                <select name="category" required>
-                    <option value="">— Choisir une catégorie —</option>
-                    @foreach ($categories as $value => $label)
-                        <option value="{{ $value }}" {{ old('category', $annonce->category) === $value ? 'selected' : '' }}>{{ $label }}</option>
+                @php
+                    $icons   = \App\Models\Annonce::ICONS;
+                    $groups  = \App\Models\Annonce::CATEGORY_GROUPS;
+                    $cats    = \App\Models\Annonce::CATEGORIES;
+                    $current = old('category', $annonce->category);
+                @endphp
+                <input type="hidden" name="category" id="cat-input" value="{{ $current }}" required>
+                <div class="cat-picker" id="cat-picker">
+                    @foreach ($groups as $groupName => $keys)
+                        <div class="cat-group-hdr">{{ $groupName }}</div>
+                        @foreach ($keys as $key)
+                            @if (isset($cats[$key]))
+                            <div class="cat-pick-btn {{ $current === $key ? 'selected' : '' }}"
+                                 data-value="{{ $key }}"
+                                 onclick="selectCat(this)">
+                                <span class="cp-icon">{{ $icons[$key] ?? '📋' }}</span>
+                                <span>{{ $cats[$key] }}</span>
+                            </div>
+                            @endif
+                        @endforeach
                     @endforeach
-                </select>
+                </div>
+                <div class="cat-selected-display" id="cat-selected-display">
+                    {{ $current ? ($cats[$current] ?? '') : 'Aucune catégorie sélectionnée' }}
+                </div>
             </div>
 
             <div class="form-group">
@@ -95,4 +123,15 @@
         </form>
     </div>
 </div>
+@push('scripts')
+<script>
+function selectCat(el) {
+    document.querySelectorAll('#cat-picker .cat-pick-btn').forEach(function(b){ b.classList.remove('selected'); });
+    el.classList.add('selected');
+    var val = el.getAttribute('data-value');
+    document.getElementById('cat-input').value = val;
+    document.getElementById('cat-selected-display').textContent = el.querySelector('span:last-child').textContent;
+}
+</script>
+@endpush
 @endsection

@@ -9,7 +9,7 @@ class FacebookAuthController extends Controller
 {
     private string $appId     = '607829245588464';
     private string $appSecret = '9a3ac50a8f5c3b3ebe3c9a824eaeef82';
-    private string $pageId    = '100089144914919';
+    private string $pageId    = '103331029313152';
     private string $redirectUri = 'https://e-benin.com/fb-auth/callback';
 
     private string $businessId = '543950788584505';
