@@ -13,8 +13,8 @@ class FacebookService
 
     public function __construct()
     {
-        $this->pageId    = config('services.facebook.page_id', env('FB_PAGE_ID', ''));
-        $this->pageToken = config('services.facebook.page_token', env('FB_PAGE_TOKEN', ''));
+        $this->pageId    = config('services.facebook.page_id');
+        $this->pageToken = config('services.facebook.page_token');
     }
 
     public function postToPage(string $message, ?string $link = null): bool
