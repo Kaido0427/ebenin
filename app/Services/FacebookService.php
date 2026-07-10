@@ -24,32 +24,13 @@ class FacebookService
             return false;
         }
 
-        // Avec image : poster via /photos pour un rendu visuel plus riche
-        if ($imageUrl) {
-            $caption = $message;
-            if ($link) {
-                $caption .= "\n\n👉 " . $link;
-            }
+        // Toujours utiliser /feed avec link → Facebook génère une vraie carte cliquable
+        // et récupère l'image via les balises Open Graph de la page
+        $params = [
+            'message'      => $message,
+            'access_token' => $this->pageToken,
+        ];
 
-            $res = Http::asForm()->post(
-                "https://graph.facebook.com/{$this->apiVersion}/{$this->pageId}/photos",
-                [
-                    'url'          => $imageUrl,
-                    'caption'      => $caption,
-                    'access_token' => $this->pageToken,
-                ]
-            );
-
-            if ($res->successful() && isset($res->json()['id'])) {
-                Log::info('Facebook photo post published', ['fb_id' => $res->json()['id']]);
-                return true;
-            }
-
-            Log::warning('Facebook photo post failed, fallback to text post', ['response' => $res->json()]);
-        }
-
-        // Sans image (ou si la photo a échoué) : post texte + lien
-        $params = ['message' => $message, 'access_token' => $this->pageToken];
         if ($link) {
             $params['link'] = $link;
         }
