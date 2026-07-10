@@ -9,9 +9,17 @@ class PostObserver
 {
     public function __construct(private FacebookService $facebook) {}
 
+    public function created(Post $post): void
+    {
+        // Les articles créés via le dashboard blogueur sont publiés directement (null = published par défaut)
+        if (in_array($post->editorial_status, ['published', null])) {
+            $this->shareArticle($post);
+        }
+    }
+
     public function updated(Post $post): void
     {
-        // Ne poster sur Facebook que quand un article passe à "published"
+        // Articles passant explicitement à "published" via le panel admin
         if (
             $post->wasChanged('editorial_status') &&
             $post->editorial_status === 'published'
