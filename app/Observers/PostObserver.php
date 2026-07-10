@@ -33,16 +33,29 @@ class PostObserver
         $title   = $post->libelle ?? '';
         $excerpt = $post->sous_titre
             ? $post->sous_titre
-            : mb_substr(strip_tags($post->description ?? ''), 0, 120);
+            : mb_substr(strip_tags($post->description ?? ''), 0, 200);
 
-        $url = url("/post/{$post->id}");
+        // URL correcte avec le subdomain de l'organisation
+        $subdomain = $post->user->organization->subdomain ?? null;
+        $baseDomain = 'e-benin.com';
+        $url = $subdomain
+            ? "https://{$subdomain}.{$baseDomain}/post/{$post->id}"
+            : url("/post/{$post->id}");
+
+        // Image de l'article si disponible
+        $imageUrl = null;
+        if ($post->image) {
+            $imageUrl = "https://{$baseDomain}/{$post->image}";
+        } elseif ($post->image_url) {
+            $imageUrl = $post->image_url;
+        }
 
         $message = "📰 {$title}";
         if ($excerpt) {
-            $message .= "\n{$excerpt}";
+            $message .= "\n\n{$excerpt}";
         }
         $message .= "\n\n👉 Lire sur e-Bénin : {$url}";
 
-        $this->facebook->postToPage($message, $url);
+        $this->facebook->postToPage($message, $url, $imageUrl);
     }
 }
