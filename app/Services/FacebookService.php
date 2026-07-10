@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\Log;
 
 class FacebookService
 {
-    private string $pageId;
-    private string $pageToken;
+    private ?string $pageId;
+    private ?string $pageToken;
     private string $apiVersion = 'v19.0';
 
     public function __construct()
