@@ -396,7 +396,7 @@
                                     </a>
                                 @endforeach
                             </div>
-                            <a href="{{ 'https://' . (str_contains(request()->getHost(), 'e-benin.bj') ? 'e-benin.bj' : 'e-benin.com') . '/blogs' }}" class="network-blogs-all">
+                            <a href="{{ 'https://' . (str_contains(request()->getHost(), 'e-benin.bj') ? 'e-benin.bj' : 'e-benin.com') . '/reseau' }}" class="network-blogs-all">
                                 Voir tous les blogs du réseau →
                             </a>
                         </div>
