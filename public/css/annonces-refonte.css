@@ -120,6 +120,23 @@
   cursor: pointer;
 }
 .ann-nav__link .ann-nav__icon { font-size: 1rem; }
+/* Icônes FA dans la nav annonces */
+.ann-nav__fa {
+  font-size: .85rem;
+  width: 16px;
+  text-align: center;
+  flex-shrink: 0;
+}
+/* Icônes FA dans les mega-dropdowns */
+.ann-mega__fa {
+  font-size: .78rem;
+  width: 14px;
+  text-align: center;
+  flex-shrink: 0;
+  color: var(--ann-red);
+}
+.ann-mega__left-link { display: flex; align-items: center; gap: 8px; }
+.ann-mega__sub-link  { display: flex; align-items: center; gap: 8px; }
 .ann-nav__item:hover > .ann-nav__link,
 .ann-nav__item.active > .ann-nav__link {
   color: var(--ann-red);
@@ -315,6 +332,7 @@
   display: flex; align-items: center; justify-content: center;
   font-size: 2.5rem; color: var(--ann-border);
 }
+.ann-card__img-ph i { font-size: 2.5rem; color: var(--ann-border); }
 .ann-card__badge {
   position: absolute;
   top: 8px; left: 8px;
@@ -373,7 +391,8 @@
   padding: 80px 20px;
   color: var(--ann-muted);
 }
-.ann-empty__icon { font-size: 3.5rem; margin-bottom: 16px; }
+.ann-empty__icon { font-size: 3.5rem; margin-bottom: 16px; color: var(--ann-border); }
+.ann-empty__icon i { font-size: 3.5rem; color: var(--ann-border); }
 .ann-empty__title { font-size: 1.1rem; font-weight: 700; color: var(--ann-navy); margin-bottom: 8px; }
 .ann-empty__text { font-size: .9rem; margin-bottom: 20px; }
 

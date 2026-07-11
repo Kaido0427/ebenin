@@ -272,6 +272,13 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .nav__link svg { width: 11px; height: 11px; transition: transform var(--transition); flex-shrink: 0; }
 .nav__item:hover .nav__link svg { transform: rotate(180deg); }
 
+/* Dropdown items avec icônes FA (Connexion, S'inscrire) */
+.nav__dropdown a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 /* Icônes Font Awesome dans le menu principal */
 .nav__link-icon {
   font-size: .78rem;

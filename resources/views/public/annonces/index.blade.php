@@ -11,60 +11,96 @@
 $icons  = \App\Models\Annonce::ICONS;
 $cats   = \App\Models\Annonce::CATEGORIES;
 
-// Structure méga-menu adaptée e-Bénin
+// Icônes Font Awesome 6 par catégorie (remplace les emojis)
+$faIcons = [
+    'vehicules'            => 'fa-car',
+    'motos'                => 'fa-motorcycle',
+    'pieces_auto'          => 'fa-gears',
+    'transport_logistique' => 'fa-truck',
+    'immobilier'           => 'fa-house',
+    'location'             => 'fa-key',
+    'terrain'              => 'fa-map',
+    'emploi'               => 'fa-briefcase',
+    'formation'            => 'fa-book-open',
+    'stage'                => 'fa-graduation-cap',
+    'services_batiment'    => 'fa-hard-hat',
+    'services_numerique'   => 'fa-laptop-code',
+    'services_menage'      => 'fa-broom',
+    'services_securite'    => 'fa-shield-halved',
+    'services_evenements'  => 'fa-champagne-glasses',
+    'services_photo'       => 'fa-camera',
+    'services_beaute'      => 'fa-scissors',
+    'sante'                => 'fa-heart-pulse',
+    'services_juridique'   => 'fa-scale-balanced',
+    'services_couture'     => 'fa-shirt',
+    'services_mecanique'   => 'fa-wrench',
+    'alimentation'         => 'fa-utensils',
+    'commerce'             => 'fa-store',
+    'agriculture'          => 'fa-wheat-awn',
+    'maison'               => 'fa-couch',
+    'electronique'         => 'fa-mobile-screen-button',
+    'materiaux'            => 'fa-hammer',
+    'mode'                 => 'fa-shirt',
+    'loisirs'              => 'fa-futbol',
+    'enfants'              => 'fa-baby',
+    'animaux'              => 'fa-paw',
+    'autres'               => 'fa-box-open',
+];
+
+// Méga-menu avec icônes FA
 $megaMenu = [
     'immobilier' => [
         'label' => 'Immobilier',
-        'icon'  => '🏠',
+        'fa'    => 'fa-house',
         'all'   => ['immobilier', 'location', 'terrain'],
         'groups' => [
-            'Vente immobilière' => ['immobilier'],
-            'Location & Colocation' => ['location'],
+            'Vente immobilière'    => ['immobilier'],
+            'Location & Colocation'=> ['location'],
             'Terrains & Parcelles' => ['terrain'],
         ],
     ],
     'vehicules_group' => [
         'label' => 'Véhicules',
-        'icon'  => '🚗',
+        'fa'    => 'fa-car',
         'all'   => ['vehicules', 'motos', 'pieces_auto', 'transport_logistique'],
         'groups' => [
-            'Voitures & 4×4'        => ['vehicules'],
-            'Motos & Scooters'       => ['motos'],
-            'Pièces & Accessoires'   => ['pieces_auto'],
-            'Transport & Livraison'  => ['transport_logistique'],
+            'Voitures & 4×4'       => ['vehicules'],
+            'Motos & Scooters'     => ['motos'],
+            'Pièces & Accessoires' => ['pieces_auto'],
+            'Transport & Livraison'=> ['transport_logistique'],
         ],
     ],
     'emploi_group' => [
         'label' => 'Emploi & Formation',
-        'icon'  => '💼',
+        'fa'    => 'fa-briefcase',
         'all'   => ['emploi', 'formation', 'stage'],
         'groups' => [
-            'Offres d\'emploi'         => ['emploi'],
-            'Formations & Cours'       => ['formation'],
-            'Stage & Bénévolat'        => ['stage'],
+            'Offres d\'emploi'  => ['emploi'],
+            'Formations & Cours'=> ['formation'],
+            'Stage & Bénévolat' => ['stage'],
         ],
     ],
     'services_group' => [
         'label' => 'Services',
-        'icon'  => '🔧',
+        'fa'    => 'fa-screwdriver-wrench',
         'all'   => ['services_batiment','services_numerique','services_menage','services_securite','services_evenements','services_photo','services_beaute','sante','services_juridique','services_couture','services_mecanique'],
         'groups' => [
-            'Bâtiment & Travaux'     => ['services_batiment'],
-            'Numérique & Web'        => ['services_numerique'],
-            'Ménage & Nettoyage'     => ['services_menage'],
-            'Sécurité'               => ['services_securite'],
-            'Événements & Anim.'     => ['services_evenements'],
-            'Photo & Vidéo'          => ['services_photo'],
-            'Beauté & Coiffure'      => ['services_beaute'],
-            'Santé & Bien-être'      => ['sante'],
-            'Juridique & Conseil'    => ['services_juridique'],
-            'Couture & Retouches'    => ['services_couture'],
-            'Mécanique & Dépannage'  => ['services_mecanique'],
+            'Bâtiment & Travaux'   => ['services_batiment'],
+            'Numérique & Web'      => ['services_numerique'],
+            'Ménage & Nettoyage'   => ['services_menage'],
+            'Sécurité'             => ['services_securite'],
+            'Événements & Anim.'   => ['services_evenements'],
+            'Photo & Vidéo'        => ['services_photo'],
+            'Beauté & Coiffure'    => ['services_beaute'],
+            'Santé & Bien-être'    => ['sante'],
+            'Juridique & Conseil'  => ['services_juridique'],
+            'Couture & Retouches'  => ['services_couture'],
+            'Mécanique & Dépannage'=> ['services_mecanique'],
         ],
     ],
     'commerce_group' => [
         'label' => 'Commerce & Agri',
-        'icon'  => '🏪',
+        'fa'    => 'fa-store',
         'all'   => ['alimentation', 'commerce', 'agriculture'],
         'groups' => [
             'Commerce & Boutique'    => ['commerce'],
@@ -74,7 +110,7 @@ $megaMenu = [
     ],
     'maison_group' => [
         'label' => 'Maison & Électro',
-        'icon'  => '🛋️',
+        'fa'    => 'fa-couch',
         'all'   => ['maison', 'electronique', 'materiaux'],
         'groups' => [
             'Maison & Mobilier'        => ['maison'],
@@ -84,18 +120,18 @@ $megaMenu = [
     ],
     'mode_group' => [
         'label' => 'Mode & Loisirs',
-        'icon'  => '👗',
+        'fa'    => 'fa-shirt',
         'all'   => ['mode', 'loisirs', 'enfants', 'animaux'],
         'groups' => [
-            'Mode & Habillement' => ['mode'],
-            'Loisirs & Sport'    => ['loisirs'],
-            'Enfants & Bébé'     => ['enfants'],
-            'Animaux'            => ['animaux'],
+            'Mode & Habillement'=> ['mode'],
+            'Loisirs & Sport'   => ['loisirs'],
+            'Enfants & Bébé'    => ['enfants'],
+            'Animaux'           => ['animaux'],
         ],
     ],
     'autres_group' => [
         'label' => 'Autres',
-        'icon'  => '📦',
+        'fa'    => 'fa-box-open',
         'all'   => ['autres'],
         'groups' => [
             'Divers' => ['autres'],
@@ -134,7 +170,7 @@ $annoncesUrl = fn($cat) => route('annonces.index', ['category' => $cat]);
         <div class="ann-nav__bar">
             <div class="ann-nav__item">
                 <a href="{{ route('annonces.index') }}" class="ann-nav__link {{ !$category ? 'active' : '' }}">
-                    <span class="ann-nav__icon">🔍</span> Toutes
+                    <i class="fa-solid fa-magnifying-glass ann-nav__fa"></i> Toutes
                 </a>
             </div>
 
@@ -144,7 +180,7 @@ $annoncesUrl = fn($cat) => route('annonces.index', ['category' => $cat]);
             @endphp
             <div class="ann-nav__item {{ $groupActive ? 'active' : '' }}" data-mega="ann-mega-{{ $groupKey }}">
                 <span class="ann-nav__link {{ $groupActive ? 'active' : '' }}">
-                    <span class="ann-nav__icon">{{ $group['icon'] }}</span>
+                    <i class="fa-solid {{ $group['fa'] }} ann-nav__fa"></i>
                     {{ $group['label'] }}
                     <svg width="10" height="6" viewBox="0 0 10 6" fill="none" style="margin-left:2px;opacity:.5"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
                 </span>
@@ -157,15 +193,15 @@ $annoncesUrl = fn($cat) => route('annonces.index', ['category' => $cat]);
         <div class="ann-mega" id="ann-mega-{{ $groupKey }}">
             <div class="ann-mega__left">
                 <div class="ann-mega__left-title">
-                    {{ $group['icon'] }} {{ $group['label'] }}
+                    <i class="fa-solid {{ $group['fa'] }}"></i> {{ $group['label'] }}
                 </div>
                 <a href="{{ route('annonces.index', ['category' => $group['all'][0]]) }}" class="ann-mega__left-link">
-                    Tout {{ $group['label'] }}
+                    <i class="fa-solid fa-list ann-mega__fa"></i> Tout {{ $group['label'] }}
                 </a>
                 @foreach ($group['all'] as $catKey)
                     @if (isset($cats[$catKey]))
                     <a href="{{ $annoncesUrl($catKey) }}" class="ann-mega__left-link">
-                        {{ $icons[$catKey] ?? '' }} {{ $cats[$catKey] }}
+                        <i class="fa-solid {{ $faIcons[$catKey] ?? 'fa-tag' }} ann-mega__fa"></i> {{ $cats[$catKey] }}
                     </a>
                     @endif
                 @endforeach
@@ -178,7 +214,7 @@ $annoncesUrl = fn($cat) => route('annonces.index', ['category' => $cat]);
                         @if (isset($cats[$subKey]))
                         <a href="{{ $annoncesUrl($subKey) }}" class="ann-mega__sub-link {{ $category === $subKey ? 'active' : '' }}"
                            style="{{ $category === $subKey ? 'color:var(--ann-red);font-weight:700;' : '' }}">
-                            {{ $icons[$subKey] ?? '' }} {{ $cats[$subKey] }}
+                            <i class="fa-solid {{ $faIcons[$subKey] ?? 'fa-tag' }} ann-mega__fa"></i> {{ $cats[$subKey] }}
                         </a>
                         @endif
                     @endforeach
@@ -196,9 +232,9 @@ $annoncesUrl = fn($cat) => route('annonces.index', ['category' => $cat]);
         <div class="ann-listing__header">
             <h2 class="ann-listing__title">
                 @if ($category)
-                    {{ $icons[$category] ?? '' }} {{ $cats[$category] ?? 'Annonces' }}
+                    <i class="fa-solid {{ $faIcons[$category] ?? 'fa-tag' }}" style="color:var(--ann-red);margin-right:6px"></i>{{ $cats[$category] ?? 'Annonces' }}
                 @else
-                    Toutes les annonces
+                    <i class="fa-solid fa-list" style="color:var(--ann-red);margin-right:6px"></i>Toutes les annonces
                 @endif
                 @if (!$annonces->isEmpty())
                     <span class="ann-listing__count">{{ $annonces->total() }} annonce(s)</span>
@@ -209,7 +245,9 @@ $annoncesUrl = fn($cat) => route('annonces.index', ['category' => $cat]);
 
         @if ($annonces->isEmpty())
             <div class="ann-empty">
-                <div class="ann-empty__icon">{{ $category ? ($icons[$category] ?? '📋') : '📋' }}</div>
+                <div class="ann-empty__icon">
+                    <i class="fa-solid {{ $category ? ($faIcons[$category] ?? 'fa-box-open') : 'fa-box-open' }}"></i>
+                </div>
                 <p class="ann-empty__title">Aucune annonce disponible</p>
                 <p class="ann-empty__text">Soyez le premier à publier{{ $category ? ' dans cette catégorie' : '' }} !</p>
                 <a href="{{ route('advertiser.register') }}" class="ann-btn-post">Publier la première annonce</a>
@@ -222,7 +260,9 @@ $annoncesUrl = fn($cat) => route('annonces.index', ['category' => $cat]);
                         @if ($annonce->images && count($annonce->images) > 0)
                             <img class="ann-card__img" src="{{ asset($annonce->images[0]) }}" alt="{{ $annonce->title }}" loading="lazy">
                         @else
-                            <div class="ann-card__img-ph">{{ $icons[$annonce->category] ?? '📋' }}</div>
+                            <div class="ann-card__img-ph">
+                                <i class="fa-solid {{ $faIcons[$annonce->category] ?? 'fa-tag' }}"></i>
+                            </div>
                         @endif
                         <span class="ann-card__badge">{{ $annonce->category_label }}</span>
                     </div>

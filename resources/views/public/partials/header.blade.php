@@ -185,42 +185,58 @@
             </nav>
 
             <div class="header__actions">
-                <a href="{{ $searchUrl }}" class="btn btn--icon" aria-label="Recherche">🔍</a>
+                <a href="{{ $searchUrl }}" class="btn btn--icon" aria-label="Recherche">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </a>
                 @auth
                     @if ($dashboardUrl)
-                        <a href="{{ $dashboardUrl }}" class="btn btn--outline">Dashboard</a>
+                        <a href="{{ $dashboardUrl }}" class="btn btn--outline">
+                            <i class="fa-solid fa-gauge" style="margin-right:5px"></i>Dashboard
+                        </a>
                     @endif
                     <form method="POST" action="{{ route('logOut') }}">
                         @csrf
-                        <button type="submit" class="btn btn--primary">Déconnexion</button>
+                        <button type="submit" class="btn btn--primary">
+                            <i class="fa-solid fa-right-from-bracket" style="margin-right:5px"></i>Déconnexion
+                        </button>
                     </form>
                 @else
                     <div class="nav__item header__auth-item" style="position:relative;">
                         <a href="#" class="btn btn--outline">
-                            Connexion
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:11px;height:11px;margin-left:3px">
+                            <i class="fa-solid fa-right-to-bracket" style="margin-right:5px"></i>Connexion
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:11px;height:11px;margin-left:4px">
                                 <path d="M6 9l6 6 6-6" />
                             </svg>
                         </a>
                         <div class="nav__dropdown nav__dropdown--right">
                             @if ($isMainDomain)
-                                <a href="{{ $loginUrl }}" data-auth-open="login">Espace blogueur</a>
+                                <a href="{{ $loginUrl }}" data-auth-open="login">
+                                    <i class="fa-solid fa-pen-nib nav__drop-icon"></i>Espace blogueur
+                                </a>
                             @else
-                                <a href="{{ $loginUrl }}">Espace blogueur</a>
+                                <a href="{{ $loginUrl }}">
+                                    <i class="fa-solid fa-pen-nib nav__drop-icon"></i>Espace blogueur
+                                </a>
                             @endif
-                            <a href="{{ $siteRoot }}/advertiser/login">Espace annonceur</a>
+                            <a href="{{ $siteRoot }}/advertiser/login">
+                                <i class="fa-solid fa-bullhorn nav__drop-icon"></i>Espace annonceur
+                            </a>
                         </div>
                     </div>
                     <div class="nav__item header__auth-item" style="position:relative;">
                         <a href="#" class="btn btn--primary">
-                            S'inscrire
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:11px;height:11px;margin-left:3px">
+                            <i class="fa-solid fa-user-plus" style="margin-right:5px"></i>S'inscrire
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:11px;height:11px;margin-left:4px">
                                 <path d="M6 9l6 6 6-6" />
                             </svg>
                         </a>
                         <div class="nav__dropdown nav__dropdown--right">
-                            <a href="{{ $registerUrl }}">Créer un blog</a>
-                            <a href="{{ $siteRoot }}/advertiser/register">Publier une annonce</a>
+                            <a href="{{ $registerUrl }}">
+                                <i class="fa-solid fa-blog nav__drop-icon"></i>Créer un blog
+                            </a>
+                            <a href="{{ $siteRoot }}/advertiser/register">
+                                <i class="fa-solid fa-tag nav__drop-icon"></i>Publier une annonce
+                            </a>
                         </div>
                     </div>
                 @endauth
