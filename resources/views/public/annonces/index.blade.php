@@ -118,10 +118,10 @@ $annoncesUrl = fn($cat) => route('annonces.index', ['category' => $cat]);
                     <input type="hidden" name="category" value="{{ $category }}">
                 @endif
                 <input type="text" name="q" placeholder="Que recherchez-vous ?" value="{{ request('q') }}">
-                <button type="submit">🔍 Rechercher</button>
+                <button type="submit"><i class="fa-solid fa-magnifying-glass"></i> Rechercher</button>
             </form>
             <a href="{{ route('advertiser.register') }}" class="ann-hero__cta">
-                ＋ Déposer une annonce
+                <i class="fa-solid fa-plus"></i> Déposer une annonce
             </a>
         </div>
     </div>
@@ -204,7 +204,7 @@ $annoncesUrl = fn($cat) => route('annonces.index', ['category' => $cat]);
                     <span class="ann-listing__count">{{ $annonces->total() }} annonce(s)</span>
                 @endif
             </h2>
-            <a href="{{ route('advertiser.register') }}" class="ann-btn-post">＋ Publier une annonce</a>
+            <a href="{{ route('advertiser.register') }}" class="ann-btn-post"><i class="fa-solid fa-plus"></i> Publier une annonce</a>
         </div>
 
         @if ($annonces->isEmpty())

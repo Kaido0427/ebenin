@@ -41,6 +41,7 @@
     <link rel="apple-touch-icon" href="{{ asset('images/ebenins.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
     <link rel="stylesheet" href="{{ asset('css/refonte-public.css') }}?v={{ filemtime(public_path('css/refonte-public.css')) }}">
     <style>
         .pass-wrap { position: relative; display: block; }

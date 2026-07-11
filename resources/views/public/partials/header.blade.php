@@ -37,6 +37,70 @@
     };
 
     $activeCategoryId = $activeCategoryId ?? null;
+
+    // Mapping nom de catégorie → icône Font Awesome 6
+    $catIconMap = [
+        'politi'   => 'fa-landmark',
+        'gouver'   => 'fa-building-columns',
+        'econom'   => 'fa-chart-line',
+        'financ'   => 'fa-coins',
+        'budget'   => 'fa-sack-dollar',
+        'cultur'   => 'fa-masks-theater',
+        'art'      => 'fa-palette',
+        'musique'  => 'fa-music',
+        'sport'    => 'fa-trophy',
+        'foot'     => 'fa-futbol',
+        'socie'    => 'fa-users',
+        'socié'    => 'fa-users',
+        'intern'   => 'fa-globe',
+        'monde'    => 'fa-earth-africa',
+        'sant'     => 'fa-heart-pulse',
+        'médeci'   => 'fa-stethoscope',
+        'medeci'   => 'fa-stethoscope',
+        'educa'    => 'fa-graduation-cap',
+        'éduca'    => 'fa-graduation-cap',
+        'école'    => 'fa-school',
+        'ecole'    => 'fa-school',
+        'tech'     => 'fa-microchip',
+        'numer'    => 'fa-laptop',
+        'numér'    => 'fa-laptop',
+        'innov'    => 'fa-lightbulb',
+        'justi'    => 'fa-scale-balanced',
+        'droit'    => 'fa-gavel',
+        'tribun'   => 'fa-gavel',
+        'secu'     => 'fa-shield-halved',
+        'sécu'     => 'fa-shield-halved',
+        'police'   => 'fa-shield-halved',
+        'relig'    => 'fa-church',
+        'spirit'   => 'fa-hands-praying',
+        'envir'    => 'fa-leaf',
+        'climat'   => 'fa-cloud-sun',
+        'agri'     => 'fa-wheat-awn',
+        'rural'    => 'fa-tractor',
+        'media'    => 'fa-satellite-dish',
+        'média'    => 'fa-satellite-dish',
+        'press'    => 'fa-newspaper',
+        'jeune'    => 'fa-person-running',
+        'femme'    => 'fa-venus',
+        'genre'    => 'fa-venus-mars',
+        'diasp'    => 'fa-plane',
+        'tourisme' => 'fa-map-location-dot',
+        'voyage'   => 'fa-suitcase-rolling',
+        'emploi'   => 'fa-briefcase',
+        'travail'  => 'fa-hard-hat',
+        'local'    => 'fa-map-pin',
+        'maires'   => 'fa-map-pin',
+        'commune'  => 'fa-map-pin',
+        'region'   => 'fa-map-pin',
+        'région'   => 'fa-map-pin',
+    ];
+    $getCatIcon = function(string $name) use ($catIconMap): string {
+        $lower = mb_strtolower($name);
+        foreach ($catIconMap as $key => $icon) {
+            if (str_contains($lower, $key)) return $icon;
+        }
+        return 'fa-folder-open';
+    };
     $dateLabel = now()->locale('fr')->translatedFormat('l d F Y');
 @endphp
 
@@ -83,26 +147,39 @@
             <nav class="nav">
                 <ul class="nav__list">
                     <li class="nav__item {{ request()->url() === $homeUrl ? 'active' : '' }}">
-                        <a class="nav__link" href="{{ $homeUrl }}">Accueil</a>
+                        <a class="nav__link" href="{{ $homeUrl }}">
+                            <i class="fa-solid fa-house nav__link-icon"></i>
+                            Accueil
+                        </a>
                     </li>
                     <li class="nav__item {{ $activeCategoryId ? 'active' : '' }}">
                         <a href="#" class="nav__link">
+                            <i class="fa-solid fa-newspaper nav__link-icon"></i>
                             Articles
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:12px;height:12px;margin-left:3px">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:11px;height:11px;margin-left:2px;flex-shrink:0">
                                 <path d="M6 9l6 6 6-6" />
                             </svg>
                         </a>
-                        <div class="nav__dropdown">
+                        <div class="nav__dropdown nav__dropdown--articles">
                             @foreach ($navItems as $rubrique)
-                                <a href="{{ $categoryUrl($rubrique) }}">{{ $rubrique->name }}</a>
+                                <a href="{{ $categoryUrl($rubrique) }}">
+                                    <i class="fa-solid {{ $getCatIcon($rubrique->name) }} nav__drop-icon"></i>
+                                    {{ $rubrique->name }}
+                                </a>
                             @endforeach
                         </div>
                     </li>
                     <li class="nav__item {{ request()->is('annonces*') ? 'active' : '' }}">
-                        <a class="nav__link" href="{{ $siteRoot }}/annonces">Annonces</a>
+                        <a class="nav__link" href="{{ $siteRoot }}/annonces">
+                            <i class="fa-solid fa-tag nav__link-icon"></i>
+                            Annonces
+                        </a>
                     </li>
                     <li class="nav__item {{ request()->is('necrologies*') ? 'active' : '' }}">
-                        <a class="nav__link" href="{{ $siteRoot }}/necrologies">Nécrologies</a>
+                        <a class="nav__link" href="{{ $siteRoot }}/necrologies">
+                            <i class="fa-solid fa-dove nav__link-icon"></i>
+                            Nécrologies
+                        </a>
                     </li>
                 </ul>
             </nav>
