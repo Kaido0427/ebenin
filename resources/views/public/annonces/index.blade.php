@@ -129,9 +129,9 @@ $annoncesUrl = fn($cat) => route('annonces.index', ['category' => $cat]);
 
 {{-- ── Méga-menu navigation ──────────────────────────────── --}}
 <nav class="ann-nav">
-    <div class="container">
+    <div class="container ann-nav__container">
+        {{-- Barre scrollable : items uniquement, sans les dropdowns --}}
         <div class="ann-nav__bar">
-            {{-- Toutes --}}
             <div class="ann-nav__item">
                 <a href="{{ route('annonces.index') }}" class="ann-nav__link {{ !$category ? 'active' : '' }}">
                     <span class="ann-nav__icon">🔍</span> Toutes
@@ -142,68 +142,53 @@ $annoncesUrl = fn($cat) => route('annonces.index', ['category' => $cat]);
             @php
                 $groupActive = $category && in_array($category, $group['all']);
             @endphp
-            <div class="ann-nav__item {{ $groupActive ? 'active' : '' }}">
-                <span class="ann-nav__link">
+            <div class="ann-nav__item {{ $groupActive ? 'active' : '' }}" data-mega="ann-mega-{{ $groupKey }}">
+                <span class="ann-nav__link {{ $groupActive ? 'active' : '' }}">
                     <span class="ann-nav__icon">{{ $group['icon'] }}</span>
                     {{ $group['label'] }}
                     <svg width="10" height="6" viewBox="0 0 10 6" fill="none" style="margin-left:2px;opacity:.5"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
                 </span>
-                <div class="ann-mega">
-                    <div class="ann-mega__left">
-                        <div class="ann-mega__left-title">
-                            {{ $group['icon'] }} {{ $group['label'] }}
-                        </div>
-                        <a href="{{ route('annonces.index', ['category' => $group['all'][0]]) }}" class="ann-mega__left-link">
-                            Tout {{ $group['label'] }}
-                        </a>
-                        @foreach ($group['all'] as $catKey)
-                            @if (isset($cats[$catKey]))
-                            <a href="{{ $annoncesUrl($catKey) }}" class="ann-mega__left-link">
-                                {{ $icons[$catKey] ?? '' }} {{ $cats[$catKey] }}
-                            </a>
-                            @endif
-                        @endforeach
-                    </div>
-                    <div class="ann-mega__cols">
-                        @foreach ($group['groups'] as $groupTitle => $subKeys)
-                        <div class="ann-mega__col">
-                            <p class="ann-mega__group-title">{{ $groupTitle }}</p>
-                            @foreach ($subKeys as $subKey)
-                                @if (isset($cats[$subKey]))
-                                <a href="{{ $annoncesUrl($subKey) }}" class="ann-mega__sub-link {{ $category === $subKey ? 'active' : '' }}"
-                                   style="{{ $category === $subKey ? 'color:var(--ann-red);font-weight:700;' : '' }}">
-                                    {{ $icons[$subKey] ?? '' }} {{ $cats[$subKey] }}
-                                </a>
-                                @endif
-                            @endforeach
-                        </div>
-                        @endforeach
-                    </div>
-                </div>
             </div>
             @endforeach
         </div>
+
+        {{-- Dropdowns en dehors de la barre scrollable pour éviter le clipping --}}
+        @foreach ($megaMenu as $groupKey => $group)
+        <div class="ann-mega" id="ann-mega-{{ $groupKey }}">
+            <div class="ann-mega__left">
+                <div class="ann-mega__left-title">
+                    {{ $group['icon'] }} {{ $group['label'] }}
+                </div>
+                <a href="{{ route('annonces.index', ['category' => $group['all'][0]]) }}" class="ann-mega__left-link">
+                    Tout {{ $group['label'] }}
+                </a>
+                @foreach ($group['all'] as $catKey)
+                    @if (isset($cats[$catKey]))
+                    <a href="{{ $annoncesUrl($catKey) }}" class="ann-mega__left-link">
+                        {{ $icons[$catKey] ?? '' }} {{ $cats[$catKey] }}
+                    </a>
+                    @endif
+                @endforeach
+            </div>
+            <div class="ann-mega__cols">
+                @foreach ($group['groups'] as $groupTitle => $subKeys)
+                <div class="ann-mega__col">
+                    <p class="ann-mega__group-title">{{ $groupTitle }}</p>
+                    @foreach ($subKeys as $subKey)
+                        @if (isset($cats[$subKey]))
+                        <a href="{{ $annoncesUrl($subKey) }}" class="ann-mega__sub-link {{ $category === $subKey ? 'active' : '' }}"
+                           style="{{ $category === $subKey ? 'color:var(--ann-red);font-weight:700;' : '' }}">
+                            {{ $icons[$subKey] ?? '' }} {{ $cats[$subKey] }}
+                        </a>
+                        @endif
+                    @endforeach
+                </div>
+                @endforeach
+            </div>
+        </div>
+        @endforeach
     </div>
 </nav>
-
-{{-- ── Catégories icônes ─────────────────────────────────── --}}
-<div class="ann-cats">
-    <div class="container">
-        <p class="ann-cats__title">Parcourir par catégorie</p>
-        <div class="ann-cats__grid">
-            <a href="{{ route('annonces.index') }}" class="ann-cat-btn {{ !$category ? 'active' : '' }}">
-                <span class="ann-cat-btn__icon">🔍</span>
-                <span>Toutes</span>
-            </a>
-            @foreach ($cats as $key => $label)
-            <a href="{{ $annoncesUrl($key) }}" class="ann-cat-btn {{ $category === $key ? 'active' : '' }}">
-                <span class="ann-cat-btn__icon">{{ $icons[$key] ?? '📋' }}</span>
-                <span>{{ $label }}</span>
-            </a>
-            @endforeach
-        </div>
-    </div>
-</div>
 
 {{-- ── Listing annonces ──────────────────────────────────── --}}
 <div class="ann-listing">
@@ -272,4 +257,60 @@ $annoncesUrl = fn($cat) => route('annonces.index', ['category' => $cat]);
         @endif
     </div>
 </div>
+
+<script>
+(function () {
+    var navBar    = document.querySelector('.ann-nav__bar');
+    var container = document.querySelector('.ann-nav__container');
+    if (!navBar || !container) return;
+
+    var currentMega = null;
+    var hideTimer   = null;
+
+    function positionMega(mega, item) {
+        mega.style.top = navBar.offsetHeight + 'px';
+        var cRect    = container.getBoundingClientRect();
+        var iRect    = item.getBoundingClientRect();
+        var left     = iRect.left - cRect.left;
+        var megaW    = mega.offsetWidth || 580;
+        if (left + megaW > container.offsetWidth) {
+            left = Math.max(0, container.offsetWidth - megaW);
+        }
+        mega.style.left  = left + 'px';
+        mega.style.right = 'auto';
+    }
+
+    document.querySelectorAll('.ann-nav__item[data-mega]').forEach(function (item) {
+        var mega = document.getElementById(item.getAttribute('data-mega'));
+        if (!mega) return;
+
+        function show() {
+            clearTimeout(hideTimer);
+            if (currentMega && currentMega !== mega) {
+                currentMega.style.display = 'none';
+            }
+            currentMega = mega;
+            mega.style.display = 'flex';
+            positionMega(mega, item);
+        }
+
+        function startHide() {
+            hideTimer = setTimeout(function () {
+                if (currentMega) { currentMega.style.display = 'none'; currentMega = null; }
+            }, 180);
+        }
+
+        item.addEventListener('mouseenter', show);
+        item.addEventListener('mouseleave', startHide);
+        mega.addEventListener('mouseenter', function () { clearTimeout(hideTimer); });
+        mega.addEventListener('mouseleave', startHide);
+    });
+
+    document.addEventListener('click', function (e) {
+        if (!e.target.closest('.ann-nav')) {
+            if (currentMega) { currentMega.style.display = 'none'; currentMega = null; }
+        }
+    });
+})();
+</script>
 @endsection

@@ -89,6 +89,10 @@
   z-index: 200;
   box-shadow: 0 2px 8px rgba(0,0,0,.06);
 }
+/* Le container est le point d'ancrage des dropdowns */
+.ann-nav__container {
+  position: relative;
+}
 .ann-nav__bar {
   display: flex;
   align-items: center;
@@ -126,7 +130,7 @@
 .ann-mega {
   display: none;
   position: absolute;
-  top: 100%;
+  top: 48px; /* valeur initiale; JS recalcule via navBar.offsetHeight */
   left: 0;
   min-width: 580px;
   background: var(--ann-white);
@@ -136,7 +140,6 @@
   z-index: 300;
   padding: 24px;
 }
-.ann-nav__item:hover .ann-mega { display: flex; }
 .ann-mega__left {
   width: 180px;
   flex-shrink: 0;
@@ -201,10 +204,6 @@
   text-decoration: none;
 }
 .ann-mega__all:hover { text-decoration: underline; }
-
-/* Mega dropdown ne déborde pas à gauche de l'écran */
-.ann-nav__item:last-child .ann-mega,
-.ann-nav__item:nth-last-child(-n+3) .ann-mega { left: auto; right: 0; }
 
 /* ── Section catégories icônes ───────────────────────────── */
 .ann-cats {
