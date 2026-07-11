@@ -106,6 +106,7 @@ $megaMenu = [
 $annoncesUrl = fn($cat) => route('annonces.index', ['category' => $cat]);
 @endphp
 
+@section('content')
 {{-- ── Hero ───────────────────────────────────────────────── --}}
 <div class="ann-hero">
     <div class="container">
