@@ -353,37 +353,6 @@
                     </div>
                     --}}
 
-                    <div class="widget">
-                        <div class="widget__title">Rubriques</div>
-                        <div class="tags-cloud">
-                            @foreach ($rubriquesWithoutPosts->take(16) as $rubrique)
-                                <a href="{{ $categoryUrl($rubrique) }}" class="tag">{{ $rubrique->name }}</a>
-                            @endforeach
-                        </div>
-                    </div>
-
-                    <div class="widget">
-                        <div class="widget__title">Réseaux sociaux</div>
-                        <div class="widget-divider"></div>
-                        <div class="social-grid social-grid--full">
-                            <a class="social-btn social-btn--fb" href="#">Facebook</a>
-                            <a class="social-btn social-btn--tw" href="#">Twitter</a>
-                            <a class="social-btn social-btn--yt" href="#">YouTube</a>
-                            <a class="social-btn social-btn--wa" href="#">WhatsApp</a>
-                        </div>
-                    </div>
-
-                    {{-- Newsletter (déplacée en sidebar basse) --}}
-                    <div class="widget newsletter-widget">
-                        <div class="widget__title">Newsletter</div>
-                        <div class="widget-divider"></div>
-                        <p>Recevez les dernières nouvelles dans votre boîte mail.</p>
-                        <form class="newsletter-form-compact" action="#" method="GET">
-                            <input type="email" placeholder="Votre adresse e-mail">
-                            <button type="submit" class="btn btn--primary">S'abonner</button>
-                        </form>
-                    </div>
-
                     {{-- Blogs du réseau (rotatif) --}}
                     @if ($homeBloggers->isNotEmpty())
                         <div class="widget">
@@ -471,6 +440,36 @@
                             })();
                         </script>
                     @endif
+
+                    <div class="widget">
+                        <div class="widget__title">Rubriques</div>
+                        <div class="tags-cloud">
+                            @foreach ($rubriquesWithoutPosts->take(16) as $rubrique)
+                                <a href="{{ $categoryUrl($rubrique) }}" class="tag">{{ $rubrique->name }}</a>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <div class="widget">
+                        <div class="widget__title">Réseaux sociaux</div>
+                        <div class="widget-divider"></div>
+                        <div class="social-grid social-grid--full">
+                            <a class="social-btn social-btn--fb" href="#">Facebook</a>
+                            <a class="social-btn social-btn--tw" href="#">Twitter</a>
+                            <a class="social-btn social-btn--yt" href="#">YouTube</a>
+                            <a class="social-btn social-btn--wa" href="#">WhatsApp</a>
+                        </div>
+                    </div>
+
+                    <div class="widget newsletter-widget">
+                        <div class="widget__title">Newsletter</div>
+                        <div class="widget-divider"></div>
+                        <p>Recevez les dernières nouvelles dans votre boîte mail.</p>
+                        <form class="newsletter-form-compact" action="#" method="GET">
+                            <input type="email" placeholder="Votre adresse e-mail">
+                            <button type="submit" class="btn btn--primary">S'abonner</button>
+                        </form>
+                    </div>
                 </aside>
             </div>
         </div>
