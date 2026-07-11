@@ -1615,6 +1615,21 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   margin: 16px 0;
   opacity: .7;
 }
+.footer__back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  padding: 8px 16px;
+  background: #c0392b;
+  color: #fff !important;
+  border-radius: 6px;
+  font-size: .82rem;
+  font-weight: 600;
+  text-decoration: none !important;
+  transition: background .2s;
+}
+.footer__back-btn:hover { background: #96281b; }
 .footer__social { display: flex; gap: 8px; }
 .footer__social a {
   width: 36px; height: 36px;

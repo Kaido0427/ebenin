@@ -41,6 +41,11 @@
                 <p class="footer__desc">
                     {{ $organization?->organization_name ? "Blog de {$organization->organization_name}, membre du réseau E-Benin." : "E-Benin fédère les blogs d'actualité, les reportages et les rubriques thématiques autour du Bénin." }}
                 </p>
+                @if ($isSubdomain)
+                    <a href="{{ $siteRoot }}" class="footer__back-btn" target="_blank" rel="noopener noreferrer">
+                        🌐 Retour sur E-Bénin
+                    </a>
+                @endif
                 <div class="footer__social">
                     @forelse ($socialLinks as $social)
                         <a href="{{ $social->url }}" target="_blank" rel="noopener noreferrer">

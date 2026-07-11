@@ -60,7 +60,7 @@
         ->unique('id')
         ->reject(fn($post) => $headline && $post->id === $headline->id)
         ->take(3);
-    $latestGrid = collect($latestPosts)->take(6);
+    $latestGrid = collect($latestPosts)->take(9);
     $featuredGrid = collect($featuredPosts)->take(4);
     $networkSpotlight  = collect($randomizedPosts)->take(4);
     $homeNecrologies   = collect($latestNecrologies ?? []);
@@ -384,23 +384,92 @@
                         </form>
                     </div>
 
-                    {{-- Les plus lus (déplacés en sidebar basse) --}}
-                    @if ($popularList->isNotEmpty())
+                    {{-- Blogs du réseau (rotatif) --}}
+                    @if ($homeBloggers->isNotEmpty())
                         <div class="widget">
-                            <div class="widget__title">Les plus lus</div>
+                            <div class="widget__title">Blogs du réseau</div>
                             <div class="widget-divider"></div>
-                            <div class="popular-list">
-                                @foreach ($popularList as $index => $post)
-                                    <div class="popular-item">
-                                        <div class="popular-rank">{{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}</div>
-                                        <div>
-                                            <a href="{{ $postUrl($post) }}" class="popular-title">{{ $post->libelle }}</a>
-                                            <div class="popular-meta">{{ $post->rubriques->first()->name ?? 'Actualité' }}</div>
-                                        </div>
-                                    </div>
+                            <div class="network-blogs-rotator" id="networkBlogsRotator">
+                                @foreach ($homeBloggers as $blogger)
+                                    @php
+                                        $blogUrl = 'https://' . $blogger->subdomain . '.' . (str_contains(request()->getHost(), 'e-benin.bj') ? 'e-benin.bj' : 'e-benin.com') . '/blog';
+                                        $logoSrc = Str::startsWith($blogger->organization_logo ?? '', ['http://', 'https://']) ? $blogger->organization_logo : asset(ltrim($blogger->organization_logo ?? 'images/ebenins.png', '/'));
+                                    @endphp
+                                    <a href="{{ $blogUrl }}" class="network-blog-item" target="_blank" rel="noopener">
+                                        <img src="{{ $logoSrc }}" alt="{{ $blogger->organization_name }}" class="network-blog-logo">
+                                        <span class="network-blog-name">{{ $blogger->organization_name }}</span>
+                                    </a>
                                 @endforeach
                             </div>
+                            <a href="{{ 'https://' . (str_contains(request()->getHost(), 'e-benin.bj') ? 'e-benin.bj' : 'e-benin.com') . '/blogs' }}" class="network-blogs-all">
+                                Voir tous les blogs du réseau →
+                            </a>
                         </div>
+                        <style>
+                            .network-blogs-rotator {
+                                display: flex;
+                                flex-direction: column;
+                                gap: 0;
+                                overflow: hidden;
+                                max-height: 192px;
+                            }
+                            .network-blog-item {
+                                display: flex;
+                                align-items: center;
+                                gap: 10px;
+                                padding: 8px 0;
+                                border-bottom: 1px solid #f0f0f0;
+                                text-decoration: none;
+                                color: inherit;
+                                transition: background .2s;
+                            }
+                            .network-blog-item:hover { background: #f8f8f8; padding-left: 4px; }
+                            .network-blog-logo {
+                                width: 38px;
+                                height: 38px;
+                                object-fit: contain;
+                                border-radius: 6px;
+                                background: #f4f4f4;
+                                padding: 2px;
+                                flex-shrink: 0;
+                            }
+                            .network-blog-name {
+                                font-size: 13px;
+                                font-weight: 600;
+                                line-height: 1.3;
+                                color: #222;
+                            }
+                            .network-blogs-all {
+                                display: block;
+                                margin-top: 10px;
+                                font-size: 13px;
+                                color: #c0392b;
+                                font-weight: 600;
+                                text-decoration: none;
+                                text-align: center;
+                            }
+                            .network-blogs-all:hover { text-decoration: underline; }
+                        </style>
+                        <script>
+                            (function () {
+                                const container = document.getElementById('networkBlogsRotator');
+                                if (!container) return;
+                                const items = Array.from(container.querySelectorAll('.network-blog-item'));
+                                const perPage = 3;
+                                if (items.length <= perPage) return;
+                                let offset = 0;
+                                function showNext() {
+                                    offset = (offset + 1) % items.length;
+                                    items.forEach(function (el, i) {
+                                        const pos = (i - offset + items.length) % items.length;
+                                        el.style.display = pos < perPage ? '' : 'none';
+                                    });
+                                }
+                                // Init: hide items beyond perPage
+                                items.forEach(function (el, i) { el.style.display = i < perPage ? '' : 'none'; });
+                                setInterval(showNext, 2500);
+                            })();
+                        </script>
                     @endif
                 </aside>
             </div>
