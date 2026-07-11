@@ -2221,6 +2221,38 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   flex-direction: column;
   gap: 0;
 }
+/* Version grande page (gauche) */
+.popular-list--main { gap: 0; }
+.popular-item--main {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  text-decoration: none;
+  color: inherit;
+}
+.popular-item--main:last-child { border-bottom: 0; }
+.popular-item--main:hover .popular-title { color: var(--accent); }
+.popular-rank--main {
+  font-size: 2rem;
+  font-weight: 900;
+  width: 44px;
+  flex-shrink: 0;
+  color: #9ca3af;
+  line-height: 1;
+}
+.popular-item--main:nth-child(1) .popular-rank--main { color: var(--accent); }
+.popular-item--main:nth-child(2) .popular-rank--main { color: #d97706; }
+.popular-item--main:nth-child(3) .popular-rank--main { color: #6b7280; }
+.popular-item__content { flex: 1; min-width: 0; }
+.popular-item__thumb {
+  width: 80px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
 .popular-item {
   display: flex;
   gap: 14px;

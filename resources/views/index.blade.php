@@ -262,6 +262,32 @@
                         </section>
                     @endif
 
+                    {{-- Les plus lues --}}
+                    @if ($popularList->isNotEmpty())
+                        <section>
+                            <div class="section-header">
+                                <h2 class="section-title">Les plus lues</h2>
+                            </div>
+                            <div class="popular-list popular-list--main">
+                                @foreach ($popularList as $index => $post)
+                                    <a href="{{ $postUrl($post) }}" class="popular-item popular-item--main">
+                                        <div class="popular-rank popular-rank--main">{{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}</div>
+                                        <div class="popular-item__content">
+                                            <div class="popular-title">{{ $post->libelle }}</div>
+                                            <div class="popular-meta">
+                                                {{ $post->rubriques->first()->name ?? 'Actualité' }}
+                                                @if ($post->comments_count ?? 0) · {{ $post->comments_count }} commentaires @endif
+                                            </div>
+                                        </div>
+                                        @if ($post->image)
+                                            <img src="{{ $postImageUrl($post) }}" alt="{{ $post->libelle }}" class="popular-item__thumb">
+                                        @endif
+                                    </a>
+                                @endforeach
+                            </div>
+                        </section>
+                    @endif
+
                     @if ($reportageItems->isNotEmpty())
                         <section>
                             <div class="section-header">
