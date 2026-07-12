@@ -177,7 +177,7 @@
                     </li>
                     <li class="nav__item {{ request()->is('necrologies*') ? 'active' : '' }}">
                         <a class="nav__link" href="{{ $siteRoot }}/necrologies">
-                            <i class="fa-solid fa-dove nav__link-icon"></i>
+                            <i class="fa-solid fa-fire-flame-curved nav__link-icon"></i>
                             Nécrologies
                         </a>
                     </li>

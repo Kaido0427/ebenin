@@ -565,8 +565,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   border-bottom: 1px solid var(--border);
   padding: 16px 0;
 }
-.cat-strip__inner { display: flex; align-items: center; gap: 10px; overflow-x: auto; scrollbar-width: none; }
-.cat-strip__inner::-webkit-scrollbar { display: none; }
+.cat-strip__inner { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .cat-tag {
   flex-shrink: 0;
   padding: 6px 16px;
