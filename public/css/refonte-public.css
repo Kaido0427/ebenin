@@ -269,8 +269,16 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   background: var(--primary);
   border-radius: 2px 2px 0 0;
 }
-.nav__link svg { width: 11px; height: 11px; transition: transform var(--transition); flex-shrink: 0; }
-.nav__item:hover .nav__link svg { transform: rotate(180deg); }
+.nav__link svg:not(.nav__candle-icon) { width: 11px; height: 11px; transition: transform var(--transition); flex-shrink: 0; }
+.nav__item:hover .nav__link svg:not(.nav__candle-icon) { transform: rotate(180deg); }
+.nav__candle-icon {
+  width: 14px; height: 14px;
+  flex-shrink: 0;
+  opacity: .72;
+  transition: opacity var(--transition);
+}
+.nav__link:hover .nav__candle-icon,
+.nav__item.active .nav__link .nav__candle-icon { opacity: 1; }
 
 /* Dropdown items avec icônes FA (Connexion, S'inscrire) */
 .nav__dropdown a {

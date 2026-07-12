@@ -177,7 +177,12 @@
                     </li>
                     <li class="nav__item {{ request()->is('necrologies*') ? 'active' : '' }}">
                         <a class="nav__link" href="{{ $siteRoot }}/necrologies">
-                            <i class="fa-solid fa-fire-flame-curved nav__link-icon"></i>
+                            <svg class="nav__candle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <line x1="12" y1="2" x2="12" y2="5"/>
+                                <path fill="currentColor" stroke="none" d="M10 4.5Q12 1.2 14 4.5Q14 7 12 7Q10 7 10 4.5Z"/>
+                                <rect x="9" y="7" width="6" height="11" rx="1"/>
+                                <rect x="7" y="18" width="10" height="2" rx="1"/>
+                            </svg>
                             Nécrologies
                         </a>
                     </li>
