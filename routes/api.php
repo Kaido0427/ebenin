@@ -11,14 +11,14 @@ Route::prefix('reader')->group(function () {
 
     // Lecture publique
     Route::get('/articles',          [ReaderAppController::class, 'articles']);
+    Route::get('/articles/popular',  [ReaderAppController::class, 'popularArticles']);
+    Route::get('/articles/reseau',   [ReaderAppController::class, 'reseauArticles']);
     Route::get('/articles/{id}',     [ReaderAppController::class, 'article']);
     Route::get('/categories',        [ReaderAppController::class, 'categories']);
     Route::get('/annonces',          [ReaderAppController::class, 'annonces']);
     Route::get('/annonces/{id}',     [ReaderAppController::class, 'annonceShow']);
     Route::get('/necrologies',       [ReaderAppController::class, 'necrologies']);
     Route::get('/necrologies/{id}',  [ReaderAppController::class, 'necrologieShow']);
-    Route::get('/articles/popular',  [ReaderAppController::class, 'popularArticles']);
-    Route::get('/articles/reseau',   [ReaderAppController::class, 'reseauArticles']);
 });
 
 // ── Protégé (connexion requise) ────────────────────────────────────────────
