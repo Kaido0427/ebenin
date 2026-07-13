@@ -200,6 +200,42 @@ class ReaderAppController extends Controller
         ]);
     }
 
+    // ── Les plus lues ─────────────────────────────────────────
+
+    public function popularArticles(Request $request)
+    {
+        $userId = $request->user()?->id;
+
+        $posts = post::published()
+            ->withCount('views')
+            ->with(['user.organization', 'rubriques', 'comments'])
+            ->orderByDesc('views_count')
+            ->limit(10)
+            ->get();
+
+        return response()->json([
+            'data' => $posts->map(fn($p) => $this->postResource($p, $userId)),
+        ]);
+    }
+
+    // ── Blogs du réseau ───────────────────────────────────────
+
+    public function reseauArticles(Request $request)
+    {
+        $userId = $request->user()?->id;
+
+        $posts = post::published()
+            ->whereHas('user.organization', fn($q) => $q->whereNotNull('subdomain')->where('subdomain', '!=', ''))
+            ->with(['user.organization', 'rubriques', 'comments'])
+            ->orderByDesc('created_at')
+            ->limit(10)
+            ->get();
+
+        return response()->json([
+            'data' => $posts->map(fn($p) => $this->postResource($p, $userId)),
+        ]);
+    }
+
     // ── Annonces ──────────────────────────────────────────────
 
     public function annonces(Request $request)

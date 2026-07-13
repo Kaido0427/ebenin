@@ -17,6 +17,8 @@ Route::prefix('reader')->group(function () {
     Route::get('/annonces/{id}',     [ReaderAppController::class, 'annonceShow']);
     Route::get('/necrologies',       [ReaderAppController::class, 'necrologies']);
     Route::get('/necrologies/{id}',  [ReaderAppController::class, 'necrologieShow']);
+    Route::get('/articles/popular',  [ReaderAppController::class, 'popularArticles']);
+    Route::get('/articles/reseau',   [ReaderAppController::class, 'reseauArticles']);
 });
 
 // ── Protégé (connexion requise) ────────────────────────────────────────────
