@@ -25,7 +25,7 @@
                         <source src="{{ asset($necrologie->video) }}">
                     </video>
                 @elseif ($necrologie->photo)
-                    <img src="{{ asset($necrologie->photo) }}" alt="{{ $necrologie->nom_defunt }}" style="width:100%;max-height:420px;object-fit:cover;object-position:top center;display:block;">
+                    <img src="{{ asset($necrologie->photo) }}" alt="{{ $necrologie->nom_defunt }}" style="width:100%;max-height:700px;object-fit:contain;object-position:center;display:block;background:#f4f4f4;">
                 @endif
 
                 <div style="padding:32px 36px;">
