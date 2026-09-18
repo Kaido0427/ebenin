@@ -1293,8 +1293,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   margin: 24px 0;
   position: relative;
 }
-.article-hero img { width: 100%; max-height: 500px; object-fit: cover;
-  object-position: top center; }
+.article-hero img { width: 100%; max-height: 700px; object-fit: contain;
+  object-position: center; background: #f4f4f4; }
 .article-hero__caption {
   background: var(--dark);
   color: rgba(255,255,255,.6);
